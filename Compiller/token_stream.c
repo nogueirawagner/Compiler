@@ -3,7 +3,7 @@
 
 int is_alphanumeric(char value) 
 {
-	return (value >= 65 && value <= 90) || (value >= 97 && value <= 122);
+	return (value >= 65 && value <= 90) || (value >= 97 && value <= 122) || (value == 95);
 }
 
 int is_new_line(char value) {
@@ -22,6 +22,11 @@ source_t* ts_open_source(char* source)
 	psource->last_pos = 0;
 
 	return psource;
+}
+
+void ts_close_source(char* source) 
+{
+	fclose(source);
 }
 
 token_t* ts_get_next_token(source_t* source)
