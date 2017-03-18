@@ -1,19 +1,25 @@
 #include "token_stream.h";
 #include <Windows.h>
 
-int is_alphanumeric(char value) 
+int is_alphanumeric(char value)
 {
 	return (value >= 65 && value <= 90) || (value >= 97 && value <= 122) || (value == 95);
+}
+
+int is_space(char value)
+{
+	return (value == 32);
 }
 
 int is_new_line(char value) {
 	return (value == '\n');
 }
 
-token_type_t ts_get_type(char* value) 
+token_type_t ts_get_type(char * value)
 {
 	return TK_ID;
 }
+
 
 source_t* ts_open_source(char* source)
 {
@@ -24,7 +30,7 @@ source_t* ts_open_source(char* source)
 	return psource;
 }
 
-void ts_close_source(char* source) 
+void ts_close_source(char* source)
 {
 	fclose(source);
 }
@@ -33,31 +39,32 @@ token_t* ts_get_next_token(source_t* source)
 {
 	char buffer[255];
 	FillMemory(&buffer, 255, 0);
-	
+
 	int line = 1;
 	token_t token;
 	while (1)
 	{
 		char value = getc(source->source);
 
-		if (is_alphanumeric(value)) 
+		if (is_alphanumeric(value))
 		{
 			while (1)
 			{
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = getc(source->source);			
-				if (value == ' ') 
+				value = getc(source->source);
+				if (is_space(value))
 				{
 					token.id = buffer;
 					token.line = line;
 					token.type = ts_get_type(token.id);
+					
 					return &token;
 				}
 			}
 		}
-		else if (value == '&') 
+		else if (value == '&')
 		{
 			while (1)
 			{
@@ -77,7 +84,7 @@ token_t* ts_get_next_token(source_t* source)
 				}
 			}
 		}
-		else if (value == '=') 
+		else if (value == '=')
 		{
 			token.id = "=";
 			token.line = line;
@@ -91,7 +98,7 @@ token_t* ts_get_next_token(source_t* source)
 
 		source->last_pos += 1;
 	};
-	
+
 	return NULL;
 }
 

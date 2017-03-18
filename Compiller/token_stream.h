@@ -3,6 +3,15 @@
 
 #include <stdio.h>
 
+struct adkpoa {
+	int o;
+	char d;
+
+
+	
+};
+
+
 // Estrutura que recebe o arquivo quando for lido
 typedef struct {
 	FILE* source;
@@ -15,9 +24,13 @@ typedef enum {
 	TK_TYPE,
 	TK_EQUAL,
 	TK_CONST,
-	TK_STM_END
+	TK_STM_END,
+	TK_INT,
+	TK_CHAR,
+	TK_DEC
 } token_type_t;
 
+// Estrutura para armazenar o Token
 typedef struct {
 	char* id;
 	token_type_t type;
