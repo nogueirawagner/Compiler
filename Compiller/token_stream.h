@@ -3,20 +3,7 @@
 
 #include <stdio.h>
 
-struct adkpoa {
-	int o;
-	char d;
 
-
-	
-};
-
-
-// Estrutura que recebe o arquivo quando for lido
-typedef struct {
-	FILE* source;
-	int last_pos;
-} source_t;
 
 // Enumerado de tokens 
 typedef enum {
@@ -37,27 +24,48 @@ typedef struct {
 	int line;
 } token_t;
 
+
+// Tabela de símbolos armazenando os tokens
+typedef struct {
+	token_t * token;
+	struct token_list_t * node;
+} token_list_t;
+
+// Estrutura que recebe o arquivo quando for lido
+typedef struct {
+	FILE* source;
+	int last_pos;
+} source_t;
+
+
 /******************************************************
-* Função para abrir o arquivo 
+ Função para abrir o arquivo
 */
 source_t* ts_open_source(char* source);
-/******************************************************/
+/******************************************************/
+
 /******************************************************
-* Função para fechar o arquivo
+ Função para fechar o arquivo
 */
 void ts_close_source(char* source);
 /******************************************************/
 
 /******************************************************
-* Função para pegar o próximo token
+ Função para pegar o próximo token
 */
 token_t* ts_get_next_token(source_t* source);
 /******************************************************/
 
 /******************************************************
-* Função para validar se é um tipo de token
+ Função para validar se é um tipo de token
 */
 int ts_is_token_type(token_t *token, token_type_t type);
+/******************************************************/
+
+/******************************************************
+ Função para inserir tokens na tabela de simbolos
+*/
+token_list_t* ts_save_tokens_table_symbols(token_list_t * token_next, token_t * token);
 /******************************************************/
 
 #endif // !_TOKEN_STREAM
