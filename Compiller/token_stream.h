@@ -31,10 +31,10 @@ typedef struct {
 
 // Estrutura que recebe o arquivo quando for lido
 typedef struct {
-	FILE* source;	/* ponteiro para arquivo */
-	int last_pos;	/* última posição */
+	FILE* source;		/* ponteiro para arquivo */
+	int last_pos;		/* última posição */
 	char last_read;	/* último caracter lido */
-	int line_cur; /* linha atual */
+	int line_cur;		/* linha atual */
 } source_t;
 
 /******************************************************

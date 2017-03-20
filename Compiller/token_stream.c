@@ -92,7 +92,7 @@ token_t * ts_get_token_delimiter(source_t * source)
 	token_t token;
 
 	char bufferc[255];
-	FillMemory(&bufferc, 1, 0);
+	FillMemory(&bufferc, 255, 0);
 	
 	char scopy[1] = { source->last_read };
 	strncat(bufferc, scopy, 1);
@@ -114,6 +114,7 @@ token_t* ts_get_next_token(source_t* source)
 	FillMemory(&buffer, 255, 0);
 
 	int line = 1;
+	source->line_cur = line;
 	token_t token;
 	while (1)
 	{
