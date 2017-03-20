@@ -79,6 +79,31 @@ void ts_close_source(char* source)
 	fclose(source);
 }
 
+char ts_get_next_caracter(source_t * source)
+{
+	char value = getc(source->source);
+	source->last_pos = ftell(source->source);
+	source->last_read = value;
+	return value;
+}
+
+token_t * ts_get_token_delimiter(source_t * source)
+{
+	token_t token;
+
+	char bufferc[255];
+	FillMemory(&bufferc, 1, 0);
+	
+	char scopy[1] = { source->last_read };
+	strncat(bufferc, scopy, 1);
+
+	token.id = bufferc;
+	token.line = source->line_cur;
+	token.type = TK_STM_END;
+
+	return &token;
+}
+
 token_t* ts_get_next_token(source_t* source)
 {
 
@@ -92,8 +117,10 @@ token_t* ts_get_next_token(source_t* source)
 	token_t token;
 	while (1)
 	{
-		char value = getc(source->source);
-		source->last_pos = ftell(source->source);
+		if (is_caracter_semicolon(source->last_read))
+			return ts_get_token_delimiter(source);
+
+		char value = ts_get_next_caracter(source);
 
 		if (is_alphanumeric(value))
 		{
@@ -102,14 +129,12 @@ token_t* ts_get_next_token(source_t* source)
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = getc(source->source);
-				source->last_pos = ftell(source->source);
+				value = ts_get_next_caracter(source); // Lê próximo caracter
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
 					token.id = buffer;
 					token.line = line;
 					token.type = ts_get_type(token.id); // resolver
-
 					return &token;
 				}
 			}
@@ -121,14 +146,12 @@ token_t* ts_get_next_token(source_t* source)
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = getc(source->source);
-				source->last_pos = ftell(source->source);
+				value = ts_get_next_caracter(source); // Lê proximo caracter
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
 					token.id = buffer;
 					token.line = line;
 					token.type = ts_get_type(token.id); // resolver 
-					
 					return &token;
 				}
 			}
@@ -147,8 +170,7 @@ token_t* ts_get_next_token(source_t* source)
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = getc(source->source);
-				source->last_pos = ftell(source->source);
+				value = ts_get_next_caracter(source); // Lê proximo caracter
 				if (is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value))
 				{
 					token.id = buffer;
@@ -166,11 +188,11 @@ token_t* ts_get_next_token(source_t* source)
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = getc(source->source);
-				source->last_pos = ftell(source->source);
+				value = ts_get_next_caracter(source); // Lê proximo caracter
 				if (is_new_line(value))
 				{
 					line++;
+					source->line_cur = line;
 					return;
 				}
 			}
