@@ -57,7 +57,7 @@ token_type_t ts_get_type(char * value)
 	//	return TK_INT;
 	//}
 
-	return TK_INT;
+	return TK_TYPE;
 
 }
 
