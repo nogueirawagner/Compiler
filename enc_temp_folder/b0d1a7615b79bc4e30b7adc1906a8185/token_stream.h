@@ -25,8 +25,8 @@ typedef struct {
 // Tabela de tokens armazenados
 typedef struct {
 	token_t * token;
-	struct token_stack_t * next_node;
-} token_stack_t;
+	struct token_list_t * node;
+} token_list_t;
 
 // Tabela de simbols
 typedef struct {
@@ -66,6 +66,12 @@ token_t * ts_get_next_token(source_t* source);
 	Função para validar se é um tipo de token
 */
 int ts_is_token_type(token_t *token, token_type_t type);
+/******************************************************/
+
+/******************************************************
+	Função para inserir tokens na tabela de simbolos
+*/
+token_list_t * ts_save_tokens_table_symbols(token_list_t * token_next, token_t * token);
 /******************************************************/
 
 /******************************************************

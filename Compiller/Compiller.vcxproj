@@ -144,9 +144,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="token_stack.c" />
     <ClCompile Include="token_stream.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="token_stack.h" />
     <ClInclude Include="token_stream.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

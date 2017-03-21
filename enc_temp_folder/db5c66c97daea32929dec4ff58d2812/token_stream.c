@@ -1,8 +1,7 @@
 #include "token_stream.h";
-#include "token_stack.h";
 #include <stdio.h>;
 #include <string.h>
-
+#include <Windows.h>
 
 // verifica se é caracter A...Z ou a...z
 int is_alphanumeric(char value)
@@ -56,7 +55,18 @@ token_type_t ts_get_type(char * value)
 	if (strcmp(pointer, value) == 0) { // match!
 		return TK_INT;
 	}
+		
+}
 
+token_list_t * ts_save_tokens_table_symbols(token_list_t * token_next, token_t * token)
+{
+	token_next->token = (token_t*)malloc(sizeof(token_t));
+	token_next->node = (token_list_t*)malloc(sizeof(token_list_t));
+
+	token_next->token = &token;
+	token_next = token_next->node;
+
+	return token_next;
 }
 
 source_t * ts_open_source(char * source)
@@ -105,6 +115,9 @@ int ts_is_token_type(token_t *token, token_type_t type)
 
 token_t * ts_get_next_token(source_t* source)
 {
+	token_list_t * ts_inicio;
+	token_list_t * ts_next_token;
+
 	char buffer[255];
 	FillMemory(&buffer, 255, 0);
 
