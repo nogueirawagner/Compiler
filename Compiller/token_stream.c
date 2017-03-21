@@ -52,10 +52,12 @@ int is_new_line(char value) {
 
 token_type_t ts_get_type(char * value)
 {
-	char *pointer = "int";
-	if (strcmp(pointer, value) == 0) { // match!
-		return TK_INT;
-	}
+	//char *pointer = "int";
+	//if (strcmp(pointer, value) == 0) { // match!
+	//	return TK_INT;
+	//}
+
+	return TK_INT;
 
 }
 
