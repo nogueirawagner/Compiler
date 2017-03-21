@@ -20,7 +20,6 @@ token_stack_t * ts_alloc_stack(token_t * token)
 void ts_init_stack_tokens(token_stack_t * stack)
 {
 	stack->next_node = NULL;
-	//tam_stack = 0;
 }
 
 /* Insere dados na pilha de tokens */
@@ -39,7 +38,6 @@ void ts_push_stack_tokens(token_stack_t * stack, token_t * token)
 
 		temp->next_node = new_element;
 	}
-	//tam_stack++;
 }
 
 /* Verifica se a pilha está vazia */
