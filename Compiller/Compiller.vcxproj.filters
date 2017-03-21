@@ -17,9 +17,15 @@
     <ClCompile Include="token_stream.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="token_stack.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="token_stream.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="token_stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
