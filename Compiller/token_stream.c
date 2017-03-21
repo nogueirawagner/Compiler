@@ -6,7 +6,7 @@
 // verifica se é caracter A...Z ou a...z
 int is_alphanumeric(char value)
 {
-	return (value >= 65 && value <= 90) || (value >= 97 && value <= 122) || (value == 95);
+	return (value >= 65 && value <= 90) || (value >= 97 && value <= 122);
 }
 
 int is_numeric(char value)
@@ -51,7 +51,11 @@ int is_new_line(char value) {
 
 token_type_t ts_get_type(char * value)
 {
-	return TK_TYPE;
+	char *pointer = "int";
+	if (strcmp(pointer, value) == 0) { // match!
+		return TK_INT;
+	}
+		
 }
 
 token_list_t * ts_save_tokens_table_symbols(token_list_t * token_next, token_t * token)
@@ -65,7 +69,7 @@ token_list_t * ts_save_tokens_table_symbols(token_list_t * token_next, token_t *
 	return token_next;
 }
 
-source_t* ts_open_source(char* source)
+source_t * ts_open_source(char * source)
 {
 	source_t* psource = (source_t*)malloc(sizeof(source_t));
 	psource->source = fopen(source, "rb");
@@ -93,7 +97,7 @@ token_t * ts_get_token_delimiter(source_t * source)
 
 	char bufferc[255];
 	FillMemory(&bufferc, 255, 0);
-	
+
 	char scopy[1] = { source->last_read };
 	strncat(bufferc, scopy, 1);
 
@@ -104,9 +108,13 @@ token_t * ts_get_token_delimiter(source_t * source)
 	return &token;
 }
 
-token_t* ts_get_next_token(source_t* source)
+int ts_is_token_type(token_t *token, token_type_t type)
 {
+	return (token->type == type);
+}
 
+token_t * ts_get_next_token(source_t* source)
+{
 	token_list_t * ts_inicio;
 	token_list_t * ts_next_token;
 
@@ -137,6 +145,8 @@ token_t* ts_get_next_token(source_t* source)
 					token.line = line;
 					token.type = ts_get_type(token.id); // resolver
 					return &token;
+
+					//Table 
 				}
 			}
 		}
@@ -204,7 +214,3 @@ token_t* ts_get_next_token(source_t* source)
 	return NULL;
 }
 
-int ts_is_token_type(token_t *token, token_type_t type)
-{
-	return (token->type == type);
-}
