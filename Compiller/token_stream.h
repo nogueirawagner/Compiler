@@ -36,48 +36,30 @@ typedef struct {
 	int line;
 } token_table_symbols_t;
 
-// Estrutura que recebe o arquivo quando for lido
+/* Estrutura que recebe o arquivo quando for lido */
 typedef struct {
 	FILE * source;		/* ponteiro para arquivo */
-	int last_pos;		/* última posição */
+	int last_pos;			/* última posição */
 	char last_read;		/* último caracter lido */
-	int line_cur;		/* linha atual */
+	int line_cur;			/* linha atual */
 } source_t;
 
-/******************************************************
-	Função para abrir o arquivo
-*/
+/* Função para abrir o arquivo */
 source_t * ts_open_source(char* source);
-/******************************************************/
 
-/******************************************************
-	Função para fechar o arquivo
-*/
+/* Função para fechar o arquivo */
 void ts_close_source(char* source);
-/******************************************************/
 
-/******************************************************
-	Função para pegar o próximo token
-*/
+/* Função para pegar o próximo token */
 token_t * ts_get_next_token(source_t* source);
-/******************************************************/
 
-/******************************************************
-	Função para validar se é um tipo de token
-*/
+/* Função para validar se é um tipo de token */
 int ts_is_token_type(token_t *token, token_type_t type);
-/******************************************************/
 
-/******************************************************
-	Função para pegar o proximo caracter
-*/
+/* Função para pegar o proximo caracter */
 char ts_get_next_caracter(source_t * source);
-/******************************************************/
 
-/******************************************************
-	Função para retornar o token quando o delimitador for encontrado
-*/
+/* Função para retornar o token quando o delimitador for encontrado */
 token_t * ts_get_token_delimiter(source_t * source);
-/******************************************************/
 
 #endif // !_TOKEN_STREAM

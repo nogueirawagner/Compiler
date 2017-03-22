@@ -15,7 +15,7 @@ void ts_init_stack_tokens(token_stack_t * stack);
 /******************************************************
 	Função para inserir dados na pilha de Token
 */
-void ts_push_stack_tokens(token_stack_t * stack, token_t * token);
+token_stack_t * ts_push_stack_tokens(token_stack_t * stack, token_t * token);
 /******************************************************/
 
 /******************************************************

@@ -107,12 +107,12 @@ int ts_is_token_type(token_t *token, token_type_t type)
 
 token_t * ts_get_next_token(source_t* source)
 {
-	char buffer[255];
-	FillMemory(&buffer, 255, 0);
+	char* buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
 
 	int line = 1;
 	source->line_cur = line;
-	token_t token;
+	token_t* token = (token_t*)malloc(sizeof(token_t));
 	while (1)
 	{
 		if (is_caracter_semicolon(source->last_read))
@@ -130,10 +130,10 @@ token_t * ts_get_next_token(source_t* source)
 				value = ts_get_next_caracter(source); // Lê próximo caracter
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
-					token.id = &buffer;
-					token.line = line;
-					token.type = ts_get_type(token.id); // resolver
-					return &token;
+					token->id = buffer;
+					token->line = line;
+					token->type = ts_get_type(token->id); // resolver
+					return token;
 				}
 			}
 		}
@@ -147,19 +147,19 @@ token_t * ts_get_next_token(source_t* source)
 				value = ts_get_next_caracter(source); // Lê proximo caracter
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
-					token.id = &buffer;
-					token.line = line;
-					token.type = ts_get_type(token.id); // resolver 
-					return &token;
+					token->id = buffer;
+					token->line = line;
+					token->type = ts_get_type(token->id); // resolver 
+					return token;
 				}
 			}
 		}
 		else if (is_caracter_equals(value))
 		{
-			token.id = "=";
-			token.line = line;
-			token.type = TK_EQUAL;
-			return &token;
+			token->id = "=";
+			token->line = line;
+			token->type = TK_EQUAL;
+			return token;
 		}
 		else if (is_numeric(value))
 		{
@@ -171,11 +171,11 @@ token_t * ts_get_next_token(source_t* source)
 				value = ts_get_next_caracter(source); // Lê proximo caracter
 				if (is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value))
 				{
-					token.id = &buffer;
-					token.line = line;
-					token.type = ts_get_type(token.id); // resolver 
+					token->id = buffer;
+					token->line = line;
+					token->type = ts_get_type(token->id); // resolver 
 
-					return &token;
+					return token;
 				}
 			}
 		}

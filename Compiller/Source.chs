@@ -1,4 +1,4 @@
-int &documento, linha;
+int &documento, &linha;
 
 int &documento = 10; ok
 int &documento; ok
