@@ -130,7 +130,7 @@ token_t * ts_get_next_token(source_t* source)
 				value = ts_get_next_caracter(source); // Lê próximo caracter
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
-					token.id = buffer;
+					token.id = &buffer;
 					token.line = line;
 					token.type = ts_get_type(token.id); // resolver
 					return &token;
@@ -147,7 +147,7 @@ token_t * ts_get_next_token(source_t* source)
 				value = ts_get_next_caracter(source); // Lê proximo caracter
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
-					token.id = buffer;
+					token.id = &buffer;
 					token.line = line;
 					token.type = ts_get_type(token.id); // resolver 
 					return &token;
@@ -171,7 +171,7 @@ token_t * ts_get_next_token(source_t* source)
 				value = ts_get_next_caracter(source); // Lê proximo caracter
 				if (is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value))
 				{
-					token.id = buffer;
+					token.id = &buffer;
 					token.line = line;
 					token.type = ts_get_type(token.id); // resolver 
 
