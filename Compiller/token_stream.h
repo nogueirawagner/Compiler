@@ -3,32 +3,32 @@
 
 #include <stdio.h>
 
-// Enumerado de tokens 
+/* Enumerado de tokens */
 typedef enum {
 	TK_ID,			/* define o identificador do token */
 	TK_TYPE,		/* define se o token é um tipo de dado (int, char, long, dec) */
 	TK_EQUAL,		/* define se o token é operador aritmetico de igualdade */
 	TK_CONST,		/* define se o token é um valor atribuido */
-	TK_STM_END,  	/* define se o token é um ponto e vírgula */
+	TK_STM_END, /* define se o token é um ponto e vírgula */
 	TK_INT,			/* define se o token é um tipo int */
 	TK_CHAR,		/* define se o token é um tipo char */
 	TK_DEC			/* define se o token é um tipo decimal */
 } token_type_t;
 
-// Estrutura para armazenar o Token
+/* Estrutura para armazenar o Token */
 typedef struct {
 	char * id;
 	token_type_t type;
 	int line;
 } token_t;
 
-// Tabela de tokens armazenados
+/* Tabela de tokens armazenados */
 typedef struct {
 	token_t * token;
 	struct token_stack_t * next_node;
 } token_stack_t;
 
-// Tabela de simbols
+/* Tabela de simbols */
 typedef struct {
 	char * variable;
 	token_type_t type;
