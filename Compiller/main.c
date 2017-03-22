@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 #include "token_stream.h"
 #include "token_stack.h"
