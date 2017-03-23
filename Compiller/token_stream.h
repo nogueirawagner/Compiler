@@ -30,7 +30,7 @@ typedef struct {
 
 /* Tabela de simbols */
 typedef struct {
-	char * variable;
+	char variable;
 	token_type_t type;
 	char value;
 	int line;

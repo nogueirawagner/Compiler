@@ -1,5 +1,6 @@
 #include "token_stream.h";
 #include "token_stack.h";
+#include "token_exception.h";
 #include <stdio.h>;
 #include <string.h>;
 #include <Windows.h>;
@@ -105,9 +106,30 @@ int ts_is_token_type(token_t *token, token_type_t type)
 	return (token->type == type);
 }
 
+int ts_begin_main(char value) 
+{
+	char * buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+
+	while (1) 
+	{
+		if (value == 109)
+		{
+			char scopy[1] = { value };
+			strncat(buffer, scopy, 1);
+		}
+		else 
+		{
+			te_generate_exception('E001');
+		}
+	}
+	return 0;
+}
+
+
 token_t * ts_get_next_token(source_t* source)
 {
-	char* buffer = (char*)malloc(255);
+	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 
 	int line = 1;
@@ -122,6 +144,9 @@ token_t * ts_get_next_token(source_t* source)
 
 		if (is_alphanumeric(value))
 		{
+			if (line == 1)
+				ts_begin_main(value);
+
 			while (1)
 			{
 				char scopy[1] = { value };
