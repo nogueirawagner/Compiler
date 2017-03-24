@@ -2,17 +2,28 @@
 #include <stdlib.h>;
 #include <string.h>;
 
-void te_generate_exception(char code)
+void te_generate_exception(int code)
 {
 	switch (code)
 	{
-	case 'E001':
-		printf("kapodsd");
-		exit(1);
-	case 'E002':
-		printf("aok kodad");
-		exit(1);
+	case 1001:
+		te_error_unknown();
+	case 2:
+		te_error_unknown();
 	default:
-		break;
+		te_error_unknown();
 	}
 }
+
+
+int te_error_unknown() {
+	printf("Erro desconhecido ");
+	getchar();
+	return 0;
+}
+
+
+
+
+
+

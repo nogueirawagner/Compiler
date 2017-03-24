@@ -84,6 +84,7 @@ char ts_get_next_caracter(source_t * source)
 	return value;
 }
 
+/* Verifica se */
 token_t * ts_get_token_delimiter(source_t * source)
 {
 	token_t token;
@@ -106,28 +107,57 @@ int ts_is_token_type(token_t *token, token_type_t type)
 	return (token->type == type);
 }
 
-int ts_begin_main(char value) 
+/* Verifica se arquivo começa com main() */
+int ts_begin_main(char value, source_t * source)
 {
+	int tam = 1;
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 
-	while (1) 
+	char scopy[1] = { value };
+	strncat(buffer, scopy, 1);
+
+	while (1)
 	{
 		if (value == 109)
 		{
-			char scopy[1] = { value };
-			strncat(buffer, scopy, 1);
+			value = ts_get_next_caracter(source);
+			if (is_alphanumeric(value))
+			{
+				while (1)
+				{
+					if (is_new_line(value))
+					{
+						source->line_cur++;
+					}
+
+					if (!is_new_line(value))
+					{
+						char scopy[1] = { value };
+						strncat(buffer, scopy, 1);
+						tam++;
+						if (tam > 7)
+							te_generate_exception(1001);
+					}
+
+					value = ts_get_next_caracter(source); // Lê próximo caracter
+					if (tam == 7 && value == 123)
+					{
+						return 1;
+					}
+				}
+			}
+			else
+				te_generate_exception(1001);
 		}
-		else 
-		{
-			te_generate_exception('E001');
-		}
+		else
+			te_generate_exception(1001);
 	}
 	return 0;
 }
 
-
-token_t * ts_get_next_token(source_t* source)
+/* Pega próximo token */
+token_t * ts_get_next_token(source_t * source)
 {
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
@@ -145,7 +175,7 @@ token_t * ts_get_next_token(source_t* source)
 		if (is_alphanumeric(value))
 		{
 			if (line == 1)
-				ts_begin_main(value);
+				ts_begin_main(value, source);
 
 			while (1)
 			{
@@ -215,7 +245,7 @@ token_t * ts_get_next_token(source_t* source)
 				if (is_new_line(value))
 				{
 					line++;
-					source->line_cur = line;
+					source->line_cur += line;
 					return;
 				}
 			}
