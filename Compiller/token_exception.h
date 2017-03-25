@@ -2,6 +2,8 @@
 #ifndef _TOKEN_EXCEPT
 #define _TOKEN_EXCEPT
 
+#include <stdio.h>
+#include <stdlib.h>
 
 /*
 
@@ -27,7 +29,7 @@ erro[14] = "Atribuição de valores equivocada";
 
 
 /* GENERATE EXCEPTIONS */
-void te_generate_exception(int code);
+void te_generate_exception(int code, int line, source_t * source);
 
 
 

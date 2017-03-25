@@ -1,6 +1,6 @@
 main()
 {
- int &documento, &linha;
+ int &documento, &linha ;
 }
 
 
