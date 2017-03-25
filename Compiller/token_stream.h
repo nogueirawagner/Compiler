@@ -5,7 +5,7 @@
 
 /* Enumerado de tokens */
 typedef enum {
-	TK_ID,			/* define o identificador do token */
+	TK_ID,			/* define o identificador do token ou variavel */
 	TK_TYPE,		/* define se o token é um tipo de dado (int, char, long, dec) */
 	TK_EQUAL,		/* define se o token é operador aritmetico de igualdade */
 	TK_CONST,		/* define se o token é um valor atribuido */
@@ -25,7 +25,7 @@ typedef struct {
 /* Tabela de tokens armazenados */
 typedef struct {
 	token_t * token;
-	struct token_stack_t * next_node;
+	struct token_stack_t * next_token;
 } token_stack_t;
 
 /* Tabela de simbols */

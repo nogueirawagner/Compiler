@@ -54,7 +54,7 @@ int is_new_line(char value)
 }
 
 /* Verifica se é um caracter '\n' */
-int is_caracter_smash_line(char value) 
+int is_caracter_smash_line(char value)
 {
 	return (value == 10);
 }
@@ -66,11 +66,12 @@ int is_caracter_key_opened(char value)
 }
 
 /* Verificar se ponteiros são iguais */
-int ts_are_equal(char * pointer1, char * pointer2) 
+int ts_are_equal(char * pointer1, char * pointer2)
 {
 	return !(strcmp(pointer1, pointer2));
 }
 
+/* Define o tipo do token */
 token_type_t ts_get_type(char * value)
 {
 	//char *pointer = "int";
@@ -82,12 +83,13 @@ token_type_t ts_get_type(char * value)
 
 }
 
+/* Abre o arquivo em binário */
 source_t * ts_open_source(char * source)
 {
 	source_t* psource = (source_t*)malloc(sizeof(source_t));
 	psource->source = fopen(source, "rb");
 	psource->last_pos = 0;
-
+	psource->line_cur = 1;
 	return psource;
 }
 
@@ -179,8 +181,7 @@ token_t * ts_get_next_token(source_t * source)
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 
-	int line = 1;
-	source->line_cur = line;
+	int line = source->line_cur;
 	token_t* token = (token_t*)malloc(sizeof(token_t));
 	while (1)
 	{
@@ -193,17 +194,16 @@ token_t * ts_get_next_token(source_t * source)
 		/* Verificar se é primeira linha e se a primeira letra é 'm' */
 		if (source->last_pos == 1 && value != 109)
 			te_generate_exception(1001, 1, source);
+		else if (line == 1) /* Valida a palavra reservada main */
+		{
+			ts_begin_main(value, source);
+			line = source->line_cur;
+			value = source->last_read;
+		}
 
 		/* Verificar se é qualquer letra de A...Z e a...z */
 		if (is_alphanumeric(value))
 		{
-			/* Valida a palavra reservada main */
-			if (line == 1) 
-			{
-				ts_begin_main(value, source);
-				line = source->line_cur;
-			}
-			
 			while (1)
 			{
 				char scopy[1] = { value };
@@ -272,7 +272,7 @@ token_t * ts_get_next_token(source_t * source)
 				if (is_new_line(value))
 				{
 					line++;
-					source->line_cur += line;
+					source->line_cur = line;
 					return;
 				}
 			}
