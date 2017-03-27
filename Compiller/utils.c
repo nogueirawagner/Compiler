@@ -1,0 +1,66 @@
+
+/* Verifica se é caracter A...Z ou a...z */
+int is_alphanumeric(char value)
+{
+	return (value >= 65 && value <= 90) || (value >= 97 && value <= 122);
+}
+
+/* Verifica se é númerico */
+int is_numeric(char value)
+{
+	return (value >= 48 && value <= 57);
+}
+
+/* Verifica se é caracter e-comercial '&' */
+int is_caracter_ampersand(char value)
+{
+	return (value == 38);
+}
+
+/* Verifica se é caracter ponto e vírgula ';' */
+int is_caracter_semicolon(char value)
+{
+	return (value == 59);
+}
+
+/* Verifica se é caracter vírgula ',' */
+int is_caracter_comma(char value)
+{
+	return (value == 44);
+}
+
+/* Verifica se é operador de igualdade '=' */
+int is_caracter_equals(char value)
+{
+	return (value == 61);
+}
+
+/* Verifica se é espaço em branco */
+int is_space(char value)
+{
+	return (value == 32);
+}
+
+/* Verifica se é final de linha */
+int is_new_line(char value)
+{
+	return (value == 13 || value == 10);
+}
+
+/* Verifica se é um caracter '\n' */
+int is_caracter_smash_line(char value)
+{
+	return (value == 10);
+}
+
+/* Verifica se é abre chaves */
+int is_caracter_key_opened(char value)
+{
+	return (value == 123);
+}
+
+/* Verificar se ponteiros são iguais */
+int ts_are_equal(char* pointer1, char* pointer2)
+{
+	return !(strcmp(pointer1, pointer2));
+}

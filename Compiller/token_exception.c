@@ -1,7 +1,7 @@
-#include <stdio.h>;
-#include "token_stream.h";
-#include <stdlib.h>;
-#include <string.h>;
+#include "token_stream.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 void te_generate_exception(int code, int line, source_t * source)
 {

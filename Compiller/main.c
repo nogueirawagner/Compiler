@@ -1,9 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "token_stream.h"
-#include "token_stack.h"
 #include "stack.h"
-
 
 int main(int argc, char** argv) {
 
@@ -26,9 +24,12 @@ int main(int argc, char** argv) {
 		stack_push(&stack_token, token);
 
 		/* Desempilha tokens */
-		tt = (token_t*)stack_pop(&stack_token);
+		// tt = (token_t*)stack_pop(&stack_token);
 
 	}
+
+
+	
 
 error:
 	"erro ao processar";
