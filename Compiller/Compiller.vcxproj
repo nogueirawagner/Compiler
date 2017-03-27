@@ -144,11 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.c" />
+    <ClCompile Include="stack.c" />
     <ClCompile Include="token_exception.c" />
     <ClCompile Include="token_stack.c" />
     <ClCompile Include="token_stream.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="stack.h" />
     <ClInclude Include="token_exception.h" />
     <ClInclude Include="token_stack.h" />
     <ClInclude Include="token_stream.h" />

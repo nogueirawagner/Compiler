@@ -38,6 +38,28 @@ token_stack_t * ts_push_stack_tokens(token_stack_t * stack, token_t * token)
 	}
 }
 
+/* Retira dados da pilha */
+token_stack_t * ts_pop_stack_tokens(token_stack_t * stack) 
+{
+	if (stack->next_token == NULL) 
+	{
+		return NULL;
+	}
+	else 
+	{
+		token_stack_t * ultimo = stack->next_token;
+		token_stack_t * penultimo = stack;
+
+		while (ultimo->next_token != NULL) 
+		{
+			penultimo = ultimo;
+			ultimo = ultimo->next_token;
+		}
+		penultimo->next_token = NULL;
+		return ultimo;
+	}
+}
+
 /* Verifica se a pilha está vazia */
 int ts_stack_empty(token_stack_t * stack)
 {

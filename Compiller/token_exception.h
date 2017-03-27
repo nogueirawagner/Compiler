@@ -28,7 +28,7 @@ erro[14] = "Atribuição de valores equivocada";
 */
 
 
-/* GENERATE EXCEPTIONS */
+/* Gerar exceptions */
 void te_generate_exception(int code, int line, source_t * source);
 
 
