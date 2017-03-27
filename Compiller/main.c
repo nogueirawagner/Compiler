@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "token_stream.h"
 #include "stack.h"
+#include "utils.h"
 
 int main(int argc, char** argv) {
 
@@ -21,15 +22,16 @@ int main(int argc, char** argv) {
 		token_t * token = ts_get_next_token(source);  /* Pega proximo token */
 
 		/* Insere token na pilha */
-		stack_push(&stack_token, token);
+		if (token != NULL)
+			stack_push(&stack_token, token);
+
+		if(is_caracter_semicolon(source->last_read))
+			tt = (token_t*)stack_pop(&stack_token);
 
 		/* Desempilha tokens */
 		// tt = (token_t*)stack_pop(&stack_token);
 
 	}
-
-
-	
 
 error:
 	"erro ao processar";

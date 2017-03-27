@@ -128,11 +128,15 @@ token_t* ts_get_next_token(source_t* source)
 		/* Verificar se é primeira linha e se a primeira letra é 'm' */
 		if (source->last_pos == 1 && value != 109)
 			te_generate_exception(1001, 1, source);
-		else if (line == 1) /* Valida a palavra reservada main */
+		else if (line == 1 && source->last_pos == 1) /* Valida a palavra reservada main */
 		{
 			ts_begin_main(value, source);
 			line = source->line_cur;
-			value = source->last_read;
+			
+			if (is_new_line(source->last_read) && is_caracter_smash_line(ts_get_next_caracter(source)))
+				source->line_cur++;
+
+			return NULL;
 		}
 
 		/* Verificar se é qualquer letra de A...Z e a...z */
