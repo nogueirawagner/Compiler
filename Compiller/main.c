@@ -9,9 +9,11 @@ int main(int argc, char** argv) {
 
 	source_t * source = ts_open_source("Source.chs"); /* Abre arquivo em binário */
 	stack_t * stack_token; /* Pilha de Tokens */
-	list_t * table_symbols = list_new();
+	int length_stack = 0;
+	token_t * token_list = list_new();
+	token_table_symbols_t * table_symbols = list_new();
 
-	token_t* tt;
+	
 
 	int ret = stack_init(&stack_token);
 	if (ret < 0)
@@ -23,26 +25,22 @@ int main(int argc, char** argv) {
 		token_t * token = ts_get_next_token(source);  /* Pega proximo token */
 
 		/* Insere token na pilha */
-		if (token != NULL)
-			stack_push(&stack_token, token);
-
-		if (is_caracter_semicolon(source->last_read)) 
+		if (token != NULL) 
 		{
-			tt = (token_t*)stack_pop(&stack_token);
-			list_rpush(table_symbols, list_node_new(tt));
-			int i = 0;
-
-			list_node_t *node;
-			list_iterator_t *it = list_iterator_new(table_symbols, LIST_HEAD);
-			while ((node = list_iterator_next(it))) {
-				puts(node->val);
-			}
+			stack_push(&stack_token, token);
+			length_stack++;
 		}
 			
 
-		/* Desempilha tokens */
-		// tt = (token_t*)stack_pop(&stack_token);
-
+		if (is_caracter_semicolon(source->last_read))
+		{
+			token_t* tt;
+			while (length_stack != 0)
+			{
+				tt = (token_t*)stack_pop(&stack_token);
+				length_stack--;
+			}
+		}
 	}
 
 error:
