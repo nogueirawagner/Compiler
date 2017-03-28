@@ -31,6 +31,12 @@ int main(int argc, char** argv) {
 			tt = (token_t*)stack_pop(&stack_token);
 			list_rpush(table_symbols, list_node_new(tt));
 			int i = 0;
+
+			list_node_t *node;
+			list_iterator_t *it = list_iterator_new(table_symbols, LIST_HEAD);
+			while ((node = list_iterator_next(it))) {
+				puts(node->val);
+			}
 		}
 			
 
