@@ -1,184 +1,196 @@
+/********************************************************************
+ Source file 	: list.c
+      Author 	: Leam Delaney
+
+     Purpose	: Provide functionality for linked-lists
+     Version	: 0.0.1
+********************************************************************/
+
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 #include "list.h"
 
-/* Alocar lista */
-list_t *
-list_new() {
-  list_t *self;
-  if (!(self = LIST_MALLOC(sizeof(list_t))))
-    return NULL;
-  self->head = NULL;
-  self->tail = NULL;
-  self->free = NULL;
-  self->match = NULL;
-  self->len = 0;
-  return self;
+void list_initialize(linked_list_t *list, void (*destroy)(void *data))
+{
+    list->size = 0;
+    list->destroy = destroy;
+    list->head = NULL;
+    list->tail = NULL;
+
+    return;
 }
 
-/* Limpar lista */
-void
-list_destroy(list_t *self) {
-  unsigned int len = self->len;
-  list_node_t *next;
-  list_node_t *curr = self->head;
+void 
+list_destroy(linked_list_t *list)
+{
+    void * data;
 
-  while (len--) {
-    next = curr->next;
-    if (self->free) self->free(curr->val);
-    LIST_FREE(curr);
-    curr = next;
-  }
-
-  LIST_FREE(self);
-}
-
-/*
- * Append the given node to the list
- * and return the node, NULL on failure.
- */
-
-list_node_t *
-list_rpush(list_t *self, list_node_t *node) {
-  if (!node) return NULL;
-
-  if (self->len) {
-    node->prev = self->tail;
-    node->next = NULL;
-    self->tail->next = node;
-    self->tail = node;
-  } else {
-    self->head = self->tail = node;
-    node->prev = node->next = NULL;
-  }
-
-  ++self->len;
-  return node;
-}
-
-/*
- * Return / detach the last node in the list, or NULL.
- */
-
-list_node_t *
-list_rpop(list_t *self) {
-  if (!self->len) return NULL;
-
-  list_node_t *node = self->tail;
-
-  if (--self->len) {
-    (self->tail = node->prev)->next = NULL;
-  } else {
-    self->tail = self->head = NULL;
-  }
-
-  node->next = node->prev = NULL;
-  return node;
-}
-
-/*
- * Return / detach the first node in the list, or NULL.
- */
-
-list_node_t *
-list_lpop(list_t *self) {
-  if (!self->len) return NULL;
-
-  list_node_t *node = self->head;
-
-  if (--self->len) {
-    (self->head = node->next)->prev = NULL;
-  } else {
-    self->head = self->tail = NULL;
-  }
-
-  node->next = node->prev = NULL;
-  return node;
-}
-
-list_node_t *
-list_lpush(list_t *self, list_node_t *node) {
-  if (!node) return NULL;
-
-  if (self->len) {
-    node->next = self->head;
-    node->prev = NULL;
-    self->head->prev = node;
-    self->head = node;
-  } else {
-    self->head = self->tail = node;
-    node->prev = node->next = NULL;
-  }
-
-  ++self->len;
-  return node;
-}
-
-/*
- * Return the node associated to val or NULL.
- */
-
-list_node_t *
-list_find(list_t *self, void *val) {
-  list_iterator_t *it = list_iterator_new(self, LIST_HEAD);
-  list_node_t *node;
-
-  while ((node = list_iterator_next(it))) {
-    if (self->match) {
-      if (self->match(val, node->val)) {
-        list_iterator_destroy(it);
-        return node;
-      }
-    } else {
-      if (val == node->val) {
-        list_iterator_destroy(it);
-        return node;
-      }
+    /* Loop to remove each element from the list */
+    while (list_get_size(list) > 0)
+    {
+        if (list_remove_next(list, NULL, (void**)&data) == 0 &&
+            list->destroy != NULL)
+        {
+            /* Call the function that the user defines for destroy */
+            list->destroy(data);
+        }
     }
-  }
-
-  list_iterator_destroy(it);
-  return NULL;
+    /* No more operations can be performed on this list now. As a
+     * precaution, the structure should be cleared anyway. */
+    memset(list, 0, sizeof(linked_list_t));
+    return;
 }
 
-/*
- * Return the node at the given index or NULL.
- */
-
-list_node_t *
-list_at(list_t *self, int index) {
-  list_direction_t direction = LIST_HEAD;
-
-  if (index < 0) {
-    direction = LIST_TAIL;
-    index = ~index;
-  }
-
-  if ((unsigned)index < self->len) {
-    list_iterator_t *it = list_iterator_new(self, direction);
-    list_node_t *node = list_iterator_next(it);
-    while (index--) node = list_iterator_next(it);
-    list_iterator_destroy(it);
-    return node;
-  }
-
-  return NULL;
+int 
+list_insert_next(linked_list_t *list, 
+                 list_element_t *element,
+                 const void  *data)
+{
+    list_element_t *newElement;
+    
+    /* Attempt to allocate the memory for the new element */    
+    if ((newElement = (list_element_t *)malloc(sizeof(list_element_t))) == NULL)
+    {
+        printf("list_insert_next : failed to create new element\n");
+        return -1;
+    }
+    
+    newElement->data = (void*)data;
+    
+    if (element == NULL)
+    {
+        /* Add the new element at the HEAD of the list */
+        if (list_get_size(list) == 0)
+        {
+            list->tail = newElement;
+        }
+        
+        newElement->next = list->head;
+        list->head=newElement;
+    }    
+    else
+    {
+        if (element->next == NULL)
+        {
+            list->tail = newElement;
+        }
+    
+        newElement->next = element->next;
+        element->next = newElement;
+    }
+    
+    list->size++;
+    return 0;
 }
 
-/*
- * Remove the given node from the list, freeing it and it's value.
- */
+int
+list_remove_next(linked_list_t *list, list_element_t *element, void **data)
+{
+    list_element_t* oldElement;
 
-void
-list_remove(list_t *self, list_node_t *node) {
-  node->prev
-    ? (node->prev->next = node->next)
-    : (self->head = node->next);
+    /* Can't remove from an empty list */
+    if ( list_get_size(list) == 0 )
+    {
+        printf("list_remove_next : cannot remove element from empty list.\n");
+        return -1;
+    }
 
-  node->next
-    ? (node->next->prev = node->prev)
-    : (self->tail = node->prev);
+    /* Continue to remove element from list */
+    if ( element == NULL )
+    {
+        /* Remove element at head of list */
+        *data = list->head->data;
+        oldElement = list->head;
+        list->head = list->head->next;
 
-  if (self->free) self->free(node->val);
+        if ( list_get_size(list) == 1 )
+        {
+            list->tail = NULL;
+        }
+    }
+    else
+    {
+        /* Remove element from anywhere else in the list */
+        if ( element->next == NULL )
+        {
+            /*If there is no element after the current one, fail */
+            printf("list_remove_next : no element after tail\n");
+            return -1;
+        }
+        *data = element->data;
+        oldElement = element->next;
+        element->next = element->next->next;
 
-  LIST_FREE(node);
-  --self->len;
+        if ( element->next == NULL )
+        {
+            /* Setting new tail of list */
+            list->tail = element;
+        }
+    }
+    
+    /* Free the storage which was allocated in the list for old element. */
+    free(oldElement);
+    
+    list->size--;
+    return 0;
+}
+
+/* The following section of code is used to get values associated with
+ * the list, or the elements inside it.
+ * They are pretty simple to understand.*/
+int 
+list_get_size(linked_list_t* list)
+{
+    return (int)list->size;
+}
+
+list_element_t* 
+list_head(linked_list_t* list)
+{
+    return list->head;
+}
+
+list_element_t* 
+list_tail(linked_list_t* list)
+{
+    return list->tail;
+}
+
+int 
+list_is_head(linked_list_t* list, list_element_t* element)
+{
+    if( element == list->head )
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int 
+list_is_tail(linked_list_t* list, list_element_t* element)
+{
+    if( element == list->tail )
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void* 
+list_data(list_element_t* element)
+{
+    return element->data;
+}
+
+list_element_t* 
+list_next(list_element_t* element)
+{
+    return element->next;
 }

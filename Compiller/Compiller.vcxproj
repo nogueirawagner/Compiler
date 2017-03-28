@@ -144,8 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="list.c" />
-    <ClCompile Include="list_iterator.c" />
-    <ClCompile Include="list_node.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="stack.c" />
     <ClCompile Include="token_exception.c" />

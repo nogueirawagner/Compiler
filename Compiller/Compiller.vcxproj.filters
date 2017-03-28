@@ -29,12 +29,6 @@
     <ClCompile Include="list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="list_iterator.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="list_node.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="token_stream.h">

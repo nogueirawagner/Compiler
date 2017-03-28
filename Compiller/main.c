@@ -6,21 +6,11 @@
 #include "utils.h"
 #include "list.h"
 
-
-void insert_symbol_table(token_table_symbols_t* tbs)
-{
-
-}
-
 int main(int argc, char** argv) {
 
 	source_t * source = ts_open_source("Source.chs"); /* Abre arquivo em binário */
 	stack_t * stack_token; /* Pilha de Tokens */
 	int length_stack = 0;
-	token_t * token_list = list_new();
-	token_table_symbols_t * table_symbols = list_new();
-
-
 
 	int ret = stack_init(&stack_token);
 	if (ret < 0)
@@ -68,11 +58,8 @@ int main(int argc, char** argv) {
 					tbs->value = "";
 					tbs->variable = id->id;
 
-					insert_symbol_table(tbs);
-
 					count_id--;
 				}
-
 				// adiciona na tabela de simbolos
 			}
 		}
