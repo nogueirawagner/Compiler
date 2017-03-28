@@ -34,4 +34,10 @@ int is_caracter_key_opened(char value);
 /* Verificar se ponteiros são iguais */
 int ts_are_equal(char* pointer1, char* pointer2);
 
+/* Define se o token é um tipo de dado */
+int is_token_type_data(char* value);
+
+/* Define se o token é uma variável */
+int is_token_variable(char* value);
+
 #endif

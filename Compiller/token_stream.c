@@ -8,13 +8,10 @@
 /* Define o tipo do token */
 token_type_t ts_get_type(char* value)
 {
-	//char *pointer = "int";
-	//if (strcmp(pointer, value) == 0) { // match!
-	//	return TK_INT;
-	//}
-
-	return TK_TYPE;
-
+	if (is_token_type_data(value))
+		return TK_TYPE;
+	if (is_token_variable(value))
+		return TK_ID;
 }
 
 /* Abre o arquivo em binário */

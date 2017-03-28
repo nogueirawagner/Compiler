@@ -1,5 +1,5 @@
 #include "stack.h"
-#include<stdlib.h>
+#include <stdlib.h>
 
 int stack_init(struct stack_t* self)
 {

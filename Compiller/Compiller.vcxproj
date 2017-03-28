@@ -143,6 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="list.c" />
+    <ClCompile Include="list_iterator.c" />
+    <ClCompile Include="list_node.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="stack.c" />
     <ClCompile Include="token_exception.c" />
@@ -150,10 +153,14 @@
     <ClCompile Include="utils.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="list.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="token_exception.h" />
     <ClInclude Include="token_stream.h" />
     <ClInclude Include="utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Source.chs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

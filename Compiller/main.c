@@ -3,18 +3,19 @@
 #include "token_stream.h"
 #include "stack.h"
 #include "utils.h"
+#include "list.h"
 
 int main(int argc, char** argv) {
 
 	source_t * source = ts_open_source("Source.chs"); /* Abre arquivo em binário */
-	stack_t stack_token;
+	stack_t * stack_token; /* Pilha de Tokens */
+	list_t * table_symbols = list_new();
+
 	token_t* tt;
 
 	int ret = stack_init(&stack_token);
 	if (ret < 0)
-	{
 		fprintf(stderr, "Falha ao iniciar a stack \n");
-	}
 
 	while (1)
 	{
@@ -25,8 +26,13 @@ int main(int argc, char** argv) {
 		if (token != NULL)
 			stack_push(&stack_token, token);
 
-		if(is_caracter_semicolon(source->last_read))
+		if (is_caracter_semicolon(source->last_read)) 
+		{
 			tt = (token_t*)stack_pop(&stack_token);
+			list_rpush(table_symbols, list_node_new(tt));
+			int i = 0;
+		}
+			
 
 		/* Desempilha tokens */
 		// tt = (token_t*)stack_pop(&stack_token);

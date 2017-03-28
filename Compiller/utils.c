@@ -1,3 +1,4 @@
+#include "token_stream.h"
 
 /* Verifica se é caracter A...Z ou a...z */
 int is_alphanumeric(char value)
@@ -63,4 +64,23 @@ int is_caracter_key_opened(char value)
 int ts_are_equal(char* pointer1, char* pointer2)
 {
 	return !(strcmp(pointer1, pointer2));
+}
+
+/* Define se o token é um tipo de dado */
+int is_token_type_data(char* value)
+{
+	char * tipos[3] = { "int", "float", "dec" };
+
+	for (int i = 0; i < 2; i++)
+	{
+		if (strcmp(tipos[i], value) == 0)
+			return 1;
+	}
+	return 0;
+}
+
+/* Define se o token é uma variável */
+int is_token_variable(char* value)
+{
+	return is_caracter_ampersand(*value);
 }
