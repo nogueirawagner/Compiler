@@ -34,7 +34,7 @@ typedef struct {
 	char* type;
 	char* value;
 	int line;
-} token_table_symbols_t;
+} table_symbols_t;
 
 /* Estrutura que recebe o arquivo quando for lido */
 typedef struct {

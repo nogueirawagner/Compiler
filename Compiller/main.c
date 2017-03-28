@@ -12,6 +12,10 @@ int main(int argc, char** argv) {
 	stack_t * stack_token; /* Pilha de Tokens */
 	int length_stack = 0;
 
+	list_element_t* listPosition = NULL;
+	table_symbols_t myList;
+	list_initialize(&myList, NULL);
+
 	int ret = stack_init(&stack_token);
 	if (ret < 0)
 		fprintf(stderr, "Falha ao iniciar a stack \n");
@@ -27,7 +31,6 @@ int main(int argc, char** argv) {
 			stack_push(&stack_token, token);
 			length_stack++;
 		}
-
 
 		if (is_caracter_semicolon(source->last_read))
 		{
@@ -52,13 +55,14 @@ int main(int argc, char** argv) {
 				{
 					token_t* id = stack_pop(&ids);
 
-					token_table_symbols_t* tbs = (token_table_symbols_t*)malloc(sizeof(token_table_symbols_t));
+					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 					tbs->type = last_tk->id;
 					tbs->line = last_tk->line;
 					tbs->value = "";
 					tbs->variable = id->id;
-
 					count_id--;
+
+					list_insert_next(&myList, NULL, tbs);
 				}
 				// adiciona na tabela de simbolos
 			}

@@ -1,9 +1,5 @@
 /********************************************************************
- Source file 	: list.c
-      Author 	: Leam Delaney
-
-     Purpose	: Provide functionality for linked-lists
-     Version	: 0.0.1
+		 https://github.com/LeamDelaney/linked_list
 ********************************************************************/
 
 #include <stdlib.h>
