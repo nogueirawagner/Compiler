@@ -1,4 +1,5 @@
 #include "token_stream.h"
+#include <Windows.h>
 
 /* Verifica se é caracter A...Z ou a...z */
 int is_alphanumeric(char value)
@@ -69,9 +70,9 @@ int ts_are_equal(char* pointer1, char* pointer2)
 /* Define se o token é um tipo de dado */
 int is_token_type_data(char* value)
 {
-	char * tipos[3] = { "int", "float", "dec" };
+	char * tipos[4] = { "int", "float", "dec", "char" };
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		if (strcmp(tipos[i], value) == 0)
 			return 1;
@@ -83,4 +84,36 @@ int is_token_type_data(char* value)
 int is_token_variable(char* value)
 {
 	return is_caracter_ampersand(*value);
+}
+
+
+/* Retorna o tamanho do conteúdo do ponteiro */
+int length_content_token(char* value) 
+{
+	int b = 0;
+	int length = 0;
+	while (value[b] != 0)
+	{
+		if (value[b] != 0)
+			length++;
+		else
+			return length;
+		b++;
+	}
+	return length;
+}
+
+/* Retorna o valor do ponteiro */
+char* value_content(char* value) 
+{
+	char* buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+	int tam = length_content_token(value);
+
+	for (int j = 0; j < tam; j++)
+	{
+		char scopy[1] = { value[j] };
+		strncat(buffer, scopy, 1);
+	}
+	return buffer;
 }

@@ -40,4 +40,10 @@ int is_token_type_data(char* value);
 /* Define se o token é uma variável */
 int is_token_variable(char* value);
 
+/* Retorna o tamanho do conteúdo do ponteiro */
+int length_content_token(char* value);
+
+/* Retorna o valor do ponteiro */
+char* value_content(char* value);
+
 #endif

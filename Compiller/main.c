@@ -1,9 +1,16 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <Windows.h>
 #include "token_stream.h"
 #include "stack.h"
 #include "utils.h"
 #include "list.h"
+
+
+void insert_symbol_table(token_table_symbols_t* tbs)
+{
+
+}
 
 int main(int argc, char** argv) {
 
@@ -13,7 +20,7 @@ int main(int argc, char** argv) {
 	token_t * token_list = list_new();
 	token_table_symbols_t * table_symbols = list_new();
 
-	
+
 
 	int ret = stack_init(&stack_token);
 	if (ret < 0)
@@ -25,20 +32,48 @@ int main(int argc, char** argv) {
 		token_t * token = ts_get_next_token(source);  /* Pega proximo token */
 
 		/* Insere token na pilha */
-		if (token != NULL) 
+		if (token != NULL)
 		{
 			stack_push(&stack_token, token);
 			length_stack++;
 		}
-			
+
 
 		if (is_caracter_semicolon(source->last_read))
 		{
-			token_t* tt;
-			while (length_stack != 0)
+			stack_t * ids;
+			stack_init(&ids);
+
+			token_t* last_tk = (token_t*)stack_pop(&stack_token);
+			int count_id = 0;
+
+
+			while (last_tk->type == TK_ID)
 			{
-				tt = (token_t*)stack_pop(&stack_token);
-				length_stack--;
+				stack_push(&ids, last_tk);
+				last_tk = (token_t*)stack_pop(&stack_token);
+				count_id++;
+			}
+
+			if (last_tk->type == TK_TYPE)
+			{
+
+				while (count_id != 0)
+				{
+					token_t* id = stack_pop(&ids);
+
+					token_table_symbols_t* tbs = (token_table_symbols_t*)malloc(sizeof(token_table_symbols_t));
+					tbs->type = last_tk->id;
+					tbs->line = last_tk->line;
+					tbs->value = "";
+					tbs->variable = id->id;
+
+					insert_symbol_table(tbs);
+
+					count_id--;
+				}
+
+				// adiciona na tabela de simbolos
 			}
 		}
 	}
