@@ -98,7 +98,6 @@ int is_token_variable(char* value)
 	return is_caracter_ampersand(*value);
 }
 
-
 /* Retorna o tamanho do conteúdo do ponteiro */
 int length_content_token(char* value) 
 {

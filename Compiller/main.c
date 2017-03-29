@@ -54,7 +54,6 @@ int main(int argc, char** argv) {
 
 			if (last_tk->type == TK_TYPE)
 			{
-
 				while (count_id != 0)
 				{
 					token_t* id = stack_pop(&ids);
