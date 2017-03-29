@@ -33,16 +33,16 @@ int main(int argc, char** argv) {
 			stack_push(&stack_token, token);
 			length_stack++;
 		}
+		
+		if (is_caracter_semicolon(source->last_read))
+			tb_add(&stack_token, table_symbols);
 
-		if (source->last_read == -1) 
+		if (source->last_read == -1)
 		{
 			printf("Fim de analise lexica.\n");
 			tb_print_list(table_symbols);
 		}
-		
 
-		if (is_caracter_semicolon(source->last_read))
-			tb_add(&stack_token, table_symbols);
 	}
 
 error:

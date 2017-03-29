@@ -4,7 +4,6 @@
 #include "token_stream.h"
 #include "table_symbols.h"
 
-
 /* Insere elementos na tabela de simbols */
 void tb_add(stack_t* stack_token, linked_list_t tbl_symbols)
 {
@@ -35,7 +34,7 @@ void tb_add(stack_t* stack_token, linked_list_t tbl_symbols)
 			tbs->variable = id->id;
 			count_id--;
 
-			if (tbl_symbols.size == 0)
+			if (&tbl_symbols.size == 0)
 			{
 				list_insert_next(&tbl_symbols, NULL, tbs);
 				list_position = list_head(&tbl_symbols);
