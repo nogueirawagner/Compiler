@@ -2,12 +2,9 @@
 #ifndef _TOKEN_EXCEPT
 #define _TOKEN_EXCEPT
 
-#include <stdio.h>
 #include <stdlib.h>
 
 /*
-
-
 erro[0] = "Desconhecido";
 erro[1] = "Palavra reservada";
 erro[2] = "Variavel não declarada";
@@ -23,8 +20,6 @@ erro[12] = "Operador inadequado";
 erro[12] = "Comparação equivocada no comando de teste";
 erro[13] = "Comparação equivocada no comando de repetição";
 erro[14] = "Atribuição de valores equivocada";
-
-
 */
 
 

@@ -116,11 +116,6 @@ token_t* ts_get_next_token(source_t* source)
 	token_t* token = (token_t*)malloc(sizeof(token_t));
 	while (1)
 	{
-		/* Verificar se é um final de linha */
-		/*if (is_caracter_semicolon(source->last_read))
-			return ts_get_token_delimiter(source);
-		*/
-
 		char value = ts_get_next_caracter(source);
 
 		if (source->last_pos == 1 && !is_caracter_m(value))

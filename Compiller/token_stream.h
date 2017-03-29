@@ -28,14 +28,6 @@ typedef struct {
 	struct token_stack_t * next_token;
 } token_stack_t;
 
-/* Tabela de simbols */
-typedef struct {
-	char* variable;
-	char* type;
-	char* value;
-	int line;
-} table_symbols_t;
-
 /* Estrutura que recebe o arquivo quando for lido */
 typedef struct {
 	FILE * source;		/* ponteiro para arquivo */
