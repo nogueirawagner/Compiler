@@ -1,3 +1,3 @@
 main(){
- int &documento, &linha;
+ float &documento, &linha;
 }
