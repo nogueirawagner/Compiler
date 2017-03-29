@@ -28,8 +28,14 @@ int is_new_line(char value);
 /* Verifica se é um caracter '\n' */
 int is_caracter_smash_line(char value);
 
-/* Verifica se é abre chaves */
+/* Verifica se é caracter '{' */
 int is_caracter_key_opened(char value);
+
+/* Verifica se é caracter '}' */
+int is_caracter_key_closed(char value);
+
+/* Verifica se é caracter é letra 'm' */
+int is_caracter_m(char value);
 
 /* Verificar se ponteiros são iguais */
 int ts_are_equal(char* pointer1, char* pointer2);

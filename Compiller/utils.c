@@ -55,10 +55,22 @@ int is_caracter_smash_line(char value)
 	return (value == 10);
 }
 
-/* Verifica se é abre chaves */
+/* Verifica se é abre chaves '{' */
 int is_caracter_key_opened(char value)
 {
 	return (value == 123);
+}
+
+/* Verifica se é caracter '}' */
+int is_caracter_key_closed(char value)
+{
+	return (value == 125);
+}
+
+/* Verifica se caracter é letra 'm' */
+int is_caracter_m(char value) 
+{
+	return (value == 109);
 }
 
 /* Verificar se ponteiros são iguais */

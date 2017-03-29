@@ -13,8 +13,9 @@ int main(int argc, char** argv) {
 	int length_stack = 0;
 
 	list_element_t* listPosition = NULL;
-	table_symbols_t myList;
-	list_initialize(&myList, NULL);
+	linked_list_t table_symbols;
+	list_initialize(&table_symbols, NULL);
+
 
 	int ret = stack_init(&stack_token);
 	if (ret < 0)
@@ -31,6 +32,9 @@ int main(int argc, char** argv) {
 			stack_push(&stack_token, token);
 			length_stack++;
 		}
+
+		if (source->last_read == -1)
+			printf("Fim de analise lexica.\n");
 
 		if (is_caracter_semicolon(source->last_read))
 		{
@@ -58,11 +62,11 @@ int main(int argc, char** argv) {
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 					tbs->type = last_tk->id;
 					tbs->line = last_tk->line;
-					tbs->value = "";
+					tbs->value = NULL;
 					tbs->variable = id->id;
 					count_id--;
 
-					list_insert_next(&myList, NULL, tbs);
+					list_insert_next(&table_symbols, NULL, tbs);
 				}
 				// adiciona na tabela de simbolos
 			}

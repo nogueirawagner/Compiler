@@ -62,7 +62,4 @@ char ts_get_next_caracter(source_t * source);
 /* Função para retornar o token quando o delimitador for encontrado */
 token_t * ts_get_token_delimiter(source_t * source);
 
-/* Função que compara se dois ponteiros são iguais */
-int ts_are_equal(char * pointer1, char * pointer2);
-
 #endif // !_TOKEN_STREAM

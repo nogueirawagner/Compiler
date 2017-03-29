@@ -117,19 +117,19 @@ token_t* ts_get_next_token(source_t* source)
 	while (1)
 	{
 		/* Verificar se é um final de linha */
-		if (is_caracter_semicolon(source->last_read))
+		/*if (is_caracter_semicolon(source->last_read))
 			return ts_get_token_delimiter(source);
+		*/
 
 		char value = ts_get_next_caracter(source);
 
-		/* Verificar se é primeira linha e se a primeira letra é 'm' */
-		if (source->last_pos == 1 && value != 109)
+		if (source->last_pos == 1 && !is_caracter_m(value))
 			te_generate_exception(1001, 1, source);
 		else if (line == 1 && source->last_pos == 1) /* Valida a palavra reservada main */
 		{
 			ts_begin_main(value, source);
 			line = source->line_cur;
-			
+
 			if (is_new_line(source->last_read) && is_caracter_smash_line(ts_get_next_caracter(source)))
 				source->line_cur++;
 
@@ -208,8 +208,24 @@ token_t* ts_get_next_token(source_t* source)
 				{
 					line++;
 					source->line_cur = line;
-					return;
+					return NULL;
 				}
+			}
+		}
+		else if (is_caracter_key_closed(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source); // Lê proximo caracter
+				if (value == -1) 
+				{
+					source->last_read = value;
+					return NULL;
+				}
+				
 			}
 		}
 		source->last_pos += 1;
