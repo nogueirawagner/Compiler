@@ -143,7 +143,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="list.c" />
+    <ClCompile Include="list_symbols.c" />
+    <ClCompile Include="_list.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="stack.c" />
     <ClCompile Include="table_symbols.c" />
@@ -152,7 +153,8 @@
     <ClCompile Include="utils.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="list.h" />
+    <ClInclude Include="list_symbols.h" />
+    <ClInclude Include="_list.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="table_symbols.h" />
     <ClInclude Include="token_exception.h" />

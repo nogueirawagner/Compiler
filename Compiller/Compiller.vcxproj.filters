@@ -26,10 +26,13 @@
     <ClCompile Include="utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="list.c">
+    <ClCompile Include="table_symbols.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="table_symbols.c">
+    <ClCompile Include="_list.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="list_symbols.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,10 +49,13 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="list.h">
+    <ClInclude Include="table_symbols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="table_symbols.h">
+    <ClInclude Include="_list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="list_symbols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
