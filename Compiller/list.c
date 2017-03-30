@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "_list.h"
+#include "list.h"
 
 void list_initialize(linked_list_t *list, void(*destroy)(void *data))
 {

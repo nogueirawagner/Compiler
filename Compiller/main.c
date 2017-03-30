@@ -4,7 +4,7 @@
 #include "token_stream.h"
 #include "stack.h"
 #include "utils.h"
-#include "_list.h"
+#include "list.h"
 
 int main(int argc, char** argv) {
 
@@ -22,7 +22,6 @@ int main(int argc, char** argv) {
 
 	while (1)
 	{
-
 		table_symbols_t* elemento;
 		token_type_t type_stat_end;
 		token_t * token = ts_get_next_token(source);  /* Pega proximo token */
@@ -84,8 +83,8 @@ int main(int argc, char** argv) {
 		{
 			printf("Tabela de simbolos \n");
 			printf("\n");
-			printf("\t TIPO\t|\tVARIAVEL\t|\tVALOR\t|\tLINHA   \n");
-			printf("\t -------------------------------------------");
+			printf("\t%-3s\t|\t %-10s\t| %3s\t\t| %-20s\n", "TIPO", "VARIAVEL", "VALOR", "LINHA");
+			printf("\t----------------------------------------------------------");
 			printf("\n");
 			for (int i=0; i < list_get_size(&table_symbols); i++)
 			{
@@ -96,16 +95,17 @@ int main(int argc, char** argv) {
 				char* value = (char*)object->value;
 				int line = object->line;
 
-				printf("\t %s|\t%s\t|\t%s\t|\t%i\t\n", tipo, variable, value, line);
+				printf("\t%-3s\t|\t %-10s\t| %3s\t| %3i\n", tipo, variable, value, line);
 				
 				list_position = list_next(list_position);
 			}
 		}
-		getchar();
 	}
 
 error:
 	"erro ao processar";
 	ts_close_source(source);
 	return 0;
+
+	getchar();
 }
