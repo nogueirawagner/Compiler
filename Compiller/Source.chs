@@ -1,3 +1,5 @@
 main(){
-	int &document, &linha, &perereca;
+	int &valor = 10;
+	int &doc;
+	int &nome, &idade;
 }

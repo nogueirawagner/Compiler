@@ -6,8 +6,10 @@
 #include <Windows.h>
 
 /* Define o tipo do token */
-token_type_t ts_get_type(char* value)
+token_type_t ts_get_type(char* value, token_t* last_tk)
 {
+	if (last_tk->type == TK_EQUAL)
+		return TK_CONST;
 	if (is_token_type_data(value))
 		return TK_TYPE;
 	if (is_token_variable(value))
@@ -107,7 +109,7 @@ int ts_begin_main(char value, source_t* source)
 }
 
 /* Pega próximo token */
-token_t* ts_get_next_token(source_t* source)
+token_t* ts_get_next_token(source_t* source, token_t* last_token)
 {
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
@@ -144,7 +146,7 @@ token_t* ts_get_next_token(source_t* source)
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id); // resolver
+					token->type = ts_get_type(token->id, last_token); // resolver
 					return token;
 				}
 			}
@@ -161,7 +163,7 @@ token_t* ts_get_next_token(source_t* source)
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id); // resolver 
+					token->type = ts_get_type(token->id, last_token); // resolver 
 					return token;
 				}
 			}
@@ -185,7 +187,7 @@ token_t* ts_get_next_token(source_t* source)
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id); // resolver 
+					token->type = ts_get_type(token->id, last_token);
 
 					return token;
 				}
