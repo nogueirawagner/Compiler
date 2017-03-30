@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
 					tbs->line = last_tk->line;
 					
 					if (!valor)
-						tbs->value = NULL;
+						tbs->value = "NULL";
 					else
 						tbs->value = valor->id;
 					
@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
 		{
 			printf("Tabela de simbolos \n");
 			printf("\n");
-			printf("\t%-3s\t|\t %-10s\t| %3s\t\t| %-20s\n", "TIPO", "VARIAVEL", "VALOR", "LINHA");
+			printf("\t%-3s\t|\t %-10s\t| %3s\t| %-20s\n", "TIPO", "VARIAVEL", "VALOR", "LINHA");
 			printf("\t----------------------------------------------------------");
 			printf("\n");
 			for (int i = 0; i < list_get_size(&table_symbols); i++)
