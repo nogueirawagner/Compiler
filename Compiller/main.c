@@ -4,11 +4,7 @@
 #include "token_stream.h"
 #include "stack.h"
 #include "utils.h"
-#include "table_symbols.h"
-#include "list_symbols.h"
 #include "_list.h"
-
-
 
 int main(int argc, char** argv) {
 
@@ -23,9 +19,6 @@ int main(int argc, char** argv) {
 	list_element_t* list_position = NULL;
 	linked_list_t table_symbols;
 	list_initialize(&table_symbols, NULL);
-
-	symb_node_t* list_symb;
-	init_list(&list_symb);
 
 	while (1)
 	{
@@ -72,23 +65,43 @@ int main(int argc, char** argv) {
 						tbs->variable = id->id;
 						count_id--;
 
-						list_insert_next(&table_symbols, NULL, tbs);
-						push(list_symb, tbs);
+						if(table_symbols.size == 0)
+						{
+							list_insert_next(&table_symbols, NULL, tbs);
+							list_position = list_head(&table_symbols);
+						}
+						else
+						{
+							list_insert_next(&table_symbols, list_position, tbs);
+							list_position = list_head(&table_symbols);
+						}
 					}
 				}
 			}
 		}
 
-		/*	Add na função
-			if (is_caracter_semicolon(source->last_read))
-				tb_add(&stack_token, &table_symbols, &list_position);
-		*/
-
 		if (source->last_read == -1)
 		{
-			printf("Fim de analise lexica.\n");
-		}
+			printf("Tabela de simbolos \n");
+			printf("\n");
+			printf("\t TIPO\t|\tVARIAVEL\t|\tVALOR\t|\tLINHA   \n");
+			printf("\t -------------------------------------------");
+			printf("\n");
+			for (int i=0; i < list_get_size(&table_symbols); i++)
+			{
+				table_symbols_t* object = (table_symbols_t*)list_position->data;
 
+				char* variable = (char*)object->variable;
+				char* tipo = (char*)object->type;
+				char* value = (char*)object->value;
+				int line = object->line;
+
+				printf("\t %s|\t%s\t|\t%s\t|\t%i\t\n", tipo, variable, value, line);
+				
+				list_position = list_next(list_position);
+			}
+		}
+		getchar();
 	}
 
 error:
