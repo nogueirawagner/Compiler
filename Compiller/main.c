@@ -17,6 +17,7 @@ int main(int argc, char** argv) {
 	if (ret < 0)
 		fprintf(stderr, "Falha ao iniciar a stack \n");
 
+
 	list_element_t* list_position = NULL;
 	linked_list_t table_symbols;
 	list_initialize(&table_symbols, NULL);
