@@ -82,7 +82,7 @@ int ts_are_equal(char* pointer1, char* pointer2)
 /* Define se o token é um tipo de dado */
 int is_token_type_data(char* value)
 {
-	char * tipos[4] = { "int", "float", "dec", "char" };
+	char * tipos[4] = { "int", "dec", "char" };
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -117,15 +117,10 @@ int length_content_token(char* value)
 /* Verifica se é operadores relacional */
 int is_caracter_relational(char value)
 {
-	if (value == 33		/* ! */
+	if (value == 33			/* ! */
 		|| value == 60		/* < */
-		|| value == 62
-		|| is_caracter_equals(value));		/* > */
-
-		//|| (is_caracter_equals(value) && is_caracter_equals(last_value))	/* == */
-		//|| (last_value == 33 && is_caracter_equals(value))					/* != */
-		//|| (last_value == 60 && is_caracter_equals(value))					/* <= */
-		//|| (last_value == 62 && is_caracter_equals(value)));				/* >= */
+		|| value == 62		/* > */
+		|| is_caracter_equals(value));		/* = */
 }
 
 /* Verifica se é operadores lógicos */
@@ -135,4 +130,10 @@ int is_operator_logic(char value, char last_value)
 	//	Operadores logicos
 	//	&& ||
 
+}
+
+/* Verifica se é aspas duplas ' "" '  */
+int is_caracter_quotes_plus(char value) 
+{
+	return (value == 34);
 }

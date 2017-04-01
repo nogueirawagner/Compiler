@@ -53,9 +53,12 @@ int length_content_token(char* value);
 int is_caracter_relational(char value);
 
 /* Verifica se é operadores relacional */
-int is_operator_relational(char value);
+int is_caracter_relational(char value);
 
 /* Verifica se é operadores lógicos */
 int is_operator_logic(char value, char last_value);
+
+/* Verifica se é aspas duplas ' "" '  */
+int is_caracter_quotes_plus(char value);
 
 #endif // !__UTILS_H__

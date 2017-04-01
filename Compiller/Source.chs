@@ -1,3 +1,3 @@
 main(){
-	int &valor = 10;
+	int &cpf = 10;
 }

@@ -30,18 +30,19 @@ typedef struct {
 
 /* Tabela de simbols */
 typedef struct {
-	char* variable;
 	char* type;
+	char* variable;
 	char* value;
 	int line;
 } table_symbols_t;
 
 /* Estrutura que recebe o arquivo quando for lido */
 typedef struct {
-	FILE * source;		/* ponteiro para arquivo */
+	FILE * source;			/* ponteiro para arquivo */
 	int last_pos;			/* última posição */
-	char last_read;		/* último caracter lido */
+	char last_read;			/* último caracter lido */
 	int line_cur;			/* linha atual */
+	int init_pos_line;		/* posição onde começa a linha atual */
 } source_t;
 
 /* Função para abrir o arquivo */

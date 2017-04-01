@@ -82,8 +82,12 @@ int ts_begin_main(char value, source_t* source)
 			{
 				if (is_new_line(value))
 				{
-					if (is_caracter_smash_line(value))
+					if (is_caracter_smash_line(value)) 
+					{
 						source->line_cur++;
+						source->init_pos_line = source->last_pos;
+					}
+						
 				}
 
 				if (!is_new_line(value))
@@ -127,12 +131,41 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 			ts_begin_main(value, source);
 			line = source->line_cur;
 
-			if (is_new_line(source->last_read) && is_caracter_smash_line(ts_get_next_caracter(source)))
+			if (is_new_line(source->last_read) && is_caracter_smash_line(ts_get_next_caracter(source))) 
+			{
 				source->line_cur++;
+				source->init_pos_line = source->last_pos;
+			}
+			
 
 			return NULL;
 		}
 
+		if (is_caracter_semicolon(value)) 
+		{
+			return NULL;
+		}
+
+		if (is_caracter_quotes_plus(value)) 
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source); // Lê próximo caracter
+				if (is_caracter_quotes_plus(value))
+				{
+					char scopy[1] = { value };
+					strncat(buffer, scopy, 1);
+
+					token->id = buffer;
+					token->line = line;
+					token->type = TK_CONST;
+					return token;
+				}
+			}
+		}
 		/* Verificar se é qualquer letra de A...Z e a...z */
 		if (is_alphanumeric(value))
 		{
@@ -205,6 +238,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				{
 					line++;
 					source->line_cur = line;
+					source->init_pos_line = source->last_pos;
 					return NULL;
 				}
 			}

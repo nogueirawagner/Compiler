@@ -41,4 +41,8 @@ void* list_data(list_element_t* element);
 
 list_element_t* list_next(list_element_t* element);
 
+void list_update(linked_list_t* list);
+
+void list_find(linked_list_t* list);
+
 #endif

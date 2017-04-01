@@ -10,7 +10,7 @@ void te_generate_exception(int code, int line, source_t * source)
 	case 1001:
 		te_error_main(source);
 	case 1002:
-		te_error_unknown(line);
+		te_error_declare_var(source);
 	default:
 		te_error_unknown(line);
 	}
@@ -39,11 +39,12 @@ int te_error_main(source_t * source)
 /* Erro na declaração de variável */
 int te_error_declare_var(source_t* source) 
 {
+	fseek(source->source, source->init_pos_line, SEEK_SET);
 	char linha[1000];
 	fgets(linha, 1000, source->source);
 
 	printf("TE-1002 - Erro na declaracao de variavel | linha: %i \n", source->line_cur);
-	printf("%c", linha);
+	printf("%s", linha);
 	getchar();
 	exit(1);
 	return 0;
