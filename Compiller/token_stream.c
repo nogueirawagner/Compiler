@@ -142,7 +142,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source); // Lê próximo caracter
-				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
+				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
 				{
 					token->id = buffer;
 					token->line = line;
@@ -159,7 +159,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source); // Lê proximo caracter
-				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value))
+				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
 				{
 					token->id = buffer;
 					token->line = line;
@@ -183,7 +183,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source); // Lê proximo caracter
-				if (is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value))
+				if (is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_relational(value))
 				{
 					token->id = buffer;
 					token->line = line;
@@ -230,4 +230,3 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 
 	return NULL;
 }
-

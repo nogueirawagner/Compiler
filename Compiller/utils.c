@@ -68,7 +68,7 @@ int is_caracter_key_closed(char value)
 }
 
 /* Verifica se caracter é letra 'm' */
-int is_caracter_m(char value) 
+int is_caracter_m(char value)
 {
 	return (value == 109);
 }
@@ -99,7 +99,7 @@ int is_token_variable(char* value)
 }
 
 /* Retorna o tamanho do conteúdo do ponteiro */
-int length_content_token(char* value) 
+int length_content_token(char* value)
 {
 	int b = 0;
 	int length = 0;
@@ -114,17 +114,25 @@ int length_content_token(char* value)
 	return length;
 }
 
-/* Retorna o valor do ponteiro */
-char* value_content(char* value) 
+/* Verifica se é operadores relacional */
+int is_caracter_relational(char value)
 {
-	char* buffer = (char*)malloc(255);
-	FillMemory(buffer, 255, 0);
-	int tam = length_content_token(value);
+	if (value == 33		/* ! */
+		|| value == 60		/* < */
+		|| value == 62
+		|| is_caracter_equals(value));		/* > */
 
-	for (int j = 0; j < tam; j++)
-	{
-		char scopy[1] = { value[j] };
-		strncat(buffer, scopy, 1);
-	}
-	return buffer;
+		//|| (is_caracter_equals(value) && is_caracter_equals(last_value))	/* == */
+		//|| (last_value == 33 && is_caracter_equals(value))					/* != */
+		//|| (last_value == 60 && is_caracter_equals(value))					/* <= */
+		//|| (last_value == 62 && is_caracter_equals(value)));				/* >= */
+}
+
+/* Verifica se é operadores lógicos */
+int is_operator_logic(char value, char last_value)
+{
+	
+	//	Operadores logicos
+	//	&& ||
+
 }

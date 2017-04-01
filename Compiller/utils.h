@@ -49,7 +49,13 @@ int is_token_variable(char* value);
 /* Retorna o tamanho do conteúdo do ponteiro */
 int length_content_token(char* value);
 
-/* Retorna o valor do ponteiro */
-char* value_content(char* value);
+/* Verifica se é operadores relacional */
+int is_caracter_relational(char value);
 
-#endif
+/* Verifica se é operadores relacional */
+int is_operator_relational(char value);
+
+/* Verifica se é operadores lógicos */
+int is_operator_logic(char value, char last_value);
+
+#endif // !__UTILS_H__
