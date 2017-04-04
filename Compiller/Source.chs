@@ -1,3 +1,3 @@
 main(){
-	int &cpf = 10;
+	&cpf = 10;
 }

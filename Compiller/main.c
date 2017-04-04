@@ -139,6 +139,12 @@ int main(int argc, char** argv) {
 					token_t* id = stack_pop(&ids);
 					token_t* valor = stack_pop(&constants);
 					int i = 0;
+
+					if (table_symbols.size == 0)
+						te_generate_exception(1003, source->line_cur, source);
+					if (list_any(&table_symbols, list_position))
+						return;
+
 					/* procurar itens na tabela de simbolos */
 					/* deve encontrar o item id que é a variavel  */
 

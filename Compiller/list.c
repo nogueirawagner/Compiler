@@ -165,7 +165,11 @@ void list_update(linked_list_t* list)
 
 }
 
-void list_find(linked_list_t* list) 
+int list_any(linked_list_t* list, list_element_t* position)
 {
-
+	for (int i = 0; i < list_get_size(&list); i++)
+	{
+		list_element_t* object = (list_element_t*)position->data;
+	}
+	return 0;
 }
