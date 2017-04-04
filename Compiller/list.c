@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdio.h>
 #include "list.h"
+#include "token_stream.h"
+#include "utils.h"
 
 void list_initialize(linked_list_t *list, void(*destroy)(void *data))
 {
@@ -165,11 +167,14 @@ void list_update(linked_list_t* list)
 
 }
 
-int list_any(linked_list_t* list, list_element_t* position)
+int list_any_tbl_symb(linked_list_t* list, list_element_t* position, char* value)
 {
-	for (int i = 0; i < list_get_size(&list); i++)
+	for (int i = 0; i < list->size; i++)
 	{
-		list_element_t* object = (list_element_t*)position->data;
+		table_symbols_t* object = (table_symbols_t*)position->data;
+		char* variable = (char*)object->variable;
+		if (ts_are_equal(variable, value))
+			return 1;
 	}
 	return 0;
 }

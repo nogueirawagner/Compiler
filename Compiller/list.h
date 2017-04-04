@@ -43,6 +43,6 @@ list_element_t* list_next(list_element_t* element);
 
 void list_update(linked_list_t* list);
 
-int list_any(linked_list_t* list, list_element_t* position);
+int list_any_tbl_symb(linked_list_t* list, list_element_t* position, char* value);
 
 #endif

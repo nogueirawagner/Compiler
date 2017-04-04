@@ -1,3 +1,4 @@
 main(){
-	&cpf = 10;
+	int &idade = 20;
+	&idade = 10;
 }

@@ -142,25 +142,16 @@ int main(int argc, char** argv) {
 
 					if (table_symbols.size == 0)
 						te_generate_exception(1003, source->line_cur, source);
-					if (list_any(&table_symbols, list_position))
-						return;
-
+					if (!list_any_tbl_symb(&table_symbols, list_position, id->id))
+						te_generate_exception(1003, source->line_cur, source);
+					else 
+					{
+						// alterar
+						int i = 20;
+					}
 					/* procurar itens na tabela de simbolos */
 					/* deve encontrar o item id que é a variavel  */
 
-			
-
-					///* Verificar se item existe na tabela de símbolos */
-					//if (table_symbols.size == 0)
-					//{
-					//	list_insert_next(&table_symbols, NULL, tbs);
-					//	list_position = list_head(&table_symbols);
-					//}
-					//else
-					//{
-					//	list_insert_next(&table_symbols, list_position, tbs);
-					//	list_position = list_head(&table_symbols);
-					//}
 				}
 			}
 		}
