@@ -121,37 +121,43 @@ int main(int argc, char** argv) {
 					/* Verificar se item existe na tabela de símbolos */
 					if (table_symbols.size == 0)
 					{
-						list_insert_next(&table_symbols, NULL, tbs);
-						list_position = list_head(&table_symbols);
+						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
+							te_generate_exception(1004, source->line_cur, source);
+						else 
+						{
+							list_insert_next(&table_symbols, NULL, tbs);
+							list_position = list_head(&table_symbols);
+						}
 					}
 					else
 					{
-						list_insert_next(&table_symbols, list_position, tbs);
-						list_position = list_head(&table_symbols);
+						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
+							te_generate_exception(1004, source->line_cur, source);
+						else 
+						{
+							list_insert_next(&table_symbols, list_position, tbs);
+							list_position = list_head(&table_symbols);
+						}
 					}
 				}
 			}
 
-			if (count_id > 0 || count_const > 0) 
+			if (count_id > 0 || count_const > 0)
 			{
 				while (count_id != 0)
 				{
 					token_t* id = stack_pop(&ids);
 					token_t* valor = stack_pop(&constants);
+					count_id--;
+					count_const--;
 					int i = 0;
 
 					if (table_symbols.size == 0)
 						te_generate_exception(1003, source->line_cur, source);
-					if (!list_any_tbl_symb(&table_symbols, list_position, id->id))
+					if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
 						te_generate_exception(1003, source->line_cur, source);
-					else 
-					{
-						// alterar
-						int i = 20;
-					}
-					/* procurar itens na tabela de simbolos */
-					/* deve encontrar o item id que é a variavel  */
-
+					else
+						list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
 				}
 			}
 		}

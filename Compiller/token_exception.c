@@ -15,6 +15,8 @@ void te_generate_exception(int code, int line, source_t * source)
 		te_error_declare_var(source);
 	case 1003:
 		te_error_var_not_declared(source);
+	case 1004:
+		te_error_var_already_declared(source);
 	default:
 		te_error_unknown(line);
 	}
@@ -83,6 +85,33 @@ int te_error_var_not_declared(source_t* source)
 	}
 }
 
+int te_error_var_already_declared(source_t* source)
+{ 
+	fseek(source->source, source->init_pos_line, SEEK_SET);
+	char buffer[255];
+	FillMemory(buffer, 255, 0);
 
+	while (1)
+	{
+		char value = ts_get_next_caracter(source);
+		if (is_caracter_ampersand(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+				value = ts_get_next_caracter(source);
+				if (is_caracter_equals(value))
+				{
+					printf("TE-1003 - Identificador %s ja foi declarado | linha: %i \n", buffer, source->line_cur);
+					getchar();
+					exit(1);
+					return 0;
+				}
+			}
+		}
+	}
+	return 0;
+}
 
 
