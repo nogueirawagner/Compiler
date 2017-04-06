@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 		token_t * token = ts_get_next_token(source, last_tk_temp);  /* Pega proximo token */
 
 		/* Insere token na pilha */
-		if (token != NULL)
+		if (token != NULL && is_token_valid(token, source))
 		{
 			stack_push(&stack_token, token);
 			length_stack++;
@@ -56,14 +56,14 @@ int main(int argc, char** argv) {
 				{
 					last_tk = (token_t*)stack_pop(&stack_token);
 					if (last_tk && last_tk->type != TK_ID)
-						te_generate_exception(1002, source->line_cur, source);
+						throw_exception(1002, source->line_cur, source);
 
 					stack_push(&ids, last_tk);
 					count_id++;
 					last_tk = (token_t*)stack_pop(&stack_token);
 				}
 				else
-					te_generate_exception(1002, source->line_cur, source);
+					throw_exception(1002, source->line_cur, source);
 			}
 
 
@@ -86,13 +86,13 @@ int main(int argc, char** argv) {
 					{
 						last_tk = (token_t*)stack_pop(&stack_token);
 						if (last_tk && last_tk->type != TK_ID)
-							te_generate_exception(1002, source->line_cur, source);
+							throw_exception(1002, source->line_cur, source);
 						stack_push(&ids, last_tk);
 						count_id++;
 						last_tk = (token_t*)stack_pop(&stack_token);
 					}
 					else
-						te_generate_exception(1002, source->line_cur, source);
+						throw_exception(1002, source->line_cur, source);
 				}
 			}
 #pragma endregion
@@ -122,7 +122,7 @@ int main(int argc, char** argv) {
 					if (table_symbols.size == 0)
 					{
 						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-							te_generate_exception(1004, source->line_cur, source);
+							throw_exception(1004, source->line_cur, source);
 						else 
 						{
 							list_insert_next(&table_symbols, NULL, tbs);
@@ -132,7 +132,7 @@ int main(int argc, char** argv) {
 					else
 					{
 						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-							te_generate_exception(1004, source->line_cur, source);
+							throw_exception(1004, source->line_cur, source);
 						else 
 						{
 							list_insert_next(&table_symbols, list_position, tbs);
@@ -153,9 +153,9 @@ int main(int argc, char** argv) {
 					int i = 0;
 
 					if (table_symbols.size == 0)
-						te_generate_exception(1003, source->line_cur, source);
+						throw_exception(1003, source->line_cur, source);
 					if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
-						te_generate_exception(1003, source->line_cur, source);
+						throw_exception(1003, source->line_cur, source);
 					else
 						list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
 				}
@@ -193,16 +193,3 @@ error:
 
 	getchar();
 }
-
-
-/*
-
-1º Verificar se ja existe na tabela de simbolos antes de inserir
-2º Validar automatos na hora de inserir na tabela de simbolos
-	2.1- Variavel -> Tipo; Ex: int &doc;
-	2.2- Valor -> Igual -> Variavel -> Tipo; Ex: int &doc = 10;
-	2.3- Variavel -> Igual -> Variavel -> Tipo; Ex: int &doc = &a;
-	2.4- Variaveis do tipo char... (fudeu);
-3º Definir tipo correto para valores atribuidos hoje está vindo como ID deve ser CONST;
-
-*/
