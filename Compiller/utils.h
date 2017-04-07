@@ -61,4 +61,13 @@ int is_operator_logic(char value, char last_value);
 /* Verifica se é aspas duplas ' "" '  */
 int is_caracter_quotes_plus(char value);
 
+/* Verifica se é abre parenteses '(' */
+int is_caracter_open_parathesi(char value);
+
+/* Verifica se é fecha parenteses ')' */
+int is_caracter_closed_parathesi(char value);
+
+/* Verifica tamanho da variavel Ex: dec &x(1.5) ou char &y(15) */
+char* any_definition_length(char* value, source_t* source, int isDec);
+
 #endif // !__UTILS_H__

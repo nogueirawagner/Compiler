@@ -24,7 +24,7 @@ void throw_exception(int code, int line, source_t * source)
 	case 1007:
 		te_error_var_already_declared(source);
 	case 1008:
-		te_error_type_undefined(source); //Tipo n encontrado
+		te_error_type_undefined(source); 
 	default:
 		te_error_unknown(line);
 	}

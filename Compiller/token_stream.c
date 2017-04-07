@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <Windows.h>
+#include "stack.h"
 
 /* Define o tipo do token */
 token_type_t ts_get_type(char* value, token_t* last_tk, source_t* source)
@@ -14,8 +15,6 @@ token_type_t ts_get_type(char* value, token_t* last_tk, source_t* source)
 		return TK_TYPE;
 	if (is_token_variable(value))
 		return TK_ID;
-	
-	throw_exception(1008, source->line_cur, source);
 }
 
 /* Abre o arquivo em binário */
@@ -109,9 +108,18 @@ int ts_begin_main(char value, source_t* source)
 	return 0;
 }
 
+token_type_t ts_define_scope(token_t* last_tk)
+{
+	if (last_tk->type == TK_TYPE)
+		return TK_ID;
+}
+
+
 /* Pega próximo token */
 token_t* ts_get_next_token(source_t* source, token_t* last_token)
 {
+	token_type_t scope = ts_define_scope(last_token);
+
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 
@@ -123,6 +131,8 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 
 		if (source->last_pos == 1 && !is_caracter_m(value))
 			throw_exception(1001, 1, source);
+		if (scope == TK_ID && !is_caracter_ampersand(value))
+			throw_exception(1002, source->line_cur, source);
 		else if (line == 1 && source->last_pos == 1) /* Valida a palavra reservada main */
 		{
 			ts_begin_main(value, source);
@@ -133,15 +143,11 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				source->line_cur++;
 				source->init_pos_line = source->last_pos;
 			}
-
-
 			return NULL;
 		}
 
 		if (is_caracter_semicolon(value))
-		{
 			return NULL;
-		}
 
 		if (is_caracter_quotes_plus(value))
 		{
