@@ -117,7 +117,6 @@ int main(int argc, char** argv) {
 					count_id--;
 					count_const--;
 
-
 					/* Verificar se item existe na tabela de símbolos */
 					if (table_symbols.size == 0)
 					{
