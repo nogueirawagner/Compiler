@@ -9,8 +9,8 @@
 
 int main(int argc, char** argv) {
 
-	source_t * source = ts_open_source("Source.chs"); /* Abre arquivo em binário */
-	stack_t * stack_token; /* Pilha de Tokens */
+	source_t* source = ts_open_source("Source.chs"); /* Abre arquivo em binário */
+	stack_t* stack_token; /* Pilha de Tokens */
 	int length_stack = 0;
 
 	int ret = stack_init(&stack_token);
@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 		token_t * token = ts_get_next_token(source, last_tk_temp);  /* Pega proximo token */
 
 		/* Insere token na pilha */
-		if (token != NULL)
+		if (token != NULL && is_token_valid(token, source))
 		{
 			stack_push(&stack_token, token);
 			length_stack++;
@@ -56,14 +56,14 @@ int main(int argc, char** argv) {
 				{
 					last_tk = (token_t*)stack_pop(&stack_token);
 					if (last_tk && last_tk->type != TK_ID)
-						te_generate_exception(1002, source->line_cur, source);
+						throw_exception(1002, source->line_cur, source);
 
 					stack_push(&ids, last_tk);
 					count_id++;
 					last_tk = (token_t*)stack_pop(&stack_token);
 				}
 				else
-					te_generate_exception(1002, source->line_cur, source);
+					throw_exception(1002, source->line_cur, source);
 			}
 
 
@@ -86,13 +86,13 @@ int main(int argc, char** argv) {
 					{
 						last_tk = (token_t*)stack_pop(&stack_token);
 						if (last_tk && last_tk->type != TK_ID)
-							te_generate_exception(1002, source->line_cur, source);
+							throw_exception(1002, source->line_cur, source);
 						stack_push(&ids, last_tk);
 						count_id++;
 						last_tk = (token_t*)stack_pop(&stack_token);
 					}
 					else
-						te_generate_exception(1002, source->line_cur, source);
+						throw_exception(1002, source->line_cur, source);
 				}
 			}
 #pragma endregion
@@ -103,54 +103,74 @@ int main(int argc, char** argv) {
 				{
 					token_t* id = stack_pop(&ids);
 					token_t* valor = stack_pop(&constants);
+					count_id--;
+					count_const--;
+					char* length = 0; // tamanho de variavel char e dec 
+
+					char* _dec = "dec";
+					char* _char = "char";
+
+					if (id->type == TK_ID && ts_are_equal(last_tk->id, _char))
+						 length = any_definition_length(id->id, source, 0);
+					if (id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
+						length = any_definition_length(id, source, 0);
+
 
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 					tbs->type = last_tk->id;
 					tbs->line = last_tk->line;
 
+					if (!length)
+						tbs->length = "NULL";
+					else
+						tbs->length = length;
+
 					if (!valor)
 						tbs->value = "NULL";
 					else
 						tbs->value = valor->id;
-
 					tbs->variable = id->id;
-					count_id--;
-					count_const--;
 
 					/* Verificar se item existe na tabela de símbolos */
 					if (table_symbols.size == 0)
 					{
-						list_insert_next(&table_symbols, NULL, tbs);
-						list_position = list_head(&table_symbols);
+						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
+							throw_exception(1004, source->line_cur, source);
+						else
+						{
+							list_insert_next(&table_symbols, NULL, tbs);
+							list_position = list_head(&table_symbols);
+						}
 					}
 					else
 					{
-						list_insert_next(&table_symbols, list_position, tbs);
-						list_position = list_head(&table_symbols);
+						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
+							throw_exception(1004, source->line_cur, source);
+						else
+						{
+							list_insert_next(&table_symbols, list_position, tbs);
+							list_position = list_head(&table_symbols);
+						}
 					}
 				}
 			}
 
-			if (count_id > 0 || count_const > 0) 
+			if (count_id > 0 || count_const > 0)
 			{
 				while (count_id != 0)
 				{
 					token_t* id = stack_pop(&ids);
 					token_t* valor = stack_pop(&constants);
+					count_id--;
+					count_const--;
 					int i = 0;
 
 					if (table_symbols.size == 0)
-						te_generate_exception(1003, source->line_cur, source);
-					if (!list_any_tbl_symb(&table_symbols, list_position, id->id))
-						te_generate_exception(1003, source->line_cur, source);
-					else 
-					{
-						// alterar
-						int i = 20;
-					}
-					/* procurar itens na tabela de simbolos */
-					/* deve encontrar o item id que é a variavel  */
-
+						throw_exception(1003, source->line_cur, source);
+					if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
+						throw_exception(1003, source->line_cur, source);
+					else
+						list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
 				}
 			}
 		}
@@ -160,7 +180,7 @@ int main(int argc, char** argv) {
 		{
 			printf("Tabela de simbolos \n");
 			printf("\n");
-			printf("\t%-3s\t|\t %-20s\t| %-20s\t| %-10s\n", "TIPO", "VARIAVEL", "VALOR", "LINHA");
+			printf("\t%-3s\t| %-15s\t| %-2s\t| %-3s\t|\t %-10s\n", "TIPO", "VARIAVEL", "TAM", "VALOR", "LINHA");
 			printf("\t------------------------------------------------------------------------");
 			printf("\n");
 			for (int i = 0; i < list_get_size(&table_symbols); i++)
@@ -170,9 +190,10 @@ int main(int argc, char** argv) {
 				char* variable = (char*)object->variable;
 				char* tipo = (char*)object->type;
 				char* value = (char*)object->value;
+				char* length = (char*)object->length;
 				int line = object->line;
 
-				printf("\t%-3s\t|\t %-20s\t| %-20s\t| %-10i\n", tipo, variable, value, line);
+				printf("\t%-3s\t| %-15s\t| %-2s\t| %-3s\t|\t %-10i\n", tipo, variable, length, value, line);
 				list_position = list_next(list_position);
 			}
 		}
@@ -186,16 +207,3 @@ error:
 
 	getchar();
 }
-
-
-/*
-
-1º Verificar se ja existe na tabela de simbolos antes de inserir
-2º Validar automatos na hora de inserir na tabela de simbolos
-	2.1- Variavel -> Tipo; Ex: int &doc;
-	2.2- Valor -> Igual -> Variavel -> Tipo; Ex: int &doc = 10;
-	2.3- Variavel -> Igual -> Variavel -> Tipo; Ex: int &doc = &a;
-	2.4- Variaveis do tipo char... (fudeu);
-3º Definir tipo correto para valores atribuidos hoje está vindo como ID deve ser CONST;
-
-*/

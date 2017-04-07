@@ -162,19 +162,36 @@ list_element_t* list_next(list_element_t* element)
 {
 	return element->next;
 }
-void list_update(linked_list_t* list) 
-{
-
-}
-
-int list_any_tbl_symb(linked_list_t* list, list_element_t* position, char* value)
+void list_update_tbl_symb(linked_list_t* list, list_element_t* position, char* id, char* value)
 {
 	for (int i = 0; i < list->size; i++)
 	{
 		table_symbols_t* object = (table_symbols_t*)position->data;
 		char* variable = (char*)object->variable;
-		if (ts_are_equal(variable, value))
+		if (ts_are_equal(variable, id))
+		{
+			object->value = value;
+		}
+		position = list_next(position);
+	}
+	return 0;
+}
+
+int list_any_tbl_symb(linked_list_t* list, list_element_t* position, char* id, char* type)
+{
+	for (int i = 0; i < list->size; i++)
+	{
+		table_symbols_t* object = (table_symbols_t*)position->data;
+		char* variable = (char*)object->variable;
+		char* tipo = (char*)object->type;
+		if (!type)
+		{
+			if (ts_are_equal(variable, id))
+				return 1;
+		}
+		else if (ts_are_equal(variable, id) && ts_are_equal(tipo, type))
 			return 1;
+		position = list_next(position);
 	}
 	return 0;
 }

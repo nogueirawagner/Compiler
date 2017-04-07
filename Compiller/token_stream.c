@@ -4,9 +4,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <Windows.h>
+#include "stack.h"
 
 /* Define o tipo do token */
-token_type_t ts_get_type(char* value, token_t* last_tk)
+token_type_t ts_get_type(char* value, token_t* last_tk, source_t* source)
 {
 	if (last_tk->type == TK_EQUAL)
 		return TK_CONST;
@@ -57,11 +58,6 @@ token_t * ts_get_token_delimiter(source_t* source)
 	return &token;
 }
 
-int ts_is_token_type(token_t* token, token_type_t type)
-{
-	return (token->type == type);
-}
-
 /* Verifica se arquivo começa com main() */
 int ts_begin_main(char value, source_t* source)
 {
@@ -82,12 +78,12 @@ int ts_begin_main(char value, source_t* source)
 			{
 				if (is_new_line(value))
 				{
-					if (is_caracter_smash_line(value)) 
+					if (is_caracter_smash_line(value))
 					{
 						source->line_cur++;
 						source->init_pos_line = source->last_pos;
 					}
-						
+
 				}
 
 				if (!is_new_line(value))
@@ -96,7 +92,7 @@ int ts_begin_main(char value, source_t* source)
 					strncat(buffer, scopy, 1);
 					tam++;
 					if (tam > 7)
-						te_generate_exception(1001, 1, source);
+						throw_exception(1001, 1, source);
 				}
 
 				value = ts_get_next_caracter(source); // Lê próximo caracter
@@ -107,14 +103,23 @@ int ts_begin_main(char value, source_t* source)
 			}
 		}
 		else
-			te_generate_exception(1001, 1, source);
+			throw_exception(1001, 1, source);
 	}
 	return 0;
 }
 
+token_type_t ts_define_scope(token_t* last_tk)
+{
+	if (last_tk->type == TK_TYPE)
+		return TK_ID;
+}
+
+
 /* Pega próximo token */
 token_t* ts_get_next_token(source_t* source, token_t* last_token)
 {
+	token_type_t scope = ts_define_scope(last_token);
+
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 
@@ -125,28 +130,26 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 		char value = ts_get_next_caracter(source);
 
 		if (source->last_pos == 1 && !is_caracter_m(value))
-			te_generate_exception(1001, 1, source);
+			throw_exception(1001, 1, source);
+		if (scope == TK_ID && !is_caracter_ampersand(value)) /* Valida se espera uma variavel se for verifica se o caracter é & */
+			throw_exception(1002, source->line_cur, source);
 		else if (line == 1 && source->last_pos == 1) /* Valida a palavra reservada main */
 		{
 			ts_begin_main(value, source);
 			line = source->line_cur;
 
-			if (is_new_line(source->last_read) && is_caracter_smash_line(ts_get_next_caracter(source))) 
+			if (is_new_line(source->last_read) && is_caracter_smash_line(ts_get_next_caracter(source)))
 			{
 				source->line_cur++;
 				source->init_pos_line = source->last_pos;
 			}
-			
-
 			return NULL;
 		}
 
-		if (is_caracter_semicolon(value)) 
-		{
+		if (is_caracter_semicolon(value))
 			return NULL;
-		}
 
-		if (is_caracter_quotes_plus(value)) 
+		if (is_caracter_quotes_plus(value))
 		{
 			while (1)
 			{
@@ -179,7 +182,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id, last_token); // resolver
+					token->type = ts_get_type(token->id, last_token, source); // resolver
 					return token;
 				}
 			}
@@ -196,7 +199,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id, last_token); // resolver 
+					token->type = ts_get_type(token->id, last_token, source); // resolver 
 					return token;
 				}
 			}
@@ -220,7 +223,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id, last_token);
+					token->type = ts_get_type(token->id, last_token, source);
 
 					return token;
 				}
@@ -251,16 +254,34 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source); // Lê proximo caracter
-				if (value == -1) 
+				if (value == -1)
 				{
 					source->last_read = value;
 					return NULL;
 				}
-				
+
 			}
 		}
 		source->last_pos += 1;
 	};
 
 	return NULL;
+}
+
+/* Verifica se é um token válido */
+int is_token_valid(token_t* token, source_t* source)
+{
+	if (token->type == TK_TYPE)
+	{
+		if (!is_token_type_data(token->id))
+			throw_exception(1007, source->line_cur, source); //Tipo não definido
+	}
+	else if (token->type == TK_ID) // Se é variavel
+	{
+		if (!is_caracter_ampersand(token->id[0]))
+			throw_exception(1005, source->line_cur, source); //Erro ao declarar variavel deve iniciar com &
+		else if (is_token_type_data(token->id))
+			throw_exception(1006, source->line_cur, source); //Variavel com nome de palavra reservada
+	}
+	return 1;
 }

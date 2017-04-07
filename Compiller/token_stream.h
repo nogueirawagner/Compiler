@@ -9,10 +9,7 @@ typedef enum {
 	TK_TYPE,		/* define se o token é um tipo de dado (int, char, long, dec) */
 	TK_EQUAL,		/* define se o token é operador aritmetico de igualdade */
 	TK_CONST,		/* define se o token é um valor atribuido */
-	TK_STM_END, /* define se o token é um ponto e vírgula */
-	TK_INT,			/* define se o token é um tipo int */
-	TK_CHAR,		/* define se o token é um tipo char */
-	TK_DEC			/* define se o token é um tipo decimal */
+	TK_STM_END  /* define se o token é um ponto e vírgula */
 } token_type_t;
 
 /* Estrutura para armazenar o Token */
@@ -32,6 +29,7 @@ typedef struct {
 typedef struct {
 	char* type;
 	char* variable;
+	char* length;
 	char* value;
 	int line;
 } table_symbols_t;
@@ -52,15 +50,16 @@ source_t * ts_open_source(char* source);
 void ts_close_source(char* source);
 
 /* Função para pegar o próximo token */
-token_t * ts_get_next_token(source_t* source, token_t* last_token);
-
-/* Função para validar se é um tipo de token */
-int ts_is_token_type(token_t *token, token_type_t type);
+token_t* ts_get_next_token(source_t* source, token_t* last_token);
 
 /* Função para pegar o proximo caracter */
 char ts_get_next_caracter(source_t * source);
 
 /* Função para retornar o token quando o delimitador for encontrado */
 token_t * ts_get_token_delimiter(source_t * source);
+
+/* Verifica se é um token válido */
+int is_token_valid(token_t* token, source_t* source);
+
 
 #endif // !_TOKEN_STREAM

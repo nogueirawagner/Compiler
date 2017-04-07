@@ -1,5 +1,6 @@
 #include "token_stream.h"
 #include <Windows.h>
+#include "token_exception.h"
 
 /* Verifica se é caracter A...Z ou a...z */
 int is_alphanumeric(char value)
@@ -61,7 +62,7 @@ int is_caracter_key_opened(char value)
 	return (value == 123);
 }
 
-/* Verifica se é caracter '}' */
+/* Verifica se é caracter fecha chaves '}' */
 int is_caracter_key_closed(char value)
 {
 	return (value == 125);
@@ -126,14 +127,86 @@ int is_caracter_relational(char value)
 /* Verifica se é operadores lógicos */
 int is_operator_logic(char value, char last_value)
 {
-	
+
 	//	Operadores logicos
 	//	&& ||
 
 }
 
 /* Verifica se é aspas duplas ' "" '  */
-int is_caracter_quotes_plus(char value) 
+int is_caracter_quotes_plus(char value)
 {
 	return (value == 34);
+}
+
+
+/* Verifica se é abre parenteses '(' */
+int is_caracter_open_parathesi(char value)
+{
+	return (value == 40);
+}
+
+/* Verifica se é fecha parenteses ')' */
+int is_caracter_closed_parathesi(char value)
+{
+	return (value == 41);
+}
+
+
+/* Verifica tamanho da variavel Ex: dec &x(1.5) ou char &y(15) */
+char* any_definition_length(char* value, source_t* source, int isDec)
+{
+	int tam = length_content_token(value);
+	char * buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+
+	if (isDec)
+	{
+		for (int i = 0; i < tam; i++)
+		{
+			char caracter = value[i];
+			if (is_caracter_open_parathesi(caracter))
+			{
+				while (1)
+				{
+					i++;
+					caracter = value[i];
+					if (!is_caracter_closed_parathesi(caracter))
+					{
+						if (!is_numeric(caracter))
+							throw_exception(1010, source->line_cur, source);
+						char scopy[1] = { caracter };
+						strncat(buffer, scopy, 1);
+					}
+					if (is_caracter_closed_parathesi(caracter))
+						return buffer;
+				}
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < tam; i++)
+		{
+			char caracter = value[i];
+			if (is_caracter_open_parathesi(caracter))
+			{
+				while (1)
+				{
+					i++;
+					caracter = value[i];
+					if (!is_caracter_closed_parathesi(caracter))
+					{
+						if (!is_numeric(caracter))
+							throw_exception(1009, source->line_cur, source);
+						char scopy[1] = { caracter };
+						strncat(buffer, scopy, 1);
+					}
+					if (is_caracter_closed_parathesi(caracter))
+						return buffer;
+				}
+			}
+		}
+	}
+	return 0;
 }
