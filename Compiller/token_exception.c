@@ -25,6 +25,8 @@ void throw_exception(int code, int line, source_t * source)
 		te_error_var_already_declared(source);
 	case 1008:
 		te_error_type_undefined(source); 
+	case 1009:
+		te_error_invalid_value_in_char(source);
 	default:
 		te_error_unknown(line);
 	}
@@ -181,3 +183,32 @@ int te_error_type_undefined(source_t* source)
 	return 0;
 }
 
+int te_error_invalid_value_in_char(source_t* source)
+{
+	fseek(source->source, source->init_pos_line, SEEK_SET);
+	char buffer[255];
+	FillMemory(buffer, 255, 0);
+
+	while (1)
+	{
+		char value = ts_get_next_caracter(source);
+		if (is_caracter_ampersand(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+				value = ts_get_next_caracter(source);
+				if (is_caracter_comma(value) || is_caracter_semicolon(value))
+				{
+					printf("TE-1009 - Impossivel ponto flutuante no tipo char '%s' | linha: %i \n", buffer, source->line_cur);
+					printf("TE-1009 - Utilize valor inteiro");
+					getchar();
+					exit(1);
+					return 0;
+				}
+			}
+		}
+	}
+	return 0;
+}

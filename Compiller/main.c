@@ -180,7 +180,7 @@ int main(int argc, char** argv) {
 		{
 			printf("Tabela de simbolos \n");
 			printf("\n");
-			printf("\t%-3s\t|\t %-20s\t| %-20s\t| %-10s| %-10s\n", "TIPO", "VARIAVEL", "TAMANHO", "VALOR", "LINHA");
+			printf("\t%-3s\t| %-15s\t| %-2s\t| %-3s\t|\t %-10s\n", "TIPO", "VARIAVEL", "TAM", "VALOR", "LINHA");
 			printf("\t------------------------------------------------------------------------");
 			printf("\n");
 			for (int i = 0; i < list_get_size(&table_symbols); i++)
@@ -193,7 +193,7 @@ int main(int argc, char** argv) {
 				char* length = (char*)object->length;
 				int line = object->line;
 
-				printf("\t%-3s\t|\t %-20s\t|\t %-20s\t| %-20s\t| %-10i\n", tipo, variable, length, value, line);
+				printf("\t%-3s\t| %-15s\t| %-2s\t| %-3s\t|\t %-10i\n", tipo, variable, length, value, line);
 				list_position = list_next(list_position);
 			}
 		}

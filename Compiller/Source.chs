@@ -1,5 +1,5 @@
 main(){
-	char &nomeerrado(15);
+	char &nomeerrado(1.5);
 }
 
 int &idade = 20;

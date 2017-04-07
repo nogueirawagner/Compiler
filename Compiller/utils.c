@@ -160,10 +160,29 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 
-
-
 	if (isDec)
 	{
+		for (int i = 0; i < tam; i++)
+		{
+			char caracter = value[i];
+			if (is_caracter_open_parathesi(caracter))
+			{
+				while (1)
+				{
+					i++;
+					caracter = value[i];
+					if (!is_caracter_closed_parathesi(caracter))
+					{
+						if (!is_numeric(caracter))
+							throw_exception(1010, source->line_cur, source);
+						char scopy[1] = { caracter };
+						strncat(buffer, scopy, 1);
+					}
+					if (is_caracter_closed_parathesi(caracter))
+						return buffer;
+				}
+			}
+		}
 	}
 	else
 	{
@@ -188,12 +207,6 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 				}
 			}
 		}
-
-
-		int x = 9;
 	}
-
-
 	return 0;
-
 }

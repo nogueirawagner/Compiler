@@ -131,7 +131,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 
 		if (source->last_pos == 1 && !is_caracter_m(value))
 			throw_exception(1001, 1, source);
-		if (scope == TK_ID && !is_caracter_ampersand(value))
+		if (scope == TK_ID && !is_caracter_ampersand(value)) /* Valida se espera uma variavel se for verifica se o caracter é & */
 			throw_exception(1002, source->line_cur, source);
 		else if (line == 1 && source->last_pos == 1) /* Valida a palavra reservada main */
 		{
