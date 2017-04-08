@@ -116,7 +116,7 @@ token_type_t ts_define_scope(token_t* last_tk)
 
 
 /* Pega próximo token */
-token_t* ts_get_next_token(source_t* source, token_t* last_token)
+token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_type)
 {
 	token_type_t scope = ts_define_scope(last_token);
 
@@ -259,12 +259,10 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token)
 					source->last_read = value;
 					return NULL;
 				}
-
 			}
 		}
 		source->last_pos += 1;
 	};
-
 	return NULL;
 }
 

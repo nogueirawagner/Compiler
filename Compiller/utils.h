@@ -67,6 +67,12 @@ int is_caracter_open_parathesi(char value);
 /* Verifica se é fecha parenteses ')' */
 int is_caracter_closed_parathesi(char value);
 
+/* Verifica se é ponto '.' */
+int is_caracter_point(char value);
+
+/* Verifica se nao é tabulação */
+int is_caracter_tab(char value);
+
 /* Verifica tamanho da variavel Ex: dec &x(1.5) ou char &y(15) */
 char* any_definition_length(char* value, source_t* source, int isDec);
 

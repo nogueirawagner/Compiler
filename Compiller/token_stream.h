@@ -50,7 +50,7 @@ source_t * ts_open_source(char* source);
 void ts_close_source(char* source);
 
 /* Função para pegar o próximo token */
-token_t* ts_get_next_token(source_t* source, token_t* last_token);
+token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_type);
 
 /* Função para pegar o proximo caracter */
 char ts_get_next_caracter(source_t * source);

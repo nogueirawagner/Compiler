@@ -139,7 +139,6 @@ int is_caracter_quotes_plus(char value)
 	return (value == 34);
 }
 
-
 /* Verifica se é abre parenteses '(' */
 int is_caracter_open_parathesi(char value)
 {
@@ -152,6 +151,17 @@ int is_caracter_closed_parathesi(char value)
 	return (value == 41);
 }
 
+/* Verifica se é ponto '.' */
+int is_caracter_point(char value)
+{
+	return (value == 46);
+}
+
+/* Verifica se nao é tabulação */
+int is_caracter_tab(char value)
+{
+	return (value == 9);
+}
 
 /* Verifica tamanho da variavel Ex: dec &x(1.5) ou char &y(15) */
 char* any_definition_length(char* value, source_t* source, int isDec)
@@ -162,6 +172,8 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 
 	if (isDec)
 	{
+		int leuPonto = 0;
+
 		for (int i = 0; i < tam; i++)
 		{
 			char caracter = value[i];
@@ -171,15 +183,30 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 				{
 					i++;
 					caracter = value[i];
+
+					if (!is_numeric(caracter))
+					{
+						if (!is_caracter_closed_parathesi(caracter) && !is_caracter_point(caracter))
+							throw_exception(1010, source->line_cur, source);
+					}
+
+
 					if (!is_caracter_closed_parathesi(caracter))
 					{
-						if (!is_numeric(caracter))
+						if (is_caracter_point(caracter))
+							leuPonto++;
+						if (!(leuPonto <= 2))
 							throw_exception(1010, source->line_cur, source);
 						char scopy[1] = { caracter };
 						strncat(buffer, scopy, 1);
 					}
 					if (is_caracter_closed_parathesi(caracter))
-						return buffer;
+					{
+						if (leuPonto == 1)
+							return buffer;
+						else
+							throw_exception(1010, source->line_cur, source);
+					}
 				}
 			}
 		}
@@ -203,7 +230,11 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 						strncat(buffer, scopy, 1);
 					}
 					if (is_caracter_closed_parathesi(caracter))
+					{
+						int i = (int)buffer; // Corrigir
 						return buffer;
+					}
+					
 				}
 			}
 		}

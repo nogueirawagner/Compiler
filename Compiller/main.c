@@ -22,14 +22,18 @@ int main(int argc, char** argv) {
 	list_initialize(&table_symbols, NULL);
 
 	token_t* last_tk_temp = (token_t*)malloc(sizeof(token_t));
+	char* last_type = (char*)malloc(sizeof(char));
 
 	while (1)
 	{
-		token_t * token = ts_get_next_token(source, last_tk_temp);  /* Pega proximo token */
+		token_t * token = ts_get_next_token(source, last_tk_temp, last_type);  /* Pega proximo token */
 
 		/* Insere token na pilha */
 		if (token != NULL && is_token_valid(token, source))
 		{
+			if (token->type == TK_TYPE)
+				last_type = token->id;
+
 			stack_push(&stack_token, token);
 			length_stack++;
 			last_tk_temp = token;
@@ -65,9 +69,6 @@ int main(int argc, char** argv) {
 				else
 					throw_exception(1002, source->line_cur, source);
 			}
-
-
-
 #pragma region Declaracao de variavel simples Ex: int &var, &var1;
 
 			while (last_tk && last_tk->type == TK_ID)
@@ -99,7 +100,7 @@ int main(int argc, char** argv) {
 
 			if (last_tk && last_tk->type == TK_TYPE)
 			{
-				while (count_id != 0)
+				while (count_id > 0)
 				{
 					token_t* id = stack_pop(&ids);
 					token_t* valor = stack_pop(&constants);
@@ -110,10 +111,10 @@ int main(int argc, char** argv) {
 					char* _dec = "dec";
 					char* _char = "char";
 
-					if (id->type == TK_ID && ts_are_equal(last_tk->id, _char))
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char))
 						 length = any_definition_length(id->id, source, 0);
-					if (id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
-						length = any_definition_length(id, source, 0);
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
+						length = any_definition_length(id->id, source, 1);
 
 
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
@@ -180,8 +181,8 @@ int main(int argc, char** argv) {
 		{
 			printf("Tabela de simbolos \n");
 			printf("\n");
-			printf("\t%-3s\t| %-15s\t| %-2s\t| %-3s\t|\t %-10s\n", "TIPO", "VARIAVEL", "TAM", "VALOR", "LINHA");
-			printf("\t------------------------------------------------------------------------");
+			printf("\t%-3s\t| %-15s\t| %-2s\t| %-20s\t|\t %-10s\n", "TIPO", "VARIAVEL", "TAM", "VALOR", "LINHA");
+			printf("\t------------------------------------------------------------------------------------");
 			printf("\n");
 			for (int i = 0; i < list_get_size(&table_symbols); i++)
 			{
@@ -193,7 +194,7 @@ int main(int argc, char** argv) {
 				char* length = (char*)object->length;
 				int line = object->line;
 
-				printf("\t%-3s\t| %-15s\t| %-2s\t| %-3s\t|\t %-10i\n", tipo, variable, length, value, line);
+				printf("\t%-3s\t| %-15s\t| %-2s\t| %-20s\t|\t %-10i\n", tipo, variable, length, value, line);
 				list_position = list_next(list_position);
 			}
 		}
