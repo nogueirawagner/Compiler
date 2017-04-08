@@ -231,10 +231,12 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 					}
 					if (is_caracter_closed_parathesi(caracter))
 					{
-						int i = (int)buffer; // Corrigir
+						int toint = atoi(buffer);
+						if (toint > 0 && toint > 255)
+							throw_exception(1009, source->line_cur, source);
 						return buffer;
 					}
-					
+
 				}
 			}
 		}

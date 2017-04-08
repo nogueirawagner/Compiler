@@ -12,5 +12,5 @@ main(){
 	int &show;
 	&show = 20;
 	dec &shofffw(20.3) = &show;
-	char &tamanho(256);
+	char &tamanho(255);
 }
