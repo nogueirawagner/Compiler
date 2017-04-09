@@ -29,6 +29,9 @@
     <ClCompile Include="list.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="tb_symbols.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="token_stream.h">
@@ -44,6 +47,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="list.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tb_symbols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -30,6 +30,8 @@ void throw_exception(int code, int line, source_t * source)
 	case 1010:
 		te_error_invalid_value_in_dec(source);
 	case 1011:
+		te_error_call_function(source);
+	case 1011:
 		te_error_expected_semicolon(source);
 	default:
 		te_error_unknown(line);
@@ -244,20 +246,5 @@ int te_error_invalid_value_in_dec(source_t* source)
 			}
 		}
 	}
-	return 0;
-}
-
-
-/* Esperado ponto e virgula na finalização da linha */
-int te_error_expected_semicolon(source_t* source)
-{
-	fseek(source->source, source->init_pos_line, SEEK_SET);
-	char linha[1000];
-	fgets(linha, 1000, source->source);
-
-	printf("TE-1011 - Esperado ';' no final da linha | linha: %i \n", source->line_cur);
-	printf("%s", linha);
-	getchar();
-	exit(1);
 	return 0;
 }

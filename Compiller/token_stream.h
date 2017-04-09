@@ -6,15 +6,19 @@
 /* Enumerado de tokens */
 typedef enum {
 	TK_ID,			/* define o identificador do token ou variavel */
-	TK_TYPE,		/* define se o token é um tipo de dado (int, char, long, dec) */
-	TK_EQUAL,		/* define se o token é operador aritmetico de igualdade */
-	TK_CONST,		/* define se o token é um valor atribuido */
-	TK_STM_END  /* define se o token é um ponto e vírgula */
-} token_type_t;
+	TK_TYPE,		/* define que token é um tipo de dado (int, char, long, dec) */
+	TK_EQUAL,		/* define que token é operador aritmetico de igualdade */
+	TK_CONST,		/* define que token é um valor atribuido */
+	TK_STM_END,		/* define que token é um ponto e vírgula */
+	TK_MAIN,		/* define que token é um main */
+	TK_FN_GETS,		/* define se é uma função get */
+	TK_FN_IF,		/* define se é uma função if */
+	TK_FN_FOR		/* define se é uma for */
+} token_type_t;	
 
 /* Estrutura para armazenar o Token */
 typedef struct {
-	char * id;
+	char* id;
 	token_type_t type;
 	int line;
 } token_t;
@@ -33,6 +37,13 @@ typedef struct {
 	char* value;
 	int line;
 } table_symbols_t;
+
+/* Tabela de funcoes */
+typedef struct {
+	char* id;
+	char* value;
+	int line;
+} table_functions_t;
 
 /* Estrutura que recebe o arquivo quando for lido */
 typedef struct {

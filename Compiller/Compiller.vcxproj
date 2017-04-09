@@ -146,6 +146,7 @@
     <ClCompile Include="list.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="stack.c" />
+    <ClCompile Include="tb_symbols.c" />
     <ClCompile Include="token_exception.c" />
     <ClCompile Include="token_stream.c" />
     <ClCompile Include="utils.c" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClInclude Include="list.h" />
     <ClInclude Include="stack.h" />
+    <ClInclude Include="tb_symbols.h" />
     <ClInclude Include="token_exception.h" />
     <ClInclude Include="token_stream.h" />
     <ClInclude Include="utils.h" />
