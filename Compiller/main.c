@@ -58,6 +58,7 @@ int main(int argc, char** argv) {
 			int count_id = 0;
 			int count_const = 0;
 			int count_semicolon = 0;
+			int count_functions = 0;
 
 			if (last_tk && last_tk->type == TK_STM_END) 
 			{

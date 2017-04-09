@@ -250,7 +250,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1012, source->line_cur, source);
 			}
 		}
 		else if (is_caracter_ampersand(value))
@@ -269,7 +269,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 					return token;
 				}
 				if (is_new_line(value)) 
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1012, source->line_cur, source);
 			}
 		}
 		else if (is_caracter_equals(value))
@@ -295,7 +295,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1012, source->line_cur, source);
 			}
 		}
 		else if (is_new_line(value))
