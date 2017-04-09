@@ -81,6 +81,12 @@ int ts_are_equal(char* pointer1, char* pointer2)
 	return !(strcmp(pointer1, pointer2));
 }
 
+/* Verificar se é caracter ' + '*/
+int is_caracter_plus(char value) 
+{
+	return (value == 43);
+}
+
 /* Define se é palavra reservada para funcoes */
 int is_token_function(char* value, source_t* source)
 {

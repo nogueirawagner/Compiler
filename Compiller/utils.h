@@ -79,6 +79,9 @@ int is_caracter_relational(char value);
 /* Verifica se é aspas duplas ' "" '  */
 int is_caracter_quotes_plus(char value);
 
+/* Verificar se é caracter ' + '*/
+int is_caracter_plus(char value);
+
 /* Verifica se é abre parenteses '(' */
 int is_caracter_open_parathesi(char value);
 

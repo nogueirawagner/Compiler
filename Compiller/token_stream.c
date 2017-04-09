@@ -231,21 +231,61 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 
 		if (is_caracter_quotes_plus(value))
 		{
+			int count_quotes = 1; // tem que validar se é 0
+			int count_plus = 0; // tem que validar se é 0
+
 			while (1)
 			{
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = ts_get_next_caracter(source); // Lê próximo caracter
+				value = ts_get_next_caracter(source);
+				if (is_caracter_semicolon(value) || is_caracter_comma(value))
+				{
+					if (count_quotes % 2 == 0)
+					{
+						token->id = buffer;
+						token->line = line;
+						token->type = TK_CONST;
+						return token;
+					}
+					else
+						throw_exception(1013, source->line_cur, source);
+				}
+				if (is_space(value) && count_quotes == 0)
+				{
+					char scopy[1] = { value };
+					strncat(buffer, scopy, 1);
+					value = ts_get_next_caracter(source);
+				}
+				if (is_caracter_plus(value))
+				{
+					char scopy[1] = { value };
+					strncat(buffer, scopy, 1);
+					value = ts_get_next_caracter(source);
+					count_plus++;
+				}
 				if (is_caracter_quotes_plus(value))
 				{
 					char scopy[1] = { value };
 					strncat(buffer, scopy, 1);
-
-					token->id = buffer;
-					token->line = line;
-					token->type = TK_CONST;
-					return token;
+					if (count_quotes % 2 == 0)
+					{
+						count_quotes++;
+						while (1)
+						{
+							value = ts_get_next_caracter(source);
+							char scopy[1] = { value };
+							strncat(buffer, scopy, 1);
+							if (is_caracter_quotes_plus(value))
+							{
+								char scopy[1] = { value };
+								strncat(buffer, scopy, 1);
+								break;
+							}
+						}
+					}
+					count_quotes++;
 				}
 			}
 		}
