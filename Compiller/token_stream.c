@@ -101,7 +101,6 @@ int ts_begin_main(char value, source_t* source)
 						source->line_cur++;
 						source->init_pos_line = source->last_pos;
 					}
-
 				}
 
 				if (!is_new_line(value))
@@ -115,9 +114,7 @@ int ts_begin_main(char value, source_t* source)
 
 				value = ts_get_next_caracter(source); // Lê próximo caracter
 				if (tam == 7 && ts_are_equal(main, buffer))
-				{
 					return 1;
-				}
 			}
 		}
 		else
@@ -145,26 +142,48 @@ token_t* ts_get_token_fn_gets(source_t* source, token_t* last_token)
 	if (!is_caracter_open_parathesi(source->last_read))
 		throw_exception(1011, source->line_cur, source);
 
+	int is_virgula = 0;
+	int expected_ampersand = 0;
 	while (1)
 	{
 		char value = ts_get_next_caracter(source);
-		if (is_caracter_ampersand(value))
+		if (is_caracter_ampersand(value) || is_space(value))
 		{
 			while (1)
 			{
 				char scopy[1] = { value };
-				strncat(buffer, scopy, 1);
+				if (!is_space(value))
+					strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source);
+
+				if (expected_ampersand)
+				{
+					if (!is_space(value) && !is_caracter_ampersand(value))
+						throw_exception(1002, source->line_cur, source);
+
+					if (is_caracter_ampersand(value))
+						expected_ampersand = 0;
+				}
+
 				if (is_caracter_closed_parathesi(value))
 				{
+					value = ts_get_next_caracter(source);
+					if (!is_caracter_semicolon(value))
+						throw_exception(1012, source->line_cur, source);
+
 					token->id = buffer;
 					token->line = line;
 					token->type = ts_get_type(token->id, last_token, source);
 					return token;
 				}
+
+				if (is_caracter_comma(value))
+					expected_ampersand = 1;
 			}
 		}
+		else
+			throw_exception(1002, source->line_cur, source);
 	}
 
 }
@@ -268,7 +287,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 					token->type = ts_get_type(token->id, last_token, source); // resolver 
 					return token;
 				}
-				if (is_new_line(value)) 
+				if (is_new_line(value))
 					throw_exception(1012, source->line_cur, source);
 			}
 		}

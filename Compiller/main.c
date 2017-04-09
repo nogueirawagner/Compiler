@@ -22,10 +22,6 @@ int main(int argc, char** argv) {
 	linked_list_t table_symbols;
 	list_initialize(&table_symbols, NULL);
 
-	list_element_t* list_position_fn = NULL;
-	linked_list_t table_functions;
-	list_initialize(&table_functions, NULL);
-
 	token_t* last_tk_temp = (token_t*)malloc(sizeof(token_t));
 	char* last_type = (char*)malloc(sizeof(char));
 
@@ -46,7 +42,6 @@ int main(int argc, char** argv) {
 
 		if (is_caracter_semicolon(source->last_read))
 		{
-			//insert_table_symbols(stack_token, source, table_symbols, list_position);
 			stack_t* ids;		/* variaveis */
 			stack_t* constants; /* atribuicoes de valores */
 			stack_t* functions; /* funções */
@@ -60,7 +55,7 @@ int main(int argc, char** argv) {
 			int count_semicolon = 0;
 			int count_functions = 0;
 
-			if (last_tk && last_tk->type == TK_STM_END) 
+			if (last_tk && last_tk->type == TK_STM_END)
 			{
 				count_semicolon++;
 				last_tk = (token_t*)stack_pop(&stack_token);
@@ -139,26 +134,37 @@ int main(int argc, char** argv) {
 					tbs->value = id->id;
 					tbs->variable = "NULL";
 
+					char buffer[255];
+					FillMemory(&buffer, 255, 0);
+					int tam = length_content_token(tbs->value);
+					int any_comma = 0;
+
 					/* Verificar se item existe na tabela de símbolos */
 					if (table_symbols.size == 0)
-					{
-						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-							throw_exception(1004, source->line_cur, source);
-						else
-						{
-							list_insert_next(&table_symbols, NULL, tbs);
-							list_position = list_head(&table_symbols);
-						}
-					}
+						throw_exception(1011, source->line_cur, source);
 					else
 					{
-						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-							throw_exception(1004, source->line_cur, source);
-						else
+						for (int i = 0; i < tam; i++)
 						{
-							list_insert_next(&table_symbols, list_position, tbs);
-							list_position = list_head(&table_symbols);
+							char value = tbs->value[i];
+							char scopy[1] = { value };
+
+							if (is_caracter_comma(value))
+							{
+								any_comma = 1;
+
+								if (!list_any_tbl_symb(&table_symbols, list_position, buffer, NULL))
+									throw_exception(1011, source->line_cur, source);
+							}
+							strncat(buffer, scopy, 1);
 						}
+						if (!any_comma)
+						{
+							if (!list_any_tbl_symb(&table_symbols, list_position, tbs->value, NULL))
+								throw_exception(1011, source->line_cur, source);
+						}
+						list_insert_next(&table_symbols, NULL, tbs);
+						list_position = list_head(&table_symbols);
 					}
 				}
 			}
@@ -173,18 +179,24 @@ int main(int argc, char** argv) {
 					count_const--;
 					char* length = 0; // tamanho de variavel char e dec 
 
+					char* var_tmp = (char*)malloc(sizeof(char));
+					int buffering = 1;
+					char buffertemp[255];
+					FillMemory(&buffertemp, 255, 0);
+
 					char* _dec = "dec";
 					char* _char = "char";
+					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char))
 						length = any_definition_length(id->id, source, 0);
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
 						length = any_definition_length(id->id, source, 1);
 
-
-					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 					tbs->type = last_tk->id;
 					tbs->line = last_tk->line;
+					var_tmp = id->id;
+					tbs->variable = id->id;
 
 					if (!length)
 						tbs->length = "NULL";
@@ -195,7 +207,6 @@ int main(int argc, char** argv) {
 						tbs->value = "NULL";
 					else
 						tbs->value = valor->id;
-					tbs->variable = id->id;
 
 					/* Verificar se item existe na tabela de símbolos */
 					if (table_symbols.size == 0)
@@ -219,6 +230,7 @@ int main(int argc, char** argv) {
 						}
 					}
 				}
+
 			}
 
 			if (count_id > 0 || count_const > 0 || count_functions > 0)
