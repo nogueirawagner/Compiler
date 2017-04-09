@@ -29,6 +29,8 @@ token_type_t ts_get_type_fn(char* value)
 
 	if (ts_are_equal(_gets, value))
 		return TK_FN_GETS;
+	if (ts_are_equal(_puts, value))
+		return TK_FN_PUTS;
 	if (ts_are_equal(_if, value))
 		return TK_FN_IF;
 	if (ts_are_equal(_for, value))
@@ -185,8 +187,26 @@ token_t* ts_get_token_fn_gets(source_t* source, token_t* last_token)
 		else
 			throw_exception(1002, source->line_cur, source);
 	}
-
 }
+
+token_t* ts_get_token_fn_puts(source_t* source, token_t* last_token)
+{
+	char * buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+	int line = source->line_cur;
+	token_t* token = (token_t*)malloc(sizeof(token_t));
+
+	if (!is_caracter_open_parathesi(source->last_read))
+		throw_exception(1011, source->line_cur, source);
+	puts(buffer);
+	while (1) 
+	{
+		char value = ts_get_next_caracter(source);
+	}
+	return NULL;
+}
+
+
 
 /* Pega próximo token */
 token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_type)
@@ -198,7 +218,10 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 		scope = ts_define_scope(last_token);
 
 	if (last_token->type == TK_FN_GETS)
-		return	ts_get_token_fn_gets(source, last_token);
+		return ts_get_token_fn_gets(source, last_token);
+
+	/*if (last_token->type == TK_FN_PUTS)
+		ts_get_token_fn_puts(source, last_token);*/
 
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);

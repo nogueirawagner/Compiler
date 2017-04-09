@@ -13,7 +13,8 @@ typedef enum {
 	TK_MAIN,		/* define que token é um main */
 	TK_FN_GETS,		/* define se é uma função get */
 	TK_FN_IF,		/* define se é uma função if */
-	TK_FN_FOR		/* define se é uma for */
+	TK_FN_FOR,		/* define se é uma for */
+	TK_FN_PUTS		/* define se é uma funcao puts */
 } token_type_t;	
 
 /* Estrutura para armazenar o Token */
