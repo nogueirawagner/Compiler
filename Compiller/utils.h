@@ -1,6 +1,24 @@
 #ifndef __UTILS_H__
 #define __UTILS_H__
 
+/* Operador Aritimeticos */
+typedef enum {
+	OP_MULT,	/* multiplicação */
+	OP_ADIC,	/* adição */
+	OP_SUBT,	/* subtração */
+	OP_DIVI		/* divisão */
+} operator_aritmetic;
+
+/* Operador Relacionais */
+typedef enum {
+	OP_MORE_THEN,	/* maior que */
+	OP_LESS_THEN,	/* menor que */
+	OP_MORE_EQUAL,	/* maior ou igual */
+	OP_LESS_EQUAL,	/* menor ou igual */
+	OP_EQUAL,		/* igual */
+	OP_DIFF			/* diferente */
+} operator_relational;
+
 /* Verifica se é caracter A...Z ou a...z */
 int is_alphanumeric(char value);
 
@@ -41,7 +59,10 @@ int is_caracter_m(char value);
 int ts_are_equal(char* pointer1, char* pointer2);
 
 /* Define se o token é um tipo de dado */
-int is_token_type_data(char* value);
+int is_token_type_data(char* value, source_t* source);
+
+/* Define se é palavra reservada para funcoes */
+int is_token_function(char* value, source_t* source);
 
 /* Define se o token é uma variável */
 int is_token_variable(char* value);
@@ -54,9 +75,6 @@ int is_caracter_relational(char value);
 
 /* Verifica se é operadores relacional */
 int is_caracter_relational(char value);
-
-/* Verifica se é operadores lógicos */
-int is_operator_logic(char value, char last_value);
 
 /* Verifica se é aspas duplas ' "" '  */
 int is_caracter_quotes_plus(char value);

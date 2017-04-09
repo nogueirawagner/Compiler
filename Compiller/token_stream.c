@@ -11,10 +11,28 @@ token_type_t ts_get_type(char* value, token_t* last_tk, source_t* source)
 {
 	if (last_tk->type == TK_EQUAL)
 		return TK_CONST;
-	if (is_token_type_data(value))
+	if (is_token_type_data(value, source))
 		return TK_TYPE;
 	if (is_token_variable(value))
 		return TK_ID;
+}
+
+/* Define funçao */
+token_type_t ts_get_type_fn(char* value)
+{
+	char* _gets = "gets";
+	char* _if = "if";
+	char* _for = "for";
+	char* _then = "then";
+	char* _else = "else";
+	char* _puts = "puts";
+
+	if (ts_are_equal(_gets, value))
+		return TK_FN_GETS;
+	if (ts_are_equal(_if, value))
+		return TK_FN_IF;
+	if (ts_are_equal(_for, value))
+		return TK_FN_FOR;
 }
 
 /* Abre o arquivo em binário */
@@ -112,13 +130,53 @@ token_type_t ts_define_scope(token_t* last_tk)
 {
 	if (last_tk->type == TK_TYPE)
 		return TK_ID;
+	if (last_tk->type == TK_EQUAL)
+		return TK_CONST;
+	return TK_TYPE;
 }
 
+token_t* ts_get_token_fn_gets(source_t* source)
+{
+	char * buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+
+	int line = source->line_cur;
+	token_t* token = (token_t*)malloc(sizeof(token_t));
+	while (1)
+	{
+		char value = ts_get_next_caracter(source);
+		if (is_caracter_ampersand(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source);
+				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
+				{
+					token->id = buffer;
+					token->line = line;
+					token->type = ts_get_type(token->id, NULL, source); // resolver 
+					return token;
+				}
+			}
+		}
+	}
+
+}
 
 /* Pega próximo token */
 token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_type)
 {
-	token_type_t scope = ts_define_scope(last_token);
+	token_type_t scope;
+	if (source->last_pos == 0)
+		scope = TK_MAIN;
+	if (source->last_pos > 7)
+		scope = ts_define_scope(last_token);
+
+	if (last_token->type == TK_FN_GETS)
+		ts_get_token_fn_gets(source);
 
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
@@ -178,11 +236,14 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source); // Lê próximo caracter
-				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
+				if (is_token_function(buffer, source) || is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id, last_token, source); // resolver
+					if (is_token_function(buffer, source))
+						token->type = ts_get_type_fn(buffer);
+					else
+						token->type = ts_get_type(token->id, last_token, source);
 					return token;
 				}
 			}
@@ -271,14 +332,14 @@ int is_token_valid(token_t* token, source_t* source)
 {
 	if (token->type == TK_TYPE)
 	{
-		if (!is_token_type_data(token->id))
+		if (!is_token_type_data(token->id, source))
 			throw_exception(1007, source->line_cur, source); //Tipo não definido
 	}
 	else if (token->type == TK_ID) // Se é variavel
 	{
 		if (!is_caracter_ampersand(token->id[0]))
 			throw_exception(1005, source->line_cur, source); //Erro ao declarar variavel deve iniciar com &
-		else if (is_token_type_data(token->id))
+		else if (is_token_type_data(token->id, source))
 			throw_exception(1006, source->line_cur, source); //Variavel com nome de palavra reservada
 	}
 	return 1;

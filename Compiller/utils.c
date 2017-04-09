@@ -1,6 +1,7 @@
 #include "token_stream.h"
 #include <Windows.h>
 #include "token_exception.h"
+#include <ctype.h>
 
 /* Verifica se é caracter A...Z ou a...z */
 int is_alphanumeric(char value)
@@ -80,15 +81,49 @@ int ts_are_equal(char* pointer1, char* pointer2)
 	return !(strcmp(pointer1, pointer2));
 }
 
-/* Define se o token é um tipo de dado */
-int is_token_type_data(char* value)
+/* Define se é palavra reservada para funcoes */
+int is_token_function(char* value, source_t* source)
 {
-	char * tipos[4] = { "int", "dec", "char" };
+	char * tipos[6] = { "gets", "puts", "if", "then", "else", "for" };
+
+	for (int i = 0; i < 6; i++)
+	{
+		if (strcmpi(tipos[i], value) == 0)
+		{
+			int tam = length_content_token(value);
+			for (int j = 0; j < tam; j++)
+			{
+				if (value[j] >= 65 && value[j] <= 90)
+					throw_exception(1011, source->line_cur, source);
+			}
+			return 1;
+		}
+
+	}
+	return 0;
+}
+
+
+
+
+/* Define se o token é um tipo de dado */
+int is_token_type_data(char* value, source_t* source)
+{
+	char * tipos[3] = { "int", "dec", "char" };
 
 	for (int i = 0; i < 3; i++)
 	{
-		if (strcmp(tipos[i], value) == 0)
+		if (strcmpi(tipos[i], value) == 0)
+		{
+			int tam = length_content_token(value);
+			for (int j = 0; j < tam; j++)
+			{
+				if (value[j] >= 65 && value[j] <= 90)
+					throw_exception(1002, source->line_cur, source);
+			}
 			return 1;
+		}
+
 	}
 	return 0;
 }
@@ -118,19 +153,10 @@ int length_content_token(char* value)
 /* Verifica se é operadores relacional */
 int is_caracter_relational(char value)
 {
-	if (value == 33			/* ! */
-		|| value == 60		/* < */
-		|| value == 62		/* > */
-		|| is_caracter_equals(value));		/* = */
-}
-
-/* Verifica se é operadores lógicos */
-int is_operator_logic(char value, char last_value)
-{
-
-	//	Operadores logicos
-	//	&& ||
-
+	if (value == 33						/* ! */
+	 || value == 60						/* < */
+	 || value == 62						/* > */
+	 || is_caracter_equals(value));		/* = */
 }
 
 /* Verifica se é aspas duplas ' "" '  */
@@ -189,7 +215,6 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 						if (!is_caracter_closed_parathesi(caracter) && !is_caracter_point(caracter))
 							throw_exception(1010, source->line_cur, source);
 					}
-
 
 					if (!is_caracter_closed_parathesi(caracter))
 					{
