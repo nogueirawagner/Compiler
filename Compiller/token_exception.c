@@ -29,6 +29,8 @@ void throw_exception(int code, int line, source_t * source)
 		te_error_invalid_value_in_char(source);
 	case 1010:
 		te_error_invalid_value_in_dec(source);
+	case 1011:
+		te_error_expected_semicolon(source);
 	default:
 		te_error_unknown(line);
 	}
@@ -87,7 +89,7 @@ int te_error_var_not_declared(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_equals(value))
 				{
-					printf("TE-1003 - Identificador %s nao definido | linha: %i \n", buffer, source->line_cur);
+					printf("TE-1003 - Variavel %s nao definido | linha: %i \n", buffer, source->line_cur);
 					getchar();
 					exit(1);
 					return 0;
@@ -97,6 +99,7 @@ int te_error_var_not_declared(source_t* source)
 	}
 }
 
+/* Erro na declaracao de variavel */
 int te_error_var_already_declared(source_t* source)
 {
 	fseek(source->source, source->init_pos_line, SEEK_SET);
@@ -115,7 +118,7 @@ int te_error_var_already_declared(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_equals(value))
 				{
-					printf("TE-1004 - Identificador %s ja foi declarado | linha: %i \n", buffer, source->line_cur);
+					printf("TE-1004 - Variavel %s ja foi declarado | linha: %i \n", buffer, source->line_cur);
 					getchar();
 					exit(1);
 					return 0;
@@ -155,6 +158,7 @@ int te_error_var_declared(source_t* source)
 	return 0;
 }
 
+/* Tipo de dado não definido */
 int te_error_type_undefined(source_t* source)
 {
 	fseek(source->source, source->init_pos_line, SEEK_SET);
@@ -213,6 +217,7 @@ int te_error_invalid_value_in_char(source_t* source)
 	return 0;
 }
 
+/* Valor inválido para o tipo dec */
 int te_error_invalid_value_in_dec(source_t* source)
 {
 	fseek(source->source, source->init_pos_line, SEEK_SET);
@@ -239,5 +244,20 @@ int te_error_invalid_value_in_dec(source_t* source)
 			}
 		}
 	}
+	return 0;
+}
+
+
+/* Esperado ponto e virgula na finalização da linha */
+int te_error_expected_semicolon(source_t* source)
+{
+	fseek(source->source, source->init_pos_line, SEEK_SET);
+	char linha[1000];
+	fgets(linha, 1000, source->source);
+
+	printf("TE-1011 - Esperado ';' no final da linha | linha: %i \n", source->line_cur);
+	printf("%s", linha);
+	getchar();
+	exit(1);
 	return 0;
 }

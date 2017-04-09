@@ -49,6 +49,13 @@ int main(int argc, char** argv) {
 			token_t* last_tk = (token_t*)stack_pop(&stack_token);
 			int count_id = 0;
 			int count_const = 0;
+			int count_semicolon = 0;
+
+			if (last_tk && last_tk->type == TK_STM_END) 
+			{
+				count_semicolon++;
+				last_tk = (token_t*)stack_pop(&stack_token);
+			}
 
 			while (last_tk && last_tk->type == TK_CONST)
 			{
