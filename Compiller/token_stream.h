@@ -18,7 +18,7 @@ typedef enum {
 
 /* Estrutura para armazenar o Token */
 typedef struct {
-	char * id;
+	char* id;
 	token_type_t type;
 	int line;
 } token_t;

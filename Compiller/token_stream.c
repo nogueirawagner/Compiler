@@ -135,13 +135,16 @@ token_type_t ts_define_scope(token_t* last_tk)
 	return TK_TYPE;
 }
 
-token_t* ts_get_token_fn_gets(source_t* source)
+token_t* ts_get_token_fn_gets(source_t* source, token_t* last_token)
 {
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
-
 	int line = source->line_cur;
 	token_t* token = (token_t*)malloc(sizeof(token_t));
+
+	if (!is_caracter_open_parathesi(source->last_read))
+		throw_exception(1011, source->line_cur, source);
+
 	while (1)
 	{
 		char value = ts_get_next_caracter(source);
@@ -153,11 +156,11 @@ token_t* ts_get_token_fn_gets(source_t* source)
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source);
-				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
+				if (is_caracter_closed_parathesi(value))
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id, NULL, source); // resolver 
+					token->type = ts_get_type(token->id, last_token, source);
 					return token;
 				}
 			}
@@ -176,7 +179,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 		scope = ts_define_scope(last_token);
 
 	if (last_token->type == TK_FN_GETS)
-		ts_get_token_fn_gets(source);
+		return	ts_get_token_fn_gets(source, last_token);
 
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
