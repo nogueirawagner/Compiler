@@ -199,7 +199,7 @@ token_t* ts_get_token_fn_puts(source_t* source, token_t* last_token)
 	if (!is_caracter_open_parathesi(source->last_read))
 		throw_exception(1011, source->line_cur, source);
 	puts(buffer);
-	while (1) 
+	while (1)
 	{
 		char value = ts_get_next_caracter(source);
 	}
@@ -263,6 +263,8 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source);
+				if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
+					throw_exception(1013, source->line_cur, source);
 				if (is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
 					if (count_quotes % 2 == 0)
@@ -300,6 +302,8 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 							value = ts_get_next_caracter(source);
 							char scopy[1] = { value };
 							strncat(buffer, scopy, 1);
+							if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
+								throw_exception(1013, source->line_cur, source);
 							if (is_caracter_quotes_plus(value))
 							{
 								char scopy[1] = { value };
