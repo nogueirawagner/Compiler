@@ -17,5 +17,5 @@ main()
 	int &float;
 	gets(&show);
 	gets(&cpf, &idade);
-	char &conc(20) = "Joao" + "bobo"Joao" + "bobo";
+	char &conc(20) = "Joao" + "bobo"+"Joao" + "bobo";
 }

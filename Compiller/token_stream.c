@@ -254,8 +254,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 
 		if (is_caracter_quotes_plus(value))
 		{
-			int count_quotes = 1; // tem que validar se é 0
-			int count_plus = 0; // tem que validar se é 0
+			int count_quotes = 1; 
 
 			while (1)
 			{
@@ -288,7 +287,6 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 					char scopy[1] = { value };
 					strncat(buffer, scopy, 1);
 					value = ts_get_next_caracter(source);
-					count_plus++;
 				}
 				if (is_caracter_quotes_plus(value))
 				{
