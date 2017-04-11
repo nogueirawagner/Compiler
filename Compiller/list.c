@@ -1,7 +1,3 @@
-/********************************************************************
-		 https://github.com/LeamDelaney/linked_list
-********************************************************************/
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -23,13 +19,11 @@ void list_destroy(linked_list_t *list)
 {
 	void * data;
 
-	/* Loop to remove each element from the list */
 	while (list_get_size(list) > 0)
 	{
 		if (list_remove_next(list, NULL, (void**)&data) == 0 &&
 			list->destroy != NULL)
 		{
-			/* Call the function that the user defines for destroy */
 			list->destroy(data);
 		}
 	}
@@ -41,7 +35,6 @@ int list_insert_next(linked_list_t* list, list_element_t* element, const void* d
 {
 	list_element_t *newElement;
 
-	/* Attempt to allocate the memory for the new element */
 	if ((newElement = (list_element_t *)malloc(sizeof(list_element_t))) == NULL)
 	{
 		printf("list_insert_next : Falha ao inserir novo elemento \n");
@@ -51,7 +44,6 @@ int list_insert_next(linked_list_t* list, list_element_t* element, const void* d
 
 	if (element == NULL)
 	{
-		/* Add the new element at the HEAD of the list */
 		if (list_get_size(list) == 0)
 			list->tail = newElement;
 
@@ -75,17 +67,14 @@ int list_remove_next(linked_list_t *list, list_element_t *element, void **data)
 {
 	list_element_t* oldElement;
 
-	/* Can't remove from an empty list */
 	if (list_get_size(list) == 0)
 	{
 		printf("list_remove_next : Não é possível remover item de uma lista vazia \n");
 		return -1;
 	}
 
-	/* Continue to remove element from list */
 	if (element == NULL)
 	{
-		/* Remove element at head of list */
 		*data = list->head->data;
 		oldElement = list->head;
 		list->head = list->head->next;
@@ -97,10 +86,8 @@ int list_remove_next(linked_list_t *list, list_element_t *element, void **data)
 	}
 	else
 	{
-		/* Remove element from anywhere else in the list */
 		if (element->next == NULL)
 		{
-			/*If there is no element after the current one, fail */
 			printf("list_remove_next : Nao ha elementos depois do ultimo. \n");
 			return -1;
 		}
@@ -110,12 +97,10 @@ int list_remove_next(linked_list_t *list, list_element_t *element, void **data)
 
 		if (element->next == NULL)
 		{
-			/* Setting new tail of list */
 			list->tail = element;
 		}
 	}
 
-	/* Free the storage which was allocated in the list for old element. */
 	free(oldElement);
 
 	list->size--;

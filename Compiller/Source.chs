@@ -1,5 +1,9 @@
 main()
-{	
+{
+
+	int &i = 0, &j = 10;
+	dec &raio = 2.54;
+	char &c = "d";
 	int &idade = 20, &idadex14 = 20, &idadexxxx16 = 20, &idadexx141 = 20, &idadexxx113 = 20, &idadexx211 = 20;
 	int &cpf = 150;
 	int &nome, &borracha;
@@ -17,3 +21,6 @@ main()
 	gets(&show);
 	gets(&cpf, &idade);
 	char &conc(20) = "Joao++"+"alv";
+	
+	}	
+

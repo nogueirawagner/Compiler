@@ -291,6 +291,7 @@ int te_error_double_quotes(source_t* source)
 	return 0;
 }
 
+/* Esperado } */
 int te_error_expected_keyclosed(source_t* source) 
 {
 
