@@ -1,6 +1,6 @@
 main()
 {	
-	int &i2dade = 20, &idadex14 = 20, &idadexxxx16 = 20, &idadexx141 = 20, &idadexxx113 = 20, &idadexx211 = 20;
+	int &idade = 20, &idadex14 = 20, &idadexxxx16 = 20, &idadexx141 = 20, &idadexxx113 = 20, &idadexx211 = 20;
 	int &cpf = 150;
 	int &nome, &borracha;
 	&nome = 70;

@@ -138,26 +138,20 @@ int te_error_var_declared(source_t* source)
 	fseek(source->source, source->init_pos_line, SEEK_SET);
 	char buffer[255];
 	FillMemory(buffer, 255, 0);
-
+	
 	while (1)
 	{
 		char value = ts_get_next_caracter(source);
+		char scopy[1] = { value };
+		
 		if (is_caracter_ampersand(value))
 		{
-			while (1)
-			{
-				char scopy[1] = { value };
-				strncat(buffer, scopy, 1);
-				value = ts_get_next_caracter(source);
-				if (is_caracter_equals(value))
-				{
-					printf("TE-1005 - Erro ao declarar variavel %s deve iniciar com o caracter '&' | linha: %i \n", buffer, source->line_cur);
-					getchar();
-					exit(1);
-					return 0;
-				}
-			}
+			printf("TE-1005 - Erro ao declarar palavra reservada %s | linha: %i \n", buffer, source->line_cur);
+			getchar();
+			exit(1);
+			return 0;
 		}
+		strncat(buffer, scopy, 1);
 	}
 	return 0;
 }
