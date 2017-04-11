@@ -144,27 +144,35 @@ int main(int argc, char** argv) {
 						throw_exception(1011, source->line_cur, source);
 					else
 					{
+						int j = 1;
 						for (int i = 0; i < tam; i++)
 						{
 							char value = tbs->value[i];
 							char scopy[1] = { value };
 
-							if (is_caracter_comma(value))
+							if (is_caracter_comma(value) || j == tam)
 							{
 								any_comma = 1;
 
+								if (j == tam)
+									strncat(buffer, scopy, 1);
+
 								if (!list_any_tbl_symb(&table_symbols, list_position, buffer, NULL))
 									throw_exception(1011, source->line_cur, source);
+
+								FillMemory(&buffer, 255, 0);
 							}
-							strncat(buffer, scopy, 1);
+							else
+								strncat(buffer, scopy, 1);
+							j++;
 						}
 						if (!any_comma)
 						{
 							if (!list_any_tbl_symb(&table_symbols, list_position, tbs->value, NULL))
 								throw_exception(1011, source->line_cur, source);
 						}
-						/*list_insert_next(&table_symbols, NULL, tbs);
-						list_position = list_head(&table_symbols);*/
+						list_insert_next(&table_symbols, NULL, tbs);
+						list_position = list_head(&table_symbols);
 					}
 				}
 			}
@@ -188,10 +196,19 @@ int main(int argc, char** argv) {
 					char* _char = "char";
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char))
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char)) 
+					{
 						length = any_definition_length(id->id, source, 0);
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
+						if(!length)
+							throw_exception(1009, source->line_cur, source);
+					}
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec)) 
+					{
 						length = any_definition_length(id->id, source, 1);
+						if (!length)
+							throw_exception(1010, source->line_cur, source);
+					}
+					
 
 					tbs->type = last_tk->id;
 					tbs->line = last_tk->line;
