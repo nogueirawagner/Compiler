@@ -10,8 +10,9 @@ main()
 	dec &real(1.0);
 	dec &moeda(133.1) = 20;
 	dec &conta(20.3) = &nome;
-	int &show;
-	&show = 20;
+
+	int &show; &show = 20;
+
 	dec &shofffw(20.3) = &show;
 	char &tamanho(255);
 	int &float;

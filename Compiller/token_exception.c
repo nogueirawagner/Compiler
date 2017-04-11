@@ -35,6 +35,8 @@ void throw_exception(int code, int line, source_t * source)
 		te_error_expected_semicolon(source);
 	case 1013:
 		te_error_double_quotes(source);
+	case 1014:
+		te_error_expected_keyclosed(source);
 	default:
 		te_error_unknown(line);
 	}
@@ -281,6 +283,20 @@ int te_error_double_quotes(source_t* source)
 	fgets(linha, 1000, source->source);
 
 	printf("TE-1013 - Esperado \" na expressao | linha: %i \n", source->line_cur);
+	printf("%s", linha);
+	getchar();
+	exit(1);
+	return 0;
+}
+
+int te_error_expected_keyclosed(source_t* source) 
+{
+
+	fseek(source->source, source->init_pos_line, SEEK_SET);
+	char linha[1000];
+	fgets(linha, 1000, source->source);
+
+	printf("TE-1014 - Esperado } | linha: %i \n", source->line_cur);
 	printf("%s", linha);
 	getchar();
 	exit(1);
