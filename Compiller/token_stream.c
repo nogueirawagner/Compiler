@@ -254,7 +254,8 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 
 		if (is_caracter_quotes_plus(value))
 		{
-			int count_quotes = 1; 
+			int count_quotes = 1;
+
 
 			while (1)
 			{
@@ -287,6 +288,8 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 					char scopy[1] = { value };
 					strncat(buffer, scopy, 1);
 					value = ts_get_next_caracter(source);
+					if (is_caracter_semicolon(value))
+						throw_exception(1013, source->line_cur, source);
 				}
 				if (is_caracter_quotes_plus(value))
 				{
@@ -345,6 +348,11 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 				strncat(buffer, scopy, 1);
 
 				value = ts_get_next_caracter(source); // Lê proximo caracter
+				int tam = length_content_token(buffer);
+
+				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
+					throw_exception(1002, source->line_cur, source);
+
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
 				{
 					token->id = buffer;

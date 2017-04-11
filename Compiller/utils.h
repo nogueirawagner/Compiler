@@ -22,6 +22,12 @@ typedef enum {
 /* Verifica se é caracter A...Z ou a...z */
 int is_alphanumeric(char value);
 
+/* Verifica se é caracter a...z */
+int is_alphanumeric_tolower(char value);
+
+/* Verifica se é caracter a...z */
+int is_alphanumeric_toupper(char value);
+
 /* Verifica se é númerico */
 int is_numeric(char value);
 

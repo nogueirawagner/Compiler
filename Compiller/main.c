@@ -163,8 +163,8 @@ int main(int argc, char** argv) {
 							if (!list_any_tbl_symb(&table_symbols, list_position, tbs->value, NULL))
 								throw_exception(1011, source->line_cur, source);
 						}
-						list_insert_next(&table_symbols, NULL, tbs);
-						list_position = list_head(&table_symbols);
+						/*list_insert_next(&table_symbols, NULL, tbs);
+						list_position = list_head(&table_symbols);*/
 					}
 				}
 			}

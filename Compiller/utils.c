@@ -9,6 +9,18 @@ int is_alphanumeric(char value)
 	return (value >= 65 && value <= 90) || (value >= 97 && value <= 122);
 }
 
+/* Verifica se é caracter a...z */
+int is_alphanumeric_tolower(char value) 
+{
+	return  (value >= 97 && value <= 122);
+}
+
+/* Verifica se é caracter a...z */
+int is_alphanumeric_toupper(char value) 
+{
+	return (value >= 65 && value <= 90);
+}
+
 /* Verifica se é númerico */
 int is_numeric(char value)
 {
