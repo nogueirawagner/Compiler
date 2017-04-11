@@ -122,7 +122,7 @@ int te_error_var_already_declared(source_t* source)
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 				value = ts_get_next_caracter(source);
-				if (is_caracter_equals(value))
+				if (is_caracter_semicolon(value))
 				{
 					printf("TE-1004 - Variavel %s ja foi declarado | linha: %i \n", buffer, source->line_cur);
 					getchar();
