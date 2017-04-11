@@ -350,6 +350,9 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 				value = ts_get_next_caracter(source); // Lê proximo caracter
 				int tam = length_content_token(buffer);
 
+				if (is_caracter_ampersand(value))
+					throw_exception(1002, source->line_cur, source);
+
 				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
 					throw_exception(1002, source->line_cur, source);
 
