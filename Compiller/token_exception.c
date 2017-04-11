@@ -135,6 +135,7 @@ int te_error_var_already_declared(source_t* source)
 	return 0;
 }
 
+/*Erro ao declarar palavra reservada*/
 int te_error_var_declared(source_t* source)
 {
 	fseek(source->source, source->init_pos_line, SEEK_SET);
@@ -188,6 +189,7 @@ int te_error_type_undefined(source_t* source)
 	return 0;
 }
 
+/*Erro ao declarar variavel do tipo char*/
 int te_error_invalid_value_in_char(source_t* source)
 {
 	fseek(source->source, source->init_pos_line, SEEK_SET);

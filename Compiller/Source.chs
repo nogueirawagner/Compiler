@@ -17,4 +17,3 @@ main()
 	gets(&show);
 	gets(&cpf, &idade);
 	char &conc(20) = "Joao++"+"alv";
-}
