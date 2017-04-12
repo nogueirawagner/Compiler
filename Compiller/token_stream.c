@@ -5,6 +5,7 @@
 #include <string.h>
 #include <Windows.h>
 #include "stack.h"
+#include "functions.h"
 
 /* Define o tipo do token */
 token_type_t ts_get_type(char* value, token_t* last_tk, source_t* source)
@@ -78,53 +79,6 @@ token_t * ts_get_token_delimiter(source_t* source)
 	return &token;
 }
 
-/* Verifica se arquivo começa com main() */
-int ts_begin_main(char value, source_t* source)
-{
-	int tam = 1;
-	char * main = "main(){";
-	char * buffer = (char*)malloc(255);
-	FillMemory(buffer, 255, 0);
-
-	char scopy[1] = { value };
-	strncat(buffer, scopy, 1);
-
-	while (1)
-	{
-		value = ts_get_next_caracter(source);
-		if (is_alphanumeric(value))
-		{
-			while (1)
-			{
-				if (is_new_line(value))
-				{
-					if (is_caracter_smash_line(value))
-					{
-						source->line_cur++;
-						source->init_pos_line = source->last_pos;
-					}
-				}
-
-				if (!is_new_line(value))
-				{
-					char scopy[1] = { value };
-					strncat(buffer, scopy, 1);
-					tam++;
-					if (tam > 7)
-						throw_exception(1001, 1, source);
-				}
-
-				value = ts_get_next_caracter(source); // Lê próximo caracter
-				if (tam == 7 && ts_are_equal(main, buffer))
-					return 1;
-			}
-		}
-		else
-			throw_exception(1001, 1, source);
-	}
-	return 0;
-}
-
 token_type_t ts_define_scope(token_t* last_tk)
 {
 	if (last_tk->type == TK_TYPE)
@@ -133,80 +87,6 @@ token_type_t ts_define_scope(token_t* last_tk)
 		return TK_CONST;
 	return TK_TYPE;
 }
-
-token_t* ts_get_token_fn_gets(source_t* source, token_t* last_token)
-{
-	char * buffer = (char*)malloc(255);
-	FillMemory(buffer, 255, 0);
-	int line = source->line_cur;
-	token_t* token = (token_t*)malloc(sizeof(token_t));
-
-	if (!is_caracter_open_parathesi(source->last_read))
-		throw_exception(1011, source->line_cur, source);
-
-	int is_virgula = 0;
-	int expected_ampersand = 0;
-	while (1)
-	{
-		char value = ts_get_next_caracter(source);
-		if (is_caracter_ampersand(value) || is_space(value))
-		{
-			while (1)
-			{
-				char scopy[1] = { value };
-				if (!is_space(value))
-					strncat(buffer, scopy, 1);
-
-				value = ts_get_next_caracter(source);
-
-				if (expected_ampersand)
-				{
-					if (!is_space(value) && !is_caracter_ampersand(value))
-						throw_exception(1002, source->line_cur, source);
-
-					if (is_caracter_ampersand(value))
-						expected_ampersand = 0;
-				}
-
-				if (is_caracter_closed_parathesi(value))
-				{
-					value = ts_get_next_caracter(source);
-					if (!is_caracter_semicolon(value))
-						throw_exception(1012, source->line_cur, source);
-
-					token->id = buffer;
-					token->line = line;
-					token->type = ts_get_type(token->id, last_token, source);
-					return token;
-				}
-
-				if (is_caracter_comma(value))
-					expected_ampersand = 1;
-			}
-		}
-		else
-			throw_exception(1002, source->line_cur, source);
-	}
-}
-
-token_t* ts_get_token_fn_puts(source_t* source, token_t* last_token)
-{
-	char * buffer = (char*)malloc(255);
-	FillMemory(buffer, 255, 0);
-	int line = source->line_cur;
-	token_t* token = (token_t*)malloc(sizeof(token_t));
-
-	if (!is_caracter_open_parathesi(source->last_read))
-		throw_exception(1011, source->line_cur, source);
-	puts(buffer);
-	while (1)
-	{
-		char value = ts_get_next_caracter(source);
-	}
-	return NULL;
-}
-
-
 
 /* Pega próximo token */
 token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_type)
@@ -218,10 +98,10 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 		scope = ts_define_scope(last_token);
 
 	if (last_token->type == TK_FN_GETS)
-		return ts_get_token_fn_gets(source, last_token);
+		return fn_gets(source, last_token);
 
 	/*if (last_token->type == TK_FN_PUTS)
-		ts_get_token_fn_puts(source, last_token);*/
+		fn_puts(source, last_token);*/
 
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
@@ -238,7 +118,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 			throw_exception(1002, source->line_cur, source);
 		else if (line == 1 && source->last_pos == 1)
 		{
-			ts_begin_main(value, source);
+			fn_main(value, source);
 			line = source->line_cur;
 
 			if (is_new_line(source->last_read) && is_caracter_smash_line(ts_get_next_caracter(source)))
@@ -255,8 +135,6 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 		if (is_caracter_quotes_plus(value))
 		{
 			int count_quotes = 1;
-
-
 			while (1)
 			{
 				char scopy[1] = { value };
