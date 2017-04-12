@@ -317,7 +317,6 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 				}
 			}
 		}
-		/* Verificar se é qualquer letra de A...Z e a...z */
 		if (is_alphanumeric(value))
 		{
 			while (1)
@@ -325,7 +324,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = ts_get_next_caracter(source); // Lê próximo caracter
+				value = ts_get_next_caracter(source);
 				if (is_token_function(buffer, source) || is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
 				{
 					token->id = buffer;
@@ -360,7 +359,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 				{
 					token->id = buffer;
 					token->line = line;
-					token->type = ts_get_type(token->id, last_token, source); // resolver 
+					token->type = ts_get_type(token->id, last_token, source);
 					return token;
 				}
 				if (is_new_line(value))

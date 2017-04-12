@@ -287,3 +287,25 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 	}
 	return 0;
 }
+
+/* Retorna somente variavel sem tamanho */
+char* content_variable_id(char* value) 
+{
+	int tam = length_content_token(value);
+	char * buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+
+	for (int i = 0; i < tam; i++) 
+	{
+	
+		char caracter = value[i];
+		if (is_caracter_open_parathesi(caracter))
+			break;
+		else 
+		{
+			char scopy[1] = { caracter };
+			strncat(buffer, scopy, 1);
+		}
+	}
+	return buffer;
+}

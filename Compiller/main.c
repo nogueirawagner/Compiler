@@ -185,35 +185,37 @@ int main(int argc, char** argv) {
 					token_t* valor = stack_pop(&constants);
 					count_id--;
 					count_const--;
-					char* length = 0; // tamanho de variavel char e dec 
-
-					char* var_tmp = (char*)malloc(sizeof(char));
-					int buffering = 1;
-					char buffertemp[255];
-					FillMemory(&buffertemp, 255, 0);
+					char* length = 0;
+					char* vartemp = 0;
 
 					char* _dec = "dec";
 					char* _char = "char";
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char)) 
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char))
 					{
 						length = any_definition_length(id->id, source, 0);
-						if(!length)
+						if (!length)
 							throw_exception(1009, source->line_cur, source);
+
+						vartemp = content_variable_id(id->id);
 					}
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec)) 
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
 					{
 						length = any_definition_length(id->id, source, 1);
 						if (!length)
 							throw_exception(1010, source->line_cur, source);
+
+						vartemp = content_variable_id(id->id);
 					}
-					
 
 					tbs->type = last_tk->id;
 					tbs->line = last_tk->line;
-					var_tmp = id->id;
-					tbs->variable = id->id;
+
+					if (!vartemp)
+						tbs->variable = id->id;
+					else
+						tbs->variable = vartemp;
 
 					if (!length)
 						tbs->length = "NULL";

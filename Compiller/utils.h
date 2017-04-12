@@ -103,4 +103,7 @@ int is_caracter_tab(char value);
 /* Verifica tamanho da variavel Ex: dec &x(1.5) ou char &y(15) */
 char* any_definition_length(char* value, source_t* source, int isDec);
 
+/* Retorna somente variavel sem tamanho */
+char* content_variable_id(char* value);
+
 #endif // !__UTILS_H__
