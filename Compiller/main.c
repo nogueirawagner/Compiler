@@ -277,11 +277,4 @@ int main(int argc, char** argv) {
 		if (source->last_read == -1)
 			show_table_symbols(table_symbols, list_position);
 	}
-
-error:
-	"erro ao processar";
-	ts_close_source(source);
-	return 0;
-
-	getchar();
 }
