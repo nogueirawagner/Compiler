@@ -66,9 +66,20 @@ int main(int argc, char** argv) {
 					throw_exception(1011, source->line_cur, source);
 				while (1)
 				{
-					stack_push(&ids, last_tk);
-					count_id++;
-					last_tk = (token_t*)stack_pop(&stack_token);
+					if (last_tk->type == TK_ID) 
+					{
+						stack_push(&ids, last_tk);
+						count_id++;
+						last_tk = (token_t*)stack_pop(&stack_token);
+					}
+					if (last_tk->type == TK_CONST)
+					{
+						stack_push(&constants, last_tk);
+						last_tk = (token_t*)stack_pop(&stack_token);
+						count_const++;
+					}
+					if(last_tk->type == TK_ADIC)
+						last_tk = (token_t*)stack_pop(&stack_token);
 
 					if (last_tk->type == TK_FN_PUTS)
 					{
@@ -161,6 +172,7 @@ int main(int argc, char** argv) {
 					tbs->length = "NULL";
 					tbs->value = id->id;
 					tbs->variable = "NULL";
+					tbs->enable = 0;
 
 					char buffer[255];
 					FillMemory(&buffer, 255, 0);
@@ -254,6 +266,7 @@ int main(int argc, char** argv) {
 						tbs->value = "NULL";
 					else
 						tbs->value = valor->id;
+					tbs->enable = 1;
 
 					/* Verificar se item existe na tabela de símbolos */
 					if (table_symbols.size == 0)

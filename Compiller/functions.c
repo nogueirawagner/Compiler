@@ -124,6 +124,16 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 
 	while (1)
 	{
+		if (is_caracter_plus(source->last_read))
+		{
+			char value = ts_get_next_caracter(source);
+
+			token->id = "+";
+			token->line = line;
+			token->type = TK_ADIC;
+			return token;
+		}
+
 		if (is_caracter_closed_parathesi(source->last_read))
 		{
 			char value = ts_get_next_caracter(source);
@@ -164,6 +174,69 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 				}
 				if (is_new_line(value))
 					throw_exception(1012, source->line_cur, source);
+			}
+		}
+		if (is_caracter_quotes_plus(value))
+		{
+			int count_quotes = 1;
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source);
+				if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
+					throw_exception(1013, source->line_cur, source);
+				if (is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_plus(value))
+				{
+					if (count_quotes % 2 == 0)
+					{
+						token->id = buffer;
+						token->line = line;
+						token->type = TK_CONST;
+						return token;
+					}
+					else
+						throw_exception(1013, source->line_cur, source);
+				}
+				if (is_space(value) && count_quotes == 0)
+				{
+					char scopy[1] = { value };
+					strncat(buffer, scopy, 1);
+					value = ts_get_next_caracter(source);
+				}
+				if (is_caracter_plus(value))
+				{
+					char scopy[1] = { value };
+					strncat(buffer, scopy, 1);
+					value = ts_get_next_caracter(source);
+					if (is_caracter_semicolon(value))
+						throw_exception(1013, source->line_cur, source);
+				}
+				if (is_caracter_quotes_plus(value))
+				{
+					char scopy[1] = { value };
+					strncat(buffer, scopy, 1);
+					if (count_quotes % 2 == 0)
+					{
+						count_quotes++;
+						while (1)
+						{
+							value = ts_get_next_caracter(source);
+							char scopy[1] = { value };
+							strncat(buffer, scopy, 1);
+							if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
+								throw_exception(1013, source->line_cur, source);
+							if (is_caracter_quotes_plus(value))
+							{
+								char scopy[1] = { value };
+								strncat(buffer, scopy, 1);
+								break;
+							}
+						}
+					}
+					count_quotes++;
+				}
 			}
 		}
 	}
