@@ -117,12 +117,55 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 	int line = source->line_cur;
 	token_t* token = (token_t*)malloc(sizeof(token_t));
 
-	if (!is_caracter_open_parathesi(source->last_read))
-		throw_exception(1011, source->line_cur, source);
-	puts(buffer);
+
+	if (last_token->type == TK_FN_PUTS)
+		if (!is_caracter_open_parathesi(source->last_read))
+			throw_exception(1011, source->line_cur, source);
+
 	while (1)
 	{
+		if (is_caracter_closed_parathesi(source->last_read))
+		{
+			char value = ts_get_next_caracter(source);
+			if (!is_caracter_semicolon(value))
+				throw_exception(1012, source->line_cur, source);
+			else
+			{
+				token->id = ";";
+				token->line = line;
+				token->type = TK_STM_END;
+				return token;
+			}
+		}
+
 		char value = ts_get_next_caracter(source);
+		if (is_caracter_ampersand(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source); // Lê proximo caracter
+				int tam = length_content_token(buffer);
+
+				if (is_caracter_ampersand(value))
+					throw_exception(1002, source->line_cur, source);
+
+				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
+					throw_exception(1002, source->line_cur, source);
+
+				if (is_space(value) || is_caracter_plus(value) || is_caracter_comma(value) || is_caracter_quotes_plus(value) || is_caracter_closed_parathesi(value))
+				{
+					token->id = buffer;
+					token->line = line;
+					token->type = ts_get_type(token->id, last_token, source);
+					return token;
+				}
+				if (is_new_line(value))
+					throw_exception(1012, source->line_cur, source);
+			}
+		}
 	}
 	return NULL;
 }

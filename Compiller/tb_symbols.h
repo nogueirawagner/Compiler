@@ -13,5 +13,7 @@ void show_table_symbols(linked_list_t tb_list, list_element_t* list_position);
 /* Inserir na tabela de simbolos */
 void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t table_symbols, list_element_t* list_position);
 
+/* Valida funcao gets */
+void function_gets();
 
 #endif // !_TB_SYMBOLS

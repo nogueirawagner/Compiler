@@ -106,4 +106,7 @@ char* any_definition_length(char* value, source_t* source, int isDec);
 /* Retorna somente variavel sem tamanho */
 char* content_variable_id(char* value);
 
+/* Verifica se tipo do token é uma função */
+int is_token_type_function(token_type_t type);
+
 #endif // !__UTILS_H__

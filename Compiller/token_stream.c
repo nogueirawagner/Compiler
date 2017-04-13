@@ -89,7 +89,7 @@ token_type_t ts_define_scope(token_t* last_tk)
 }
 
 /* Pega próximo token */
-token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_type)
+token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t last_func)
 {
 	token_type_t scope;
 	if (source->last_pos == 0)
@@ -100,8 +100,8 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 	if (last_token->type == TK_FN_GETS)
 		return fn_gets(source, last_token);
 
-	/*if (last_token->type == TK_FN_PUTS)
-		fn_puts(source, last_token);*/
+	if (last_token->type == TK_FN_PUTS || last_func == TK_FN_PUTS)
+		return fn_puts(source, last_token);
 
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
@@ -231,6 +231,9 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, char* last_typ
 					throw_exception(1002, source->line_cur, source);
 
 				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
+					throw_exception(1002, source->line_cur, source);
+
+				if (tam > 1 && (!is_numeric(value) || !is_alphanumeric(value)))
 					throw_exception(1002, source->line_cur, source);
 
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))

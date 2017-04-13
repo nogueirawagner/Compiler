@@ -10,8 +10,8 @@
 
 int main(int argc, char** argv) {
 
-	source_t* source = ts_open_source("Source.chs"); /* Abre arquivo em binário */
-	stack_t* stack_token; /* Pilha de Tokens */
+	source_t* source = ts_open_source("Source.chs");
+	stack_t* stack_token;
 	int length_stack = 0;
 
 	int ret = stack_init(&stack_token);
@@ -24,16 +24,19 @@ int main(int argc, char** argv) {
 
 	token_t* last_tk_temp = (token_t*)malloc(sizeof(token_t));
 	char* last_type = (char*)malloc(sizeof(char));
+	token_type_t last_func = (token_type_t)malloc(sizeof(token_type_t));
 
 	while (1)
 	{
-		token_t * token = ts_get_next_token(source, last_tk_temp, last_type);  /* Pega proximo token */
+		token_t * token = ts_get_next_token(source, last_tk_temp, last_func);  /* Pega proximo token */
 
 		/* Insere token na pilha */
 		if (token != NULL && is_token_valid(token, source))
 		{
 			if (token->type == TK_TYPE)
 				last_type = token->id;
+			else if (is_token_type_function(token->type))
+				last_func = token->type;
 
 			stack_push(&stack_token, token);
 			length_stack++;
@@ -52,13 +55,35 @@ int main(int argc, char** argv) {
 			token_t* last_tk = (token_t*)stack_pop(&stack_token);
 			int count_id = 0;
 			int count_const = 0;
-			int count_semicolon = 0;
 			int count_functions = 0;
 
 			if (last_tk && last_tk->type == TK_STM_END)
-			{
-				count_semicolon++;
 				last_tk = (token_t*)stack_pop(&stack_token);
+
+			if (last_func == TK_FN_PUTS)
+			{
+				if (last_tk->type == TK_FN_PUTS)
+					throw_exception(1011, source->line_cur, source);
+				while (1)
+				{
+					stack_push(&ids, last_tk);
+					count_id++;
+					last_tk = (token_t*)stack_pop(&stack_token);
+
+					if (last_tk->type == TK_FN_PUTS)
+					{
+						int tam = count_id;
+						for (int i = 0; i < tam; i++) 
+						{
+							token_t* id = stack_pop(&ids);
+							count_id--;
+
+							if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
+								throw_exception(1015, source->line_cur, source);
+						}
+						break;
+					}
+				}
 			}
 
 			while (last_tk && last_tk->type == TK_CONST)
@@ -80,7 +105,6 @@ int main(int argc, char** argv) {
 				else
 					throw_exception(1002, source->line_cur, source);
 			}
-#pragma region Declaracao de variavel simples Ex: int &var, &var1;
 
 			while (last_tk && last_tk->type == TK_ID)
 			{
@@ -89,6 +113,11 @@ int main(int argc, char** argv) {
 				last_tk = (token_t*)stack_pop(&stack_token);
 
 				if (last_tk->type == TK_FN_GETS)
+				{
+					stack_push(&functions, last_tk);
+					count_functions++;
+				}
+				if (last_tk->type == TK_FN_PUTS)
 				{
 					stack_push(&functions, last_tk);
 					count_functions++;
@@ -115,7 +144,6 @@ int main(int argc, char** argv) {
 					}
 				}
 			}
-#pragma endregion
 
 			if (last_tk && last_tk->type == TK_FN_GETS)
 			{

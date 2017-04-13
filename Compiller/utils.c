@@ -121,9 +121,6 @@ int is_token_function(char* value, source_t* source)
 	return 0;
 }
 
-
-
-
 /* Define se o token é um tipo de dado */
 int is_token_type_data(char* value, source_t* source)
 {
@@ -205,6 +202,11 @@ int is_caracter_point(char value)
 int is_caracter_tab(char value)
 {
 	return (value == 9);
+}
+
+int is_token_type_function(token_type_t type)
+{
+	return (type == TK_FN_GETS || type == TK_FN_FOR || type == TK_FN_IF || type == TK_FN_PUTS);
 }
 
 /* Verifica tamanho da variavel Ex: dec &x(1.5) ou char &y(15) */
