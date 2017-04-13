@@ -14,7 +14,11 @@ typedef enum {
 	TK_FN_GETS,		/* define se é uma função get */
 	TK_FN_IF,		/* define se é uma função if */
 	TK_FN_FOR,		/* define se é uma for */
-	TK_FN_PUTS		/* define se é uma funcao puts */
+	TK_FN_PUTS,		/* define se é uma funcao puts */
+	TK_MULT,	/* multiplicação */
+	TK_ADIC,	/* adição */
+	TK_SUBT,	/* subtração */
+	TK_DIVI		/* divisão */
 } token_type_t;	
 
 /* Estrutura para armazenar o Token */
@@ -37,6 +41,7 @@ typedef struct {
 	char* length;
 	char* value;
 	int line;
+	int enable;
 } table_symbols_t;
 
 /* Tabela de funcoes */

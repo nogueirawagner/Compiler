@@ -18,9 +18,7 @@ void throw_exception(int code, int line, source_t * source)
 	case 1004:
 		te_error_var_already_declared(source);
 	case 1005:
-		te_error_var_declared(source);
-	case 1006:
-		te_error_var_already_declared(source);
+		te_error_var_reserved(source);
 	case 1007:
 		te_error_var_already_declared(source);
 	case 1008:
@@ -107,9 +105,6 @@ int te_error_var_not_declared(source_t* source)
 	}
 }
 
-
-
-
 /* Erro na declaracao de variavel */
 int te_error_var_already_declared(source_t* source)
 {
@@ -141,7 +136,7 @@ int te_error_var_already_declared(source_t* source)
 }
 
 /*Erro ao declarar palavra reservada*/
-int te_error_var_declared(source_t* source)
+int te_error_var_reserved(source_t* source)
 {
 	fseek(source->source, source->init_pos_line, SEEK_SET);
 	char buffer[255];

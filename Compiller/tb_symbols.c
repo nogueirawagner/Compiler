@@ -21,7 +21,8 @@ void show_table_symbols(linked_list_t tb_list, list_element_t* list_position)
 		char* length = (char*)object->length;
 		int line = object->line;
 
-		printf("\t%-3s\t| %-15s\t| %-2s\t| %-20s\t|\t %-10i\n", tipo, variable, length, value, line);
+		if (object->enable)
+			printf("\t%-3s\t| %-15s\t| %-2s\t| %-20s\t|\t %-10i\n", tipo, variable, length, value, line);
 		list_position = list_next(list_position);
 	}
 }
