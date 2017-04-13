@@ -18,13 +18,12 @@ main()
 	char &tamanho(255);
 	int &float;
 	gets(&show);
+	int &abelha, &azul;
 	gets(&cpf, &idade);
+	puts(&abelha, &azul);
 	char &conc(20) = " Jo"+"Mac";
 	gets(&pessoa, &professora);
 	gets(&cpf, &float);
-	gets(&real);
-
-	int &abelha, &azul;
-	puts(&abelha, &azul);
+	gets(&real); 
 	puts(&abelha + &azul);
 }
