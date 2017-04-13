@@ -233,7 +233,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
 					throw_exception(1002, source->line_cur, source);
 
-				if (tam > 1 && (!is_numeric(value) || !is_alphanumeric(value)))
+				if (tam > 1 && (is_numeric(value) && is_alphanumeric(value) && is_space(value) && is_caracter_comma(value)))
 					throw_exception(1002, source->line_cur, source);
 
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))

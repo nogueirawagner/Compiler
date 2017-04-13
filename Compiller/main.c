@@ -301,6 +301,8 @@ int main(int argc, char** argv) {
 						list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
 				}
 			}
+
+			last_func = TK_TYPE;
 		}
 		if (source->last_read == -1)
 			show_table_symbols(table_symbols, list_position);
