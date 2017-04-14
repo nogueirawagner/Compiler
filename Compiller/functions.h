@@ -12,4 +12,7 @@ token_t* fn_gets(source_t* source, token_t* last_token);
 /* Função puts */
 token_t* fn_puts(source_t* source, token_t* last_token);
 
+/* Função for */
+token_t* fn_for(source_t* source, token_t* last_token);
+
 #endif // !_FUNCTIONS

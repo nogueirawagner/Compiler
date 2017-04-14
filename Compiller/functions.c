@@ -242,3 +242,22 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 	}
 	return NULL;
 }
+
+/* Função for */
+token_t* fn_for(source_t* source, token_t* last_token) 
+{
+	char * buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+	int line = source->line_cur;
+	token_t* token = (token_t*)malloc(sizeof(token_t));
+
+
+	if (last_token->type == TK_FN_FOR)
+		if (!is_caracter_open_parathesi(source->last_read))
+			throw_exception(1011, source->line_cur, source);
+
+	while (1) 
+	{
+
+	}
+}

@@ -97,11 +97,14 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 	if (source->last_pos > 7)
 		scope = ts_define_scope(last_token);
 
-	if (last_token->type == TK_FN_GETS)
+	if (last_token->type == TK_FN_GETS || last_func == TK_FN_GETS)
 		return fn_gets(source, last_token);
 
 	if (last_token->type == TK_FN_PUTS || last_func == TK_FN_PUTS)
 		return fn_puts(source, last_token);
+
+	if (last_token->type == TK_FN_FOR || last_func == TK_FN_FOR)
+		return fn_for(source, last_token);
 
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
