@@ -19,7 +19,8 @@ typedef enum {
 	TK_ADIC,		/* adição */
 	TK_SUBT,		/* subtração */
 	TK_DIVI,		/* divisão */
-	TK_RELATIONAL,  /* operador relacional */
+	TK_RELATIONAL,	/* operador relacional */
+	TK_INCREMENT	/* operador incremental */
 } token_type_t;	
 
 /* Estrutura para armazenar o Token */

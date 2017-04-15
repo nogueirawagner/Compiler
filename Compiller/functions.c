@@ -291,12 +291,34 @@ token_t* fn_for(source_t* source, token_t* last_token)
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 
-				value = ts_get_next_caracter(source); // Lê proximo caracter
+				value = ts_get_next_caracter(source);
 				int tam = length_content_token(buffer);
 
-				if (is_caracter_arimetic(value)) 
+				if (is_caracter_arimetic(value))
 				{
-					int i = 9;
+					char scopy[1] = { value };
+					strncat(buffer, scopy, 1);
+					while (1)
+					{
+						char tmp = value;
+						value = ts_get_next_caracter(source);
+
+						if (is_caracter_plus(value) && is_caracter_plus(tmp))
+						{
+							char scopy[1] = { value };
+							strncat(buffer, scopy, 1);
+
+							value = ts_get_next_caracter(source);
+
+							if (is_caracter_closed_parathesi(value))
+							{
+								token->id = buffer;
+								token->line = line;
+								token->type = TK_INCREMENT;
+								return token;
+							}
+						}
+					}
 				}
 
 				if (is_caracter_ampersand(value))
@@ -398,9 +420,6 @@ token_t* fn_for(source_t* source, token_t* last_token)
 /* Processa função for */
 void fn_run_for(source_t* source, struct stack_t* stack_token, int length_stack, linked_list_t table_symbols, list_element_t* list_position)
 {
-	if (length_stack != 4)
-		throw_exception(1011, source->line_cur, source);
-
 	token_t* last_tk;
 
 	stack_t* ids;
@@ -426,6 +445,14 @@ void fn_run_for(source_t* source, struct stack_t* stack_token, int length_stack,
 			char * buffer = (char*)malloc(255);
 			FillMemory(buffer, 255, 0);
 
+			if (id->type == TK_TYPE)
+			{
+				if (strcmpi("int", id->id) != 0)
+					throw_exception(1011, source->line_cur, source);
+
+
+
+			}
 
 			if (count_id == 3) // verifica declaração e atribuição
 			{
