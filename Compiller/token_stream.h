@@ -15,10 +15,11 @@ typedef enum {
 	TK_FN_IF,		/* define se é uma função if */
 	TK_FN_FOR,		/* define se é uma for */
 	TK_FN_PUTS,		/* define se é uma funcao puts */
-	TK_MULT,	/* multiplicação */
-	TK_ADIC,	/* adição */
-	TK_SUBT,	/* subtração */
-	TK_DIVI		/* divisão */
+	TK_MULT,		/* multiplicação */
+	TK_ADIC,		/* adição */
+	TK_SUBT,		/* subtração */
+	TK_DIVI,		/* divisão */
+	TK_RELATIONAL,  /* operador relacional */
 } token_type_t;	
 
 /* Estrutura para armazenar o Token */

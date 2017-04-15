@@ -10,13 +10,13 @@ int is_alphanumeric(char value)
 }
 
 /* Verifica se é caracter a...z */
-int is_alphanumeric_tolower(char value) 
+int is_alphanumeric_tolower(char value)
 {
 	return  (value >= 97 && value <= 122);
 }
 
 /* Verifica se é caracter a...z */
-int is_alphanumeric_toupper(char value) 
+int is_alphanumeric_toupper(char value)
 {
 	return (value >= 65 && value <= 90);
 }
@@ -94,7 +94,7 @@ int ts_are_equal(char* pointer1, char* pointer2)
 }
 
 /* Verificar se é caracter ' + '*/
-int is_caracter_plus(char value) 
+int is_caracter_plus(char value)
 {
 	return (value == 43);
 }
@@ -165,13 +165,28 @@ int length_content_token(char* value)
 	return length;
 }
 
+/* Verifica se é caracter inválido para variaveis */
+int is_caracter_invalid_var(char value)
+{
+	return ((value >= 33 && value <= 37) || value == 39 || (value >= 42 && value <= 43) || value == 45 || value == 47 || value == 58 || (value >= 60 && value <= 64) || (value >= 91 && value <= 96) || (value >= 123 && value <= 127));
+}
+
 /* Verifica se é operadores relacional */
 int is_caracter_relational(char value)
 {
-	if (value == 33						/* ! */
-	 || value == 60						/* < */
-	 || value == 62						/* > */
-	 || is_caracter_equals(value));		/* = */
+	return (value == 33							/* ! */
+		|| value == 60						/* < */
+		|| value == 62						/* > */
+		|| is_caracter_equals(value));		/* = */
+}
+
+/* Verifica se é operador aritmetico */
+int is_caracter_arimetic(char value)
+{
+	return (value == 43		/* + */
+		|| value == 45		/* - */
+		|| value == 42		/* * */
+		|| value == 47);	/* / */
 }
 
 /* Verifica se é aspas duplas ' "" '  */
@@ -277,7 +292,7 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 					if (is_caracter_closed_parathesi(caracter))
 					{
 						int toint = atoi(buffer);
-						if(toint < 1)
+						if (toint < 1)
 							throw_exception(1009, source->line_cur, source);
 						if (toint > 255)
 							throw_exception(1009, source->line_cur, source);
@@ -291,19 +306,19 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 }
 
 /* Retorna somente variavel sem tamanho */
-char* content_variable_id(char* value) 
+char* content_variable_id(char* value)
 {
 	int tam = length_content_token(value);
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 
-	for (int i = 0; i < tam; i++) 
+	for (int i = 0; i < tam; i++)
 	{
-	
+
 		char caracter = value[i];
 		if (is_caracter_open_parathesi(caracter))
 			break;
-		else 
+		else
 		{
 			char scopy[1] = { caracter };
 			strncat(buffer, scopy, 1);

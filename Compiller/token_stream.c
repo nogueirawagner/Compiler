@@ -16,6 +16,8 @@ token_type_t ts_get_type(char* value, token_t* last_tk, source_t* source)
 		return TK_TYPE;
 	if (is_token_variable(value))
 		return TK_ID;
+	if (is_caracter_relational(value))
+		return TK_RELATIONAL;
 }
 
 /* Define funçao */
@@ -230,6 +232,9 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 				value = ts_get_next_caracter(source); // Lê proximo caracter
 				int tam = length_content_token(buffer);
 
+				if(is_caracter_invalid_var(value))
+					throw_exception(1002, source->line_cur, source);
+
 				if (is_caracter_ampersand(value))
 					throw_exception(1002, source->line_cur, source);
 
@@ -237,7 +242,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 					throw_exception(1002, source->line_cur, source);
 
 				if (tam > 1)
-					if (!(is_numeric(value) || is_alphanumeric(value) || is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_open_parathesi(value) || is_caracter_point(value) ||  is_caracter_closed_parathesi(value)))
+					if (!(is_numeric(value) || is_alphanumeric(value) || is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_open_parathesi(value) || is_caracter_point(value) || is_caracter_closed_parathesi(value)))
 						throw_exception(1002, source->line_cur, source);
 
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))

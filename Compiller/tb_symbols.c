@@ -163,3 +163,9 @@ void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t 
 		}
 	}
 }
+
+/* Valida funcao gets */
+void function_gets() 
+{
+	//TODO 
+}

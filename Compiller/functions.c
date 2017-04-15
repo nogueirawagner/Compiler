@@ -5,6 +5,8 @@
 #include "token_stream.h"
 #include "utils.h"
 #include "token_exception.h"
+#include "stack.h"
+#include "list.h"
 
 /* Verifica se arquivo começa com main() */
 int fn_main(char value, source_t* source)
@@ -244,7 +246,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 }
 
 /* Função for */
-token_t* fn_for(source_t* source, token_t* last_token) 
+token_t* fn_for(source_t* source, token_t* last_token)
 {
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
@@ -256,8 +258,207 @@ token_t* fn_for(source_t* source, token_t* last_token)
 		if (!is_caracter_open_parathesi(source->last_read))
 			throw_exception(1011, source->line_cur, source);
 
-	while (1) 
+	while (1)
 	{
+		char value = ts_get_next_caracter(source);
+
+		if (is_alphanumeric(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source);
+				if (is_token_function(buffer, source) || is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
+				{
+					token->id = buffer;
+					token->line = line;
+					if (is_token_function(buffer, source))
+						token->type = ts_get_type_fn(buffer);
+					else
+						token->type = ts_get_type(token->id, last_token, source);
+					return token;
+				}
+				if (is_new_line(value))
+					throw_exception(1012, source->line_cur, source);
+			}
+		}
+		else if (is_caracter_ampersand(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source); // Lê proximo caracter
+				int tam = length_content_token(buffer);
+
+				if (is_caracter_arimetic(value)) 
+				{
+					int i = 9;
+				}
+
+				if (is_caracter_ampersand(value))
+					throw_exception(1002, source->line_cur, source);
+
+				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
+					throw_exception(1002, source->line_cur, source);
+
+				if (tam > 1)
+					if (!(is_numeric(value) || is_alphanumeric(value) || is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_open_parathesi(value) || is_caracter_point(value) || is_caracter_closed_parathesi(value)))
+						throw_exception(1002, source->line_cur, source);
+
+				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
+				{
+					token->id = buffer;
+					token->line = line;
+					token->type = ts_get_type(token->id, last_token, source);
+					return token;
+				}
+				if (is_new_line(value))
+					throw_exception(1012, source->line_cur, source);
+			}
+		}
+		else if (is_caracter_equals(value))
+		{
+			value = ts_get_next_caracter(source);
+			if (is_space(value))
+			{
+				token->id = "=";
+				token->line = line;
+				token->type = TK_EQUAL;
+				return token;
+			}
+			else if (!is_caracter_equals(value))
+				throw_exception(1012, source->line_cur, source);
+			else
+			{
+				token->id = "==";
+				token->line = line;
+				token->type = TK_RELATIONAL;
+				return token;
+			}
+		}
+		else if (is_numeric(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source); // Lê proximo caracter
+				if (is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_relational(value))
+				{
+					token->id = buffer;
+					token->line = line;
+					token->type = TK_CONST;
+					return token;
+				}
+				if (is_new_line(value))
+					throw_exception(1012, source->line_cur, source);
+			}
+		}
+		else if (is_caracter_relational(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+
+				value = ts_get_next_caracter(source);
+				if (is_space(value))
+				{
+					token->id = buffer;
+					token->line = line;
+					token->type = TK_RELATIONAL;
+					return token;
+				}
+				if (!is_caracter_relational(value))
+					throw_exception(1012, source->line_cur, source);
+				else
+				{
+					if (*buffer == value)
+						if (!is_caracter_equals(value))
+							throw_exception(1012, source->line_cur, source);
+
+					if (is_caracter_equals(*buffer) && !is_caracter_equals(value))
+						strncat(buffer, scopy, 1);
+					else
+						throw_exception(1012, source->line_cur, source);
+				}
+
+				if (is_new_line(value))
+					throw_exception(1012, source->line_cur, source);
+			}
+		}
+	}
+}
+
+/* Processa função for */
+void fn_run_for(source_t* source, struct stack_t* stack_token, int length_stack, linked_list_t table_symbols, list_element_t* list_position)
+{
+	if (length_stack != 4)
+		throw_exception(1011, source->line_cur, source);
+
+	token_t* last_tk;
+
+	stack_t* ids;
+	int count_id = 0;
+	stack_init(&ids);
+
+	for (int i = length_stack; i > 0; i--)
+	{
+		last_tk = (token_t*)stack_pop(&stack_token);
+		length_stack--;
+		if (last_tk->type != TK_FN_FOR)
+		{
+			stack_push(&ids, last_tk);
+			count_id++;
+		}
+	}
+
+	if (last_tk->type == TK_FN_FOR)
+	{
+		while (1)
+		{
+			token_t* id = stack_pop(&ids);
+			char * buffer = (char*)malloc(255);
+			FillMemory(buffer, 255, 0);
+
+
+			if (count_id == 3) // verifica declaração e atribuição
+			{
+				int tam = length_content_token(id->id);
+
+				for (int i = 0; i < tam; i++)
+				{
+					char value = id->id[i];
+					char scopy[1] = { value };
+
+					if (is_alphanumeric_tolower(value))
+					{
+						while (1)
+						{
+
+
+						}
+						int a = 9;
+					}
+					else if (is_caracter_ampersand(value))
+					{
+
+					}
+					else
+						throw_exception(1011, source->line_cur, source);
+				}
+
+
+				count_id--;
+			}
+
+			int jd = 0;
+		}
 
 	}
 }

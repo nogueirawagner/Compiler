@@ -2,6 +2,8 @@
 #define _FUNCTIONS
 
 #include "token_stream.h"
+#include "stack.h"
+#include "list.h"
 
 /* Verifica se arquivo começa com main() */
 int fn_main(char value, source_t* source);
@@ -14,5 +16,8 @@ token_t* fn_puts(source_t* source, token_t* last_token);
 
 /* Função for */
 token_t* fn_for(source_t* source, token_t* last_token);
+
+/* Processa função for */
+void fn_run_for(source_t* source, struct stack_t* stack_token, int length_stack, linked_list_t table_symbols, list_element_t* list_position);
 
 #endif // !_FUNCTIONS

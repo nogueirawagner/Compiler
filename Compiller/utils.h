@@ -79,8 +79,8 @@ int length_content_token(char* value);
 /* Verifica se é operadores relacional */
 int is_caracter_relational(char value);
 
-/* Verifica se é operadores relacional */
-int is_caracter_relational(char value);
+/* Verifica se é operador aritmetico */
+int is_caracter_arimetic(char value);
 
 /* Verifica se é aspas duplas ' "" '  */
 int is_caracter_quotes_plus(char value);
@@ -108,5 +108,8 @@ char* content_variable_id(char* value);
 
 /* Verifica se tipo do token é uma função */
 int is_token_type_function(token_type_t type);
+
+/* Verifica se é caracter inválido para variaveis */
+int is_caracter_invalid_var(char value);
 
 #endif // !__UTILS_H__

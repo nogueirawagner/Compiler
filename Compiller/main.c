@@ -7,6 +7,7 @@
 #include "list.h"
 #include "token_exception.h"
 #include "tb_symbols.h"
+#include "functions.h"
 
 int main(int argc, char** argv) {
 
@@ -43,7 +44,12 @@ int main(int argc, char** argv) {
 			last_tk_temp = token;
 		}
 
-		if (is_caracter_semicolon(source->last_read))
+		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_FOR)
+		{
+			fn_run_for(source, stack_token, length_stack, table_symbols, list_position);
+		}
+
+		if (is_caracter_semicolon(source->last_read) && last_func != TK_FN_FOR)
 		{
 			stack_t* ids;		/* variaveis */
 			stack_t* constants; /* atribuicoes de valores */
@@ -66,7 +72,7 @@ int main(int argc, char** argv) {
 					throw_exception(1011, source->line_cur, source);
 				while (1)
 				{
-					if (last_tk->type == TK_ID) 
+					if (last_tk->type == TK_ID)
 					{
 						stack_push(&ids, last_tk);
 						count_id++;
@@ -78,13 +84,13 @@ int main(int argc, char** argv) {
 						last_tk = (token_t*)stack_pop(&stack_token);
 						count_const++;
 					}
-					if(last_tk->type == TK_ADIC)
+					if (last_tk->type == TK_ADIC)
 						last_tk = (token_t*)stack_pop(&stack_token);
 
 					if (last_tk->type == TK_FN_PUTS)
 					{
 						int tam = count_id;
-						for (int i = 0; i < tam; i++) 
+						for (int i = 0; i < tam; i++)
 						{
 							token_t* id = stack_pop(&ids);
 							count_id--;
@@ -317,6 +323,7 @@ int main(int argc, char** argv) {
 
 			last_func = TK_TYPE;
 		}
+
 		if (source->last_read == -1)
 			show_table_symbols(table_symbols, list_position);
 	}
