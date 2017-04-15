@@ -44,9 +44,10 @@ int main(int argc, char** argv) {
 			last_tk_temp = token;
 		}
 
-		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_FOR)
+		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_FOR) 
 		{
-			fn_run_for(source, stack_token, length_stack, table_symbols, list_position);
+			fn_run_for(source, stack_token, table_symbols, list_position);
+			last_func = TK_STM_END;
 		}
 
 		if (is_caracter_semicolon(source->last_read) && last_func != TK_FN_FOR)
@@ -59,12 +60,17 @@ int main(int argc, char** argv) {
 			stack_init(&functions);
 
 			token_t* last_tk = (token_t*)stack_pop(&stack_token);
+			length_stack--;
 			int count_id = 0;
 			int count_const = 0;
 			int count_functions = 0;
 
-			if (last_tk && last_tk->type == TK_STM_END)
+			if (last_tk && last_tk->type == TK_STM_END) 
+			{
 				last_tk = (token_t*)stack_pop(&stack_token);
+				length_stack--;
+			}
+			
 
 			if (last_func == TK_FN_PUTS)
 			{
@@ -77,15 +83,21 @@ int main(int argc, char** argv) {
 						stack_push(&ids, last_tk);
 						count_id++;
 						last_tk = (token_t*)stack_pop(&stack_token);
+						length_stack--;
 					}
 					if (last_tk->type == TK_CONST)
 					{
 						stack_push(&constants, last_tk);
 						last_tk = (token_t*)stack_pop(&stack_token);
+						length_stack--;
 						count_const++;
 					}
-					if (last_tk->type == TK_ADIC)
+					if (last_tk->type == TK_ADIC) 
+					{
 						last_tk = (token_t*)stack_pop(&stack_token);
+						length_stack--;
+					}
+					
 
 					if (last_tk->type == TK_FN_PUTS)
 					{
@@ -107,17 +119,20 @@ int main(int argc, char** argv) {
 			{
 				stack_push(&constants, last_tk);
 				last_tk = (token_t*)stack_pop(&stack_token);
+				length_stack--;
 				count_const++;
 
 				if (last_tk && last_tk->type == TK_EQUAL)
 				{
 					last_tk = (token_t*)stack_pop(&stack_token);
+					length_stack--;
 					if (last_tk && last_tk->type != TK_ID)
 						throw_exception(1002, source->line_cur, source);
 
 					stack_push(&ids, last_tk);
 					count_id++;
 					last_tk = (token_t*)stack_pop(&stack_token);
+					length_stack--;
 				}
 				else
 					throw_exception(1002, source->line_cur, source);
@@ -128,6 +143,7 @@ int main(int argc, char** argv) {
 				stack_push(&ids, last_tk);
 				count_id++;
 				last_tk = (token_t*)stack_pop(&stack_token);
+				length_stack--;
 
 				if (last_tk->type == TK_FN_GETS)
 				{
@@ -145,16 +161,19 @@ int main(int argc, char** argv) {
 					{
 						stack_push(&constants, last_tk);
 						last_tk = (token_t*)stack_pop(&stack_token);
+						length_stack--;
 						count_const++;
 
 						if (last_tk && last_tk->type == TK_EQUAL)
 						{
 							last_tk = (token_t*)stack_pop(&stack_token);
+							length_stack--;
 							if (last_tk && last_tk->type != TK_ID)
 								throw_exception(1002, source->line_cur, source);
 							stack_push(&ids, last_tk);
 							count_id++;
 							last_tk = (token_t*)stack_pop(&stack_token);
+							length_stack--;
 						}
 						else
 							throw_exception(1002, source->line_cur, source);

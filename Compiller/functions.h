@@ -18,6 +18,6 @@ token_t* fn_puts(source_t* source, token_t* last_token);
 token_t* fn_for(source_t* source, token_t* last_token);
 
 /* Processa função for */
-void fn_run_for(source_t* source, struct stack_t* stack_token, int length_stack, linked_list_t table_symbols, list_element_t* list_position);
+void fn_run_for(source_t* source, struct stack_t* stack_token, linked_list_t table_symbols, list_element_t* list_position);
 
 #endif // !_FUNCTIONS

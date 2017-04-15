@@ -99,6 +99,12 @@ int is_caracter_plus(char value)
 	return (value == 43);
 }
 
+/* Verifica se é caracter menos ' - ' */
+int is_caracter_less(char value) 
+{
+	return (value == 45);
+}
+
 /* Define se é palavra reservada para funcoes */
 int is_token_function(char* value, source_t* source)
 {
@@ -116,7 +122,6 @@ int is_token_function(char* value, source_t* source)
 			}
 			return 1;
 		}
-
 	}
 	return 0;
 }
@@ -138,7 +143,6 @@ int is_token_type_data(char* value, source_t* source)
 			}
 			return 1;
 		}
-
 	}
 	return 0;
 }

@@ -253,7 +253,6 @@ token_t* fn_for(source_t* source, token_t* last_token)
 	int line = source->line_cur;
 	token_t* token = (token_t*)malloc(sizeof(token_t));
 
-
 	if (last_token->type == TK_FN_FOR)
 		if (!is_caracter_open_parathesi(source->last_read))
 			throw_exception(1011, source->line_cur, source);
@@ -302,22 +301,28 @@ token_t* fn_for(source_t* source, token_t* last_token)
 					{
 						char tmp = value;
 						value = ts_get_next_caracter(source);
-
-						if (is_caracter_plus(value) && is_caracter_plus(tmp))
+						if (is_caracter_arimetic(value))
 						{
-							char scopy[1] = { value };
-							strncat(buffer, scopy, 1);
-
-							value = ts_get_next_caracter(source);
-
-							if (is_caracter_closed_parathesi(value))
+							if (is_caracter_plus(value) && is_caracter_plus(tmp) || is_caracter_less(value) && is_caracter_less(tmp))
 							{
-								token->id = buffer;
-								token->line = line;
-								token->type = TK_INCREMENT;
-								return token;
+								char scopy[1] = { value };
+								strncat(buffer, scopy, 1);
+
+								value = ts_get_next_caracter(source);
+
+								if (is_caracter_closed_parathesi(value))
+								{
+									token->id = buffer;
+									token->line = line;
+									token->type = TK_INCREMENT;
+									return token;
+								}
 							}
+							else
+								throw_exception(1011, source->line_cur, source);
 						}
+						else if (is_caracter_closed_parathesi(value))
+							throw_exception(1011, source->line_cur, source);
 					}
 				}
 
@@ -331,7 +336,7 @@ token_t* fn_for(source_t* source, token_t* last_token)
 					if (!(is_numeric(value) || is_alphanumeric(value) || is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_open_parathesi(value) || is_caracter_point(value) || is_caracter_closed_parathesi(value)))
 						throw_exception(1002, source->line_cur, source);
 
-				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
+				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value) || is_caracter_closed_parathesi(value))
 				{
 					token->id = buffer;
 					token->line = line;
@@ -414,27 +419,73 @@ token_t* fn_for(source_t* source, token_t* last_token)
 					throw_exception(1012, source->line_cur, source);
 			}
 		}
+		else if (is_caracter_arimetic(value))
+		{
+			char scopy[1] = { value };
+			strncat(buffer, scopy, 1);
+			while (1)
+			{
+				char tmp = value;
+				value = ts_get_next_caracter(source);
+				if (is_caracter_arimetic(value))
+				{
+					if (is_caracter_plus(value) && is_caracter_plus(tmp) || is_caracter_less(value) && is_caracter_less(tmp))
+					{
+						while (1)
+						{
+							char scopy[1] = { value };
+							strncat(buffer, scopy, 1);
+
+							value = ts_get_next_caracter(source);
+
+							if (is_caracter_closed_parathesi(value))
+							{
+								token->id = buffer;
+								token->line = line;
+								token->type = TK_INCREMENT;
+								return token;
+							}
+						}
+
+					}
+					else
+						throw_exception(1011, source->line_cur, source);
+				}
+				else
+					throw_exception(1011, source->line_cur, source);
+			}
+		}
+		else if (is_caracter_semicolon(value))
+		{
+			token->id = ";";
+			token->line = line;
+			token->type = TK_STM_END;
+			return token;
+		}
+		else if (is_caracter_closed_parathesi(value))
+			return NULL;
 	}
 }
 
 /* Processa função for */
-void fn_run_for(source_t* source, struct stack_t* stack_token, int length_stack, linked_list_t table_symbols, list_element_t* list_position)
+void fn_run_for(source_t* source, struct stack_t* stack_token, linked_list_t table_symbols, list_element_t* list_position)
 {
 	token_t* last_tk;
-
+	int read = 0;
 	stack_t* ids;
 	int count_id = 0;
 	stack_init(&ids);
 
-	for (int i = length_stack; i > 0; i--)
+	while (1)
 	{
 		last_tk = (token_t*)stack_pop(&stack_token);
-		length_stack--;
 		if (last_tk->type != TK_FN_FOR)
 		{
 			stack_push(&ids, last_tk);
 			count_id++;
 		}
+		else
+			break;
 	}
 
 	if (last_tk->type == TK_FN_FOR)
@@ -442,50 +493,33 @@ void fn_run_for(source_t* source, struct stack_t* stack_token, int length_stack,
 		while (1)
 		{
 			token_t* id = stack_pop(&ids);
+			count_id--;
 			char * buffer = (char*)malloc(255);
 			FillMemory(buffer, 255, 0);
 
-			if (id->type == TK_TYPE)
+			if (count_id > 0 && id->type == TK_TYPE)
 			{
 				if (strcmpi("int", id->id) != 0)
 					throw_exception(1011, source->line_cur, source);
 
-
-
-			}
-
-			if (count_id == 3) // verifica declaração e atribuição
-			{
-				int tam = length_content_token(id->id);
-
-				for (int i = 0; i < tam; i++)
+				while (1)
 				{
-					char value = id->id[i];
-					char scopy[1] = { value };
-
-					if (is_alphanumeric_tolower(value))
-					{
-						while (1)
-						{
-
-
-						}
-						int a = 9;
-					}
-					else if (is_caracter_ampersand(value))
-					{
-
-					}
-					else
+					token_t* id = stack_pop(&ids);
+					count_id--;
+					if (id->type != TK_ID)
 						throw_exception(1011, source->line_cur, source);
+					read = 1;
+					break;
 				}
-
-
-				count_id--;
 			}
-
-			int jd = 0;
+			else if (count_id > 0 && id->type == TK_ID)
+			{
+				char* type = "int";
+				if (!list_any_tbl_symb(&table_symbols, list_position, id->id, type))
+					throw_exception(1011, source->line_cur, source);
+			}
+			if (count_id == 0 || read == 1)
+				break;
 		}
-
 	}
 }
