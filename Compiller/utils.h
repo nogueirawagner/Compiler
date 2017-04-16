@@ -82,10 +82,16 @@ int is_caracter_relational(char value);
 /* Verifica se é operador aritmetico */
 int is_caracter_arimetic(char value);
 
+/* Verifica se é operador lógico */
+int is_caracter_logic(char value);
+
+/* Verifica se é caracter barra ' | ' */
+int is_caracter_bar(char value);
+
 /* Verifica se é aspas duplas ' "" '  */
 int is_caracter_quotes_plus(char value);
 
-/* Verificar se é caracter ' + '*/
+/* Verificar se é caracter mais ' + '*/
 int is_caracter_plus(char value);
 
 /* Verifica se é caracter menos ' - ' */

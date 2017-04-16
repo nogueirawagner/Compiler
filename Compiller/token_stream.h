@@ -20,7 +20,10 @@ typedef enum {
 	TK_SUBT,		/* subtração */
 	TK_DIVI,		/* divisão */
 	TK_RELATIONAL,	/* operador relacional */
-	TK_INCREMENT	/* operador incremental */
+	TK_INCREMENT,	/* operador incremental */
+	TK_END_FN,		/* finaliza função */
+	TK_OP_AND,		/* operador lógico and */
+	TK_OP_OR		/* operador lógico or */
 } token_type_t;	
 
 /* Estrutura para armazenar o Token */

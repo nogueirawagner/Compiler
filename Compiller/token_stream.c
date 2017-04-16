@@ -108,6 +108,9 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 	if (last_token->type == TK_FN_FOR || last_func == TK_FN_FOR)
 		return fn_for(source, last_token);
 
+	if (last_token->type == TK_FN_IF || last_func == TK_FN_IF)
+		return fn_if(source, last_token);
+
 	char * buffer = (char*)malloc(255);
 	FillMemory(buffer, 255, 0);
 

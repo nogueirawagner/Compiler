@@ -47,7 +47,13 @@ int main(int argc, char** argv) {
 		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_FOR) 
 		{
 			fn_run_for(source, stack_token, table_symbols, list_position);
-			last_func = TK_STM_END;
+			last_func = TK_END_FN;
+		}
+
+		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_IF) 
+		{
+			fn_run_if(source, stack_token, table_symbols, list_position);
+			last_func = TK_END_FN;
 		}
 
 		if (is_caracter_semicolon(source->last_read) && last_func != TK_FN_FOR)

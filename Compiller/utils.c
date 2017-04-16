@@ -178,7 +178,7 @@ int is_caracter_invalid_var(char value)
 /* Verifica se é operadores relacional */
 int is_caracter_relational(char value)
 {
-	return (value == 33							/* ! */
+	return (value == 33						/* ! */
 		|| value == 60						/* < */
 		|| value == 62						/* > */
 		|| is_caracter_equals(value));		/* = */
@@ -191,6 +191,12 @@ int is_caracter_arimetic(char value)
 		|| value == 45		/* - */
 		|| value == 42		/* * */
 		|| value == 47);	/* / */
+}
+
+/* Verifica se é operador lógico */
+int is_caracter_logic(char value)
+{
+	return (value == 38 || value == 124);
 }
 
 /* Verifica se é aspas duplas ' "" '  */
@@ -226,6 +232,12 @@ int is_caracter_tab(char value)
 int is_token_type_function(token_type_t type)
 {
 	return (type == TK_FN_GETS || type == TK_FN_FOR || type == TK_FN_IF || type == TK_FN_PUTS);
+}
+
+/* Verifica se é caracter barra ' | ' */
+int is_caracter_bar(char value)
+{
+	return (value == 124);
 }
 
 /* Verifica tamanho da variavel Ex: dec &x(1.5) ou char &y(15) */
