@@ -1,6 +1,6 @@
 main()
 {	
-	int &a = 0, &b = 10,&aA = 0, &b1B = 10;
+	int &a = 0, &b = 10, &aA = 0, &b1B = 10;
 	dec &raio(2.4) = 2.54;
 	char &c(2) = "d";
 	int &idade = 20, &idadex14 = 20, &idadexxxx16 = 20, &idadexx141 = -20, &idadexxx113 = 1, &idadexx211 = 20;
@@ -35,5 +35,15 @@ main()
 	if(&i < 10)
 	if(&i < 10 && &i > 20)
 	if(&i < 10 || &i > 20)
+	if(&i < 10 && &i < &a || &i == &i)
 	
+	for(int &i = 0; &i < 10; &i++)
+	for(int &i = 0; &i < 10; &i--)
+	for(int &i = 0; &i < 10; ++&i)
+	for(int &i = 0; &i < 10; --&i)
+	for(int &i = 0;;)
+	for(10; &i < 10; &i++)
+	for(; &i < 10; &i++)
+	for(&i = 0; &i < 10; --&i)
+	for(&i = 0; &i < 10; &i++)
 }

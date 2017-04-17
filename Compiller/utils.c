@@ -229,6 +229,7 @@ int is_caracter_tab(char value)
 	return (value == 9);
 }
 
+/* Verifica se é um token de função */
 int is_token_type_function(token_type_t type)
 {
 	return (type == TK_FN_GETS || type == TK_FN_FOR || type == TK_FN_IF || type == TK_FN_PUTS);
