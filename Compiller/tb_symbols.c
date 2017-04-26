@@ -9,7 +9,7 @@
 #include "tb_symbols.h"
 #include "functions.h"
 
-void show_table_symbols(linked_list_t* tb_list, list_element_t* list_position)
+void show_table_symbols(linked_list_t* tb_list, list_element_t* position)
 {
 	printf("Tabela de simbolos \n");
 	printf("\n");
@@ -18,7 +18,7 @@ void show_table_symbols(linked_list_t* tb_list, list_element_t* list_position)
 	printf("\n");
 	for (int i = 0; i < list_get_size(tb_list); i++)
 	{
-		table_symbols_t* object = (table_symbols_t*)list_position->data;
+		table_symbols_t* object = (table_symbols_t*)position->data;
 
 		char* variable = (char*)object->variable;
 		char* tipo = (char*)object->type;
@@ -28,11 +28,11 @@ void show_table_symbols(linked_list_t* tb_list, list_element_t* list_position)
 
 		if (object->enable)
 			printf("\t%-3s\t| %-15s\t| %-2s\t| %-20s\t|\t %-10i\n", tipo, variable, length, value, line);
-		list_position = list_next(list_position);
+		position = list_next(position);
 	}
 }
 
-void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_list_t* tbl_symbols, list_element_t* list_position, token_type_t last_func)
+void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_list_t* tbl_symbols, list_element_t* position, token_type_t last_func)
 {
 	stack_t* ids;		/* variaveis */
 	stack_t* constants; /* atribuicoes de valores */
@@ -40,7 +40,7 @@ void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_
 	stack_init(&ids);
 	stack_init(&constants);
 	stack_init(&functions);
-	
+
 	token_t* last_tk = (token_t*)stack_pop(&stack_token);
 	int count_id = 0;
 	int count_const = 0;
@@ -84,7 +84,7 @@ void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_
 					token_t* id = stack_pop(&ids);
 					count_id--;
 
-					if (!list_any_tbl_symb(tbl_symbols, list_position, id->id, NULL))
+					if (!list_any_tbl_symb(tbl_symbols, position, id->id, NULL))
 						throw_exception(1015, source->line_cur, source);
 				}
 				break;
@@ -199,7 +199,7 @@ void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_
 						if (j == tam)
 							strncat(buffer, scopy, 1);
 
-						if (!list_any_tbl_symb(tbl_symbols, list_position, buffer, NULL))
+						if (!list_any_tbl_symb(tbl_symbols, position, buffer, NULL))
 							throw_exception(1011, source->line_cur, source);
 
 						FillMemory(&buffer, 255, 0);
@@ -210,11 +210,11 @@ void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_
 				}
 				if (!any_comma)
 				{
-					if (!list_any_tbl_symb(tbl_symbols, list_position, tbs->value, NULL))
+					if (!list_any_tbl_symb(tbl_symbols, position, tbs->value, NULL))
 						throw_exception(1011, source->line_cur, source);
 				}
 				list_insert_next(tbl_symbols, NULL, tbs);
-				list_position = list_head(tbl_symbols);
+				position = list_head(tbl_symbols);
 			}
 		}
 	}
@@ -273,28 +273,28 @@ void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_
 			/* Verificar se item existe na tabela de símbolos */
 			if (tbl_symbols->size == 0)
 			{
-				if (list_any_tbl_symb(tbl_symbols, list_position, tbs->variable, tbs->type))
+				if (list_any_tbl_symb(tbl_symbols, position, tbs->variable, tbs->type))
 					throw_exception(1004, source->line_cur, source);
 				else
 				{
 					list_insert_next(tbl_symbols, NULL, tbs);
-					list_position = list_head(tbl_symbols);
-					show_table_symbols(tbl_symbols, list_position);
+					position = list_head(tbl_symbols);
+					show_table_symbols(tbl_symbols, position);
 				}
 			}
 			else
 			{
-				if (list_any_tbl_symb(tbl_symbols, list_position, tbs->variable, tbs->type))
+				if (list_any_tbl_symb(tbl_symbols, position, tbs->variable, tbs->type))
 					throw_exception(1004, source->line_cur, source);
 				else
 				{
-					list_insert_next(tbl_symbols, list_position, tbs);
-					list_position = list_head(tbl_symbols);
-					show_table_symbols(tbl_symbols, list_position);
+					list_insert_next(tbl_symbols, position, tbs);
+					position = list_head(tbl_symbols);
+					show_table_symbols(tbl_symbols, position);
 				}
 			}
 		}
-		
+
 	}
 
 	if (count_id > 0 || count_const > 0 || count_functions > 0)
@@ -312,10 +312,10 @@ void insert_table_symbols(source_t* source, struct stack_t* stack_token, linked_
 
 			if (tbl_symbols->size == 0)
 				throw_exception(1003, source->line_cur, source);
-			if (!list_any_tbl_symb(tbl_symbols, list_position, id->id, NULL))
+			if (!list_any_tbl_symb(tbl_symbols, position, id->id, NULL))
 				throw_exception(1003, source->line_cur, source);
 			else
-				list_update_tbl_symb(tbl_symbols, list_position, id->id, valor->id);
+				list_update_tbl_symb(tbl_symbols, position, id->id, valor->id);
 		}
 	}
 
