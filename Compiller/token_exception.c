@@ -206,7 +206,7 @@ int te_error_invalid_value_in_char(source_t* source)
 				char scopy[1] = { value };
 				strncat(buffer, scopy, 1);
 				value = ts_get_next_caracter(source);
-				if (is_caracter_comma(value) || is_caracter_semicolon(value))
+				if (is_caracter_semicolon(value))
 				{
 					printf("TE-1009 - Erro ao declarar variavel do tipo char em '%s'.| linha: %i \n", buffer, source->line_cur);
 					getchar();

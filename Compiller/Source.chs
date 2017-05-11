@@ -7,7 +7,7 @@ main()
 	int &cpf = 150;
 	int &nome, &borracha;
 	&nome = 70;
-	char &pessoa(1) = "Wagner Alves";
+	char &pessoa(12) = "Wagner Alves";
 	char &professora(15) = "Aline Dayane", &aluno(15) = "Vitor";
 	char &nome(25);
 	dec &real(1.0);

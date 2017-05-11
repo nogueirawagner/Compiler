@@ -76,6 +76,9 @@ int is_token_variable(char* value);
 /* Retorna o tamanho do conteúdo do ponteiro */
 int length_content_token(char* value);
 
+/* Retorna o tamanho do conteúdo do ponteiro do tipo char */
+int length_content_token_char(char* value);
+
 /* Verifica se é operadores relacional */
 int is_caracter_relational(char value);
 

@@ -268,8 +268,15 @@ int main(int argc, char** argv) {
 						length = any_definition_length(id->id, source, 0);
 						if (!length)
 							throw_exception(1009, source->line_cur, source);
-
 						vartemp = content_variable_id(id->id);
+
+						if (valor->id != NULL) 
+						{
+							int tam = length_content_token_char(valor->id);
+							int toint = atoi(length);
+							if (tam > toint)
+								throw_exception(1009, source->line_cur, source);
+						}
 					}
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
 					{

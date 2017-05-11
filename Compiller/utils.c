@@ -100,7 +100,7 @@ int is_caracter_plus(char value)
 }
 
 /* Verifica se é caracter menos ' - ' */
-int is_caracter_less(char value) 
+int is_caracter_less(char value)
 {
 	return (value == 45);
 }
@@ -162,6 +162,25 @@ int length_content_token(char* value)
 	{
 		if (value[b] != 0)
 			length++;
+		else
+			return length;
+		b++;
+	}
+	return length;
+}
+
+/* Retorna o tamanho do conteúdo do ponteiro do tipo char */
+int length_content_token_char(char* value)
+{
+	int b = 0;
+	int length = 0;
+	while (value[b] != 0)
+	{
+		if (value[b] != 0)
+		{
+			if (value[b] != 34 && !is_caracter_plus(value[b]))
+				length++;
+		}
 		else
 			return length;
 		b++;
