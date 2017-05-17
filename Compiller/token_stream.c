@@ -328,7 +328,7 @@ int is_token_valid(token_t* token, source_t* source)
 	if (token->type == TK_TYPE)
 	{
 		if (!is_token_type_data(token->id, source))
-			throw_exception(1007, source->line_cur, source); //Tipo não definido
+			throw_exception(1008, source->line_cur, source); //Tipo não definido
 	}
 	else if (token->type == TK_ID) // Se é variavel
 	{

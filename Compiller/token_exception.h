@@ -5,6 +5,6 @@
 #include <stdlib.h>
 
 /* Gerar exceptions */
-void throw_exception(int code, int line, source_t * source);
+void throw_exception(int code, source_t * source);
 
 #endif // !_TOKEN_EXCEPT

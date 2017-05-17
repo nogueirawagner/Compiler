@@ -5,7 +5,7 @@
 #include <Windows.h>
 #include "utils.h"
 
-void throw_exception(int code, int line, source_t * source)
+void throw_exception(int code, source_t * source)
 {
 	switch (code)
 	{
@@ -20,7 +20,7 @@ void throw_exception(int code, int line, source_t * source)
 	case 1005:
 		te_error_var_reserved(source);
 	case 1007:
-		te_error_var_already_declared(source);
+		te_error_invalid_value_in_int(source);
 	case 1008:
 		te_error_type_undefined(source);
 	case 1009:
@@ -38,7 +38,7 @@ void throw_exception(int code, int line, source_t * source)
 	case 1015:
 		te_error_var_not_declared_global(source);
 	default:
-		te_error_unknown(line);
+		te_error_unknown(source->line_cur);
 	}
 }
 
@@ -209,6 +209,36 @@ int te_error_invalid_value_in_char(source_t* source)
 				if (is_caracter_semicolon(value))
 				{
 					printf("TE-1009 - Erro ao declarar variavel do tipo char em '%s'.| linha: %i \n", buffer, source->line_cur);
+					getchar();
+					exit(1);
+					return 0;
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+/*Erro ao declarar variavel do tipo char*/
+int te_error_invalid_value_in_int(source_t* source)
+{
+	fseek(source->source, source->init_pos_line, SEEK_SET);
+	char buffer[255];
+	FillMemory(buffer, 255, 0);
+
+	while (1)
+	{
+		char value = ts_get_next_caracter(source);
+		if (is_caracter_ampersand(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+				value = ts_get_next_caracter(source);
+				if (is_caracter_semicolon(value))
+				{
+					printf("TE-1007 - Erro ao declarar variavel do tipo char em '%s'.| linha: %i \n", buffer, source->line_cur);
 					getchar();
 					exit(1);
 					return 0;

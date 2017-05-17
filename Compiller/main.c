@@ -44,13 +44,13 @@ int main(int argc, char** argv) {
 			last_tk_temp = token;
 		}
 
-		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_FOR) 
+		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_FOR)
 		{
 			fn_run_for(source, stack_token, table_symbols, list_position);
 			last_func = TK_END_FN;
 		}
 
-		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_IF) 
+		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_IF)
 		{
 			fn_run_if(source, stack_token, table_symbols, list_position);
 			last_func = TK_END_FN;
@@ -71,12 +71,12 @@ int main(int argc, char** argv) {
 			int count_const = 0;
 			int count_functions = 0;
 
-			if (last_tk && last_tk->type == TK_STM_END) 
+			if (last_tk && last_tk->type == TK_STM_END)
 			{
 				last_tk = (token_t*)stack_pop(&stack_token);
 				length_stack--;
 			}
-			
+
 
 			if (last_func == TK_FN_PUTS)
 			{
@@ -98,12 +98,12 @@ int main(int argc, char** argv) {
 						length_stack--;
 						count_const++;
 					}
-					if (last_tk->type == TK_ADIC) 
+					if (last_tk->type == TK_ADIC)
 					{
 						last_tk = (token_t*)stack_pop(&stack_token);
 						length_stack--;
 					}
-					
+
 
 					if (last_tk->type == TK_FN_PUTS)
 					{
@@ -261,7 +261,15 @@ int main(int argc, char** argv) {
 
 					char* _dec = "dec";
 					char* _char = "char";
+					char* _int = "int";
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
+
+
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _int))
+					{
+						if (!is_numeric(valor))
+							throw_exception(1007, source->line_cur, source);
+					}
 
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char))
 					{
@@ -270,7 +278,7 @@ int main(int argc, char** argv) {
 							throw_exception(1009, source->line_cur, source);
 						vartemp = content_variable_id(id->id);
 
-						if (valor->id != NULL) 
+						if (valor->id != NULL)
 						{
 							int tam = length_content_token_char(valor->id);
 							int toint = atoi(length);
@@ -328,7 +336,6 @@ int main(int argc, char** argv) {
 						}
 					}
 				}
-
 			}
 
 			if (count_id > 0 || count_const > 0 || count_functions > 0)
