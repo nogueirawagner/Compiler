@@ -1,4 +1,4 @@
 main()
 {	
-	int &nome = 50.z3;
+	int &nome = 50.3;
 }

@@ -48,14 +48,14 @@ void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t 
 		{
 			last_tk = (token_t*)stack_pop(&stack_token);
 			if (last_tk && last_tk->type != TK_ID)
-				throw_exception(1002, source->line_cur, source);
+				throw_exception(1002, source);
 
 			stack_push(&ids, last_tk);
 			count_id++;
 			last_tk = (token_t*)stack_pop(&stack_token);
 		}
 		else
-			throw_exception(1002, source->line_cur, source);
+			throw_exception(1002, source);
 	}
 #pragma region Declaracao de variavel simples Ex: int &var, &var1;
 
@@ -75,13 +75,13 @@ void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t 
 			{
 				last_tk = (token_t*)stack_pop(&stack_token);
 				if (last_tk && last_tk->type != TK_ID)
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 				stack_push(&ids, last_tk);
 				count_id++;
 				last_tk = (token_t*)stack_pop(&stack_token);
 			}
 			else
-				throw_exception(1002, source->line_cur, source);
+				throw_exception(1002, source);
 		}
 	}
 #pragma endregion
@@ -124,7 +124,7 @@ void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t 
 			if (table_symbols.size == 0)
 			{
 				if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-					throw_exception(1004, source->line_cur, source);
+					throw_exception(1004, source);
 				else
 				{
 					list_insert_next(&table_symbols, NULL, tbs);
@@ -134,7 +134,7 @@ void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t 
 			else
 			{
 				if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-					throw_exception(1004, source->line_cur, source);
+					throw_exception(1004, source);
 				else
 				{
 					list_insert_next(&table_symbols, list_position, tbs);
@@ -155,9 +155,9 @@ void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t 
 			int i = 0;
 
 			if (table_symbols.size == 0)
-				throw_exception(1003, source->line_cur, source);
+				throw_exception(1003, source);
 			if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
-				throw_exception(1003, source->line_cur, source);
+				throw_exception(1003, source);
 			else
 				list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
 		}

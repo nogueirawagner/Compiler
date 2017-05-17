@@ -268,7 +268,7 @@ int main(int argc, char** argv) {
 					{
 						if (valor != NULL) 
 						{
-							if (!(is_numeric_int(valor->id)))
+							if (!(is_numeric_int(valor->id, source)))
 								throw_exception(1007, source);
 						}
 					}
@@ -386,8 +386,9 @@ int main(int argc, char** argv) {
 
 			last_func = TK_TYPE;
 		}
-
-		if (source->last_read == -1)
-			show_table_symbols(table_symbols, list_position);
+		
+		// Descomentar linha para aparecer tabela de simbolo
+		//if (source->last_read == -1)
+		//	show_table_symbols(table_symbols, list_position);
 	}
 }

@@ -238,7 +238,7 @@ int te_error_invalid_value_in_int(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_semicolon(value))
 				{
-					printf("TE-1007 - Erro ao declarar variavel do tipo char em '%s'.| linha: %i \n", buffer, source->line_cur);
+					printf("TE-1007 - valor invalido para tipo int '%s' | linha: %i \n", buffer, source->line_cur);
 					getchar();
 					exit(1);
 					return 0;

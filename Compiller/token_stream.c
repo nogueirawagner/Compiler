@@ -123,7 +123,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 		if (source->last_pos == 1 && !is_caracter_m(value))
 			throw_exception(1001, 1, source);
 		if (scope == TK_ID && !is_caracter_ampersand(value))
-			throw_exception(1002, source->line_cur, source);
+			throw_exception(1002, source);
 		else if (line == 1 && source->last_pos == 1)
 		{
 			fn_main(value, source);
@@ -150,7 +150,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 
 				value = ts_get_next_caracter(source);
 				if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
-					throw_exception(1013, source->line_cur, source);
+					throw_exception(1013, source);
 				if (is_caracter_semicolon(value) || is_caracter_comma(value))
 				{
 					if (count_quotes % 2 == 0)
@@ -161,7 +161,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 						return token;
 					}
 					else
-						throw_exception(1013, source->line_cur, source);
+						throw_exception(1013, source);
 				}
 				if (is_space(value) && count_quotes == 0)
 				{
@@ -175,7 +175,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 					strncat(buffer, scopy, 1);
 					value = ts_get_next_caracter(source);
 					if (is_caracter_semicolon(value))
-						throw_exception(1013, source->line_cur, source);
+						throw_exception(1013, source);
 				}
 				if (is_caracter_quotes_plus(value))
 				{
@@ -190,7 +190,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 							char scopy[1] = { value };
 							strncat(buffer, scopy, 1);
 							if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
-								throw_exception(1013, source->line_cur, source);
+								throw_exception(1013, source);
 							if (is_caracter_quotes_plus(value))
 							{
 								char scopy[1] = { value };
@@ -222,7 +222,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_ampersand(value))
@@ -236,17 +236,17 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 				int tam = length_content_token(buffer);
 
 				if(is_caracter_invalid_var(value))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (is_caracter_ampersand(value))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (tam > 1)
 					if (!(is_numeric(value) || is_alphanumeric(value) || is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_open_parathesi(value) || is_caracter_point(value) || is_caracter_closed_parathesi(value)))
-						throw_exception(1002, source->line_cur, source);
+						throw_exception(1002, source);
 
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value))
 				{
@@ -256,7 +256,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_equals(value))
@@ -282,7 +282,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_new_line(value))
@@ -328,14 +328,14 @@ int is_token_valid(token_t* token, source_t* source)
 	if (token->type == TK_TYPE)
 	{
 		if (!is_token_type_data(token->id, source))
-			throw_exception(1008, source->line_cur, source); //Tipo não definido
+			throw_exception(1008, source); //Tipo não definido
 	}
 	else if (token->type == TK_ID) // Se é variavel
 	{
 		if (!is_caracter_ampersand(token->id[0]))
-			throw_exception(1005, source->line_cur, source); //Erro ao declarar variavel deve iniciar com &
+			throw_exception(1005, source); //Erro ao declarar variavel deve iniciar com &
 		else if (is_token_type_data(token->id, source))
-			throw_exception(1006, source->line_cur, source); //Variavel com nome de palavra reservada
+			throw_exception(1006, source); //Variavel com nome de palavra reservada
 	}
 	return 1;
 }

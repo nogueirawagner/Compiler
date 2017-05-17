@@ -64,7 +64,7 @@ token_t* fn_gets(source_t* source, token_t* last_token)
 	token_t* token = (token_t*)malloc(sizeof(token_t));
 
 	if (!is_caracter_open_parathesi(source->last_read))
-		throw_exception(1011, source->line_cur, source);
+		throw_exception(1011, source);
 
 	int is_virgula = 0;
 	int expected_ampersand = 0;
@@ -84,7 +84,7 @@ token_t* fn_gets(source_t* source, token_t* last_token)
 				if (expected_ampersand)
 				{
 					if (!is_space(value) && !is_caracter_ampersand(value))
-						throw_exception(1002, source->line_cur, source);
+						throw_exception(1002, source);
 
 					if (is_caracter_ampersand(value))
 						expected_ampersand = 0;
@@ -94,7 +94,7 @@ token_t* fn_gets(source_t* source, token_t* last_token)
 				{
 					value = ts_get_next_caracter(source);
 					if (!is_caracter_semicolon(value))
-						throw_exception(1012, source->line_cur, source);
+						throw_exception(1012, source);
 
 					token->id = buffer;
 					token->line = line;
@@ -107,7 +107,7 @@ token_t* fn_gets(source_t* source, token_t* last_token)
 			}
 		}
 		else
-			throw_exception(1002, source->line_cur, source);
+			throw_exception(1002, source);
 	}
 }
 
@@ -122,7 +122,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 
 	if (last_token->type == TK_FN_PUTS)
 		if (!is_caracter_open_parathesi(source->last_read))
-			throw_exception(1011, source->line_cur, source);
+			throw_exception(1011, source);
 
 	while (1)
 	{
@@ -140,7 +140,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 		{
 			char value = ts_get_next_caracter(source);
 			if (!is_caracter_semicolon(value))
-				throw_exception(1012, source->line_cur, source);
+				throw_exception(1012, source);
 			else
 			{
 				token->id = ";";
@@ -162,10 +162,10 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 				int tam = length_content_token(buffer);
 
 				if (is_caracter_ampersand(value))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (is_space(value) || is_caracter_plus(value) || is_caracter_comma(value) || is_caracter_quotes_plus(value) || is_caracter_closed_parathesi(value))
 				{
@@ -175,7 +175,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		if (is_caracter_quotes_plus(value))
@@ -188,7 +188,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 
 				value = ts_get_next_caracter(source);
 				if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
-					throw_exception(1013, source->line_cur, source);
+					throw_exception(1013, source);
 				if (is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_plus(value))
 				{
 					if (count_quotes % 2 == 0)
@@ -199,7 +199,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 						return token;
 					}
 					else
-						throw_exception(1013, source->line_cur, source);
+						throw_exception(1013, source);
 				}
 				if (is_space(value) && count_quotes == 0)
 				{
@@ -213,7 +213,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 					strncat(buffer, scopy, 1);
 					value = ts_get_next_caracter(source);
 					if (is_caracter_semicolon(value))
-						throw_exception(1013, source->line_cur, source);
+						throw_exception(1013, source);
 				}
 				if (is_caracter_quotes_plus(value))
 				{
@@ -228,7 +228,7 @@ token_t* fn_puts(source_t* source, token_t* last_token)
 							char scopy[1] = { value };
 							strncat(buffer, scopy, 1);
 							if (is_caracter_semicolon(value) && count_quotes % 2 != 0)
-								throw_exception(1013, source->line_cur, source);
+								throw_exception(1013, source);
 							if (is_caracter_quotes_plus(value))
 							{
 								char scopy[1] = { value };
@@ -255,7 +255,7 @@ token_t* fn_for(source_t* source, token_t* last_token)
 
 	if (last_token->type == TK_FN_FOR)
 		if (!is_caracter_open_parathesi(source->last_read))
-			throw_exception(1011, source->line_cur, source);
+			throw_exception(1011, source);
 
 	while (1)
 	{
@@ -280,7 +280,7 @@ token_t* fn_for(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_ampersand(value))
@@ -319,22 +319,22 @@ token_t* fn_for(source_t* source, token_t* last_token)
 								}
 							}
 							else
-								throw_exception(1011, source->line_cur, source);
+								throw_exception(1011, source);
 						}
 						else if (is_caracter_closed_parathesi(value))
-							throw_exception(1011, source->line_cur, source);
+							throw_exception(1011, source);
 					}
 				}
 
 				if (is_caracter_ampersand(value))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (tam > 1)
 					if (!(is_numeric(value) || is_alphanumeric(value) || is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_open_parathesi(value) || is_caracter_point(value) || is_caracter_closed_parathesi(value)))
-						throw_exception(1002, source->line_cur, source);
+						throw_exception(1002, source);
 
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value) || is_caracter_closed_parathesi(value))
 				{
@@ -344,7 +344,7 @@ token_t* fn_for(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_equals(value))
@@ -358,7 +358,7 @@ token_t* fn_for(source_t* source, token_t* last_token)
 				return token;
 			}
 			else if (!is_caracter_equals(value))
-				throw_exception(1012, source->line_cur, source);
+				throw_exception(1012, source);
 			else
 			{
 				token->id = "==";
@@ -383,7 +383,7 @@ token_t* fn_for(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_relational(value))
@@ -402,21 +402,21 @@ token_t* fn_for(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (!is_caracter_relational(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 				else
 				{
 					if (*buffer == value)
 						if (!is_caracter_equals(value))
-							throw_exception(1012, source->line_cur, source);
+							throw_exception(1012, source);
 
 					if (is_caracter_equals(*buffer) && !is_caracter_equals(value))
 						strncat(buffer, scopy, 1);
 					else
-						throw_exception(1012, source->line_cur, source);
+						throw_exception(1012, source);
 				}
 
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_arimetic(value))
@@ -449,10 +449,10 @@ token_t* fn_for(source_t* source, token_t* last_token)
 
 					}
 					else
-						throw_exception(1011, source->line_cur, source);
+						throw_exception(1011, source);
 				}
 				else
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1011, source);
 			}
 		}
 		else if (is_caracter_semicolon(value))
@@ -500,14 +500,14 @@ void fn_run_for(source_t* source, struct stack_t* stack_token, linked_list_t tab
 			if (count_id > 0 && id->type == TK_TYPE)
 			{
 				if (strcmpi("int", id->id) != 0)
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1011, source);
 
 				while (1)
 				{
 					token_t* id = stack_pop(&ids);
 					count_id--;
 					if (id->type != TK_ID)
-						throw_exception(1011, source->line_cur, source);
+						throw_exception(1011, source);
 					read = 1;
 					break;
 				}
@@ -516,7 +516,7 @@ void fn_run_for(source_t* source, struct stack_t* stack_token, linked_list_t tab
 			{
 				char* type = "int";
 				if (!list_any_tbl_symb(&table_symbols, list_position, id->id, type))
-					throw_exception(1015, source->line_cur, source);
+					throw_exception(1015, source);
 			}
 			if (count_id == 0 || read == 1)
 				break;
@@ -534,7 +534,7 @@ token_t* fn_if(source_t* source, token_t* last_token)
 
 	if (last_token->type == TK_FN_IF)
 		if (!is_caracter_open_parathesi(source->last_read))
-			throw_exception(1011, source->line_cur, source);
+			throw_exception(1011, source);
 
 	while (1)
 	{
@@ -559,7 +559,7 @@ token_t* fn_if(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_ampersand(value))
@@ -598,10 +598,10 @@ token_t* fn_if(source_t* source, token_t* last_token)
 								}
 							}
 							else
-								throw_exception(1011, source->line_cur, source);
+								throw_exception(1011, source);
 						}
 						else if (is_caracter_closed_parathesi(value))
-							throw_exception(1011, source->line_cur, source);
+							throw_exception(1011, source);
 					}
 				}
 
@@ -612,11 +612,11 @@ token_t* fn_if(source_t* source, token_t* last_token)
 					while (1)
 					{
 						if (!is_caracter_ampersand(value))
-							throw_exception(1011, source->line_cur, source);
+							throw_exception(1011, source);
 
 						value = ts_get_next_caracter(source);
 						if(!is_space(value))
-							throw_exception(1011, source->line_cur, source);
+							throw_exception(1011, source);
 						else
 						{
 							token->id = "&&";
@@ -628,14 +628,14 @@ token_t* fn_if(source_t* source, token_t* last_token)
 				}
 
 				if (is_caracter_ampersand(value))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (tam == 1 && (is_numeric(value) || is_alphanumeric_toupper(value)))
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 
 				if (tam > 1)
 					if (!(is_numeric(value) || is_alphanumeric(value) || is_space(value) || is_caracter_comma(value) || is_caracter_semicolon(value) || is_caracter_open_parathesi(value) || is_caracter_point(value) || is_caracter_closed_parathesi(value)))
-						throw_exception(1002, source->line_cur, source);
+						throw_exception(1002, source);
 
 				if (is_space(value) || is_caracter_semicolon(value) || is_caracter_comma(value) || is_caracter_relational(value) || is_caracter_closed_parathesi(value))
 				{
@@ -645,7 +645,7 @@ token_t* fn_if(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_equals(value))
@@ -659,7 +659,7 @@ token_t* fn_if(source_t* source, token_t* last_token)
 				return token;
 			}
 			else if (!is_caracter_equals(value))
-				throw_exception(1012, source->line_cur, source);
+				throw_exception(1012, source);
 			else
 			{
 				token->id = "==";
@@ -684,7 +684,7 @@ token_t* fn_if(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_relational(value))
@@ -703,21 +703,21 @@ token_t* fn_if(source_t* source, token_t* last_token)
 					return token;
 				}
 				if (!is_caracter_relational(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 				else
 				{
 					if (*buffer == value)
 						if (!is_caracter_equals(value))
-							throw_exception(1012, source->line_cur, source);
+							throw_exception(1012, source);
 
 					if (is_caracter_equals(*buffer) && !is_caracter_equals(value))
 						strncat(buffer, scopy, 1);
 					else
-						throw_exception(1012, source->line_cur, source);
+						throw_exception(1012, source);
 				}
 
 				if (is_new_line(value))
-					throw_exception(1012, source->line_cur, source);
+					throw_exception(1012, source);
 			}
 		}
 		else if (is_caracter_arimetic(value))
@@ -750,10 +750,10 @@ token_t* fn_if(source_t* source, token_t* last_token)
 
 					}
 					else
-						throw_exception(1011, source->line_cur, source);
+						throw_exception(1011, source);
 				}
 				else
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1011, source);
 			}
 		}
 		else if (is_caracter_semicolon(value))
@@ -773,13 +773,13 @@ token_t* fn_if(source_t* source, token_t* last_token)
 				{
 					value = ts_get_next_caracter(source);
 					if (!is_caracter_bar(value))
-						throw_exception(1011, source->line_cur, source);
+						throw_exception(1011, source);
 					
 					strncat(buffer, scopy, 1);
 					value = ts_get_next_caracter(source);
 
 					if (!is_space(value))
-						throw_exception(1011, source->line_cur, source);
+						throw_exception(1011, source);
 					else
 					{
 						token->id = "||";
@@ -826,12 +826,12 @@ void fn_run_if(source_t* source, struct stack_t* stack_token, linked_list_t tabl
 			FillMemory(buffer, 255, 0);
 
 			if (id->type == TK_TYPE)
-				throw_exception(1011, source->line_cur, source);
+				throw_exception(1011, source);
 
 			else if (count_id > 0 && id->type == TK_ID)
 			{
 				if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
-					throw_exception(1015, source->line_cur, source);
+					throw_exception(1015, source);
 			}
 			if (count_id == 0 || read == 1)
 				break;

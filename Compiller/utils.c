@@ -28,19 +28,31 @@ int is_numeric(char value)
 }
 
 /* Verifica se é um número inteiro*/
-int is_numeric_int(char* value)
+int is_numeric_int(char* value, source_t* source)
 {
 	int tam = length_content_token(value);
+	int anyPonto = 0;
 	for (int i = 0; i < tam; i++)
 	{
-		if (!(is_numeric(value[i])))
+		if (is_caracter_point(value[i]))
+			anyPonto++;
+
+		if (anyPonto > 1)
+			return 0;
+		if (!(is_numeric(value[i]) || is_caracter_point(value[i])))
 			return 0;
 	}
+
+	if (anyPonto == 1) 
+	{
+		throw_alert(1001, source);
+	}
+
 	return 1;
 }
 
 /* Verifica se é um número decimal */
-int is_numeric_decimal(char* value)
+int is_numeric_decimal(char* value, source_t* source)
 {
 	return 0;
 }
@@ -136,7 +148,7 @@ int is_token_function(char* value, source_t* source)
 			for (int j = 0; j < tam; j++)
 			{
 				if (value[j] >= 65 && value[j] <= 90)
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1011, source);
 			}
 			return 1;
 		}
@@ -157,7 +169,7 @@ int is_token_type_data(char* value, source_t* source)
 			for (int j = 0; j < tam; j++)
 			{
 				if (value[j] >= 65 && value[j] <= 90)
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 			}
 			return 1;
 		}
@@ -302,7 +314,7 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 					if (!is_numeric(caracter))
 					{
 						if (!is_caracter_closed_parathesi(caracter) && !is_caracter_point(caracter))
-							throw_exception(1010, source->line_cur, source);
+							throw_exception(1010, source);
 					}
 
 					if (!is_caracter_closed_parathesi(caracter))
@@ -310,7 +322,7 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 						if (is_caracter_point(caracter))
 							leuPonto++;
 						if (!(leuPonto <= 2))
-							throw_exception(1010, source->line_cur, source);
+							throw_exception(1010, source);
 						char scopy[1] = { caracter };
 						strncat(buffer, scopy, 1);
 					}
@@ -319,7 +331,7 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 						if (leuPonto == 1)
 							return buffer;
 						else
-							throw_exception(1010, source->line_cur, source);
+							throw_exception(1010, source);
 					}
 				}
 			}
@@ -339,7 +351,7 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 					if (!is_caracter_closed_parathesi(caracter))
 					{
 						if (!is_numeric(caracter))
-							throw_exception(1009, source->line_cur, source);
+							throw_exception(1009, source);
 						char scopy[1] = { caracter };
 						strncat(buffer, scopy, 1);
 					}
@@ -347,9 +359,9 @@ char* any_definition_length(char* value, source_t* source, int isDec)
 					{
 						int toint = atoi(buffer);
 						if (toint < 1)
-							throw_exception(1009, source->line_cur, source);
+							throw_exception(1009, source);
 						if (toint > 255)
-							throw_exception(1009, source->line_cur, source);
+							throw_exception(1009, source);
 						return buffer;
 					}
 				}
