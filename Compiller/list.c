@@ -180,3 +180,22 @@ int list_any_tbl_symb(linked_list_t* list, list_element_t* position, char* id, c
 	}
 	return 0;
 }
+
+table_symbols_t* list_get_tbl_symb(linked_list_t* list, list_element_t* position, char* id, char* type)
+{
+	for (int i = 0; i < list->size; i++)
+	{
+		table_symbols_t* object = (table_symbols_t*)position->data;
+		char* variable = (char*)object->variable;
+		char* tipo = (char*)object->type;
+		if (!type)
+		{
+			if (ts_are_equal(variable, id))
+				return object;
+		}
+		else if (ts_are_equal(variable, id) && ts_are_equal(tipo, type))
+			return object;
+		position = list_next(position);
+	}
+	return NULL;
+}

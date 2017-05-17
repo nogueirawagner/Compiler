@@ -143,21 +143,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="alerts.c" />
     <ClCompile Include="functions.c" />
     <ClCompile Include="list.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="stack.c" />
     <ClCompile Include="tb_symbols.c" />
-    <ClCompile Include="token_exception.c" />
+    <ClCompile Include="exception.c" />
     <ClCompile Include="token_stream.c" />
     <ClCompile Include="utils.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="alerts.h" />
     <ClInclude Include="functions.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="stack.h" />
     <ClInclude Include="tb_symbols.h" />
-    <ClInclude Include="token_exception.h" />
+    <ClInclude Include="exception.h" />
     <ClInclude Include="token_stream.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

@@ -31,6 +31,12 @@ int is_alphanumeric_toupper(char value);
 /* Verifica se é númerico */
 int is_numeric(char value);
 
+/* Verifica se é um número inteiro*/
+int is_numeric_int(char* value);
+
+/* Verifica se é um número decimal */
+int is_numeric_decimal(char* value);
+
 /* Verifica se é caracter e-comercial '&' */
 int is_caracter_ampersand(char value);
 

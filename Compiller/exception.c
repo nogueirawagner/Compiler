@@ -9,36 +9,36 @@ void throw_exception(int code, source_t * source)
 {
 	switch (code)
 	{
-	case 1001:
-		te_error_main(source);
-	case 1002:
-		te_error_declare_var(source);
-	case 1003:
-		te_error_var_not_declared(source);
-	case 1004:
-		te_error_var_already_declared(source);
-	case 1005:
-		te_error_var_reserved(source);
-	case 1007:
-		te_error_invalid_value_in_int(source);
-	case 1008:
-		te_error_type_undefined(source);
-	case 1009:
-		te_error_invalid_value_in_char(source);
-	case 1010:
-		te_error_invalid_value_in_dec(source);
-	case 1011:
-		te_error_call_function(source);
-	case 1012:
-		te_error_expected_semicolon(source);
-	case 1013:
-		te_error_double_quotes(source);
-	case 1014:
-		te_error_expected_keyclosed(source);
-	case 1015:
-		te_error_var_not_declared_global(source);
-	default:
-		te_error_unknown(source->line_cur);
+		case 1001:
+			te_error_main(source);
+		case 1002:
+			te_error_declare_var(source);
+		case 1003:
+			te_error_var_not_declared(source);
+		case 1004:
+			te_error_var_already_declared(source);
+		case 1005:
+			te_error_var_reserved(source);
+		case 1007:
+			te_error_invalid_value_in_int(source);
+		case 1008:
+			te_error_type_undefined(source);
+		case 1009:
+			te_error_invalid_value_in_char(source);
+		case 1010:
+			te_error_invalid_value_in_dec(source);
+		case 1011:
+			te_error_call_function(source);
+		case 1012:
+			te_error_expected_semicolon(source);
+		case 1013:
+			te_error_double_quotes(source);
+		case 1014:
+			te_error_expected_keyclosed(source);
+		case 1015:
+			te_error_var_not_declared_global(source);
+		default:
+			te_error_unknown(source->line_cur);
 	}
 }
 

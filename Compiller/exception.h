@@ -1,10 +1,10 @@
 
-#ifndef _TOKEN_EXCEPT
-#define _TOKEN_EXCEPT
+#ifndef _EXCEPTION
+#define _EXCEPTION
 
 #include <stdlib.h>
 
 /* Gerar exceptions */
 void throw_exception(int code, source_t * source);
 
-#endif // !_TOKEN_EXCEPT
+#endif // !_EXCEPTION

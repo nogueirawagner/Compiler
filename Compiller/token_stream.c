@@ -1,5 +1,5 @@
 #include "token_stream.h"
-#include "token_exception.h"
+#include "exception.h"
 #include "utils.h"
 #include <stdio.h>
 #include <string.h>

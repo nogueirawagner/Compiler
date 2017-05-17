@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "token_stream.h"
 #include "utils.h"
-#include "token_exception.h"
+#include "exception.h"
 #include "stack.h"
 #include "list.h"
 

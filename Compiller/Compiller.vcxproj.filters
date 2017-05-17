@@ -17,9 +17,6 @@
     <ClCompile Include="token_stream.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="token_exception.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,12 +32,15 @@
     <ClCompile Include="functions.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="exception.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="alerts.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="token_stream.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="token_exception.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stack.h">
@@ -56,6 +56,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="functions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="alerts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

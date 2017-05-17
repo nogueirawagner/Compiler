@@ -5,7 +5,7 @@
 #include "stack.h"
 #include "utils.h"
 #include "list.h"
-#include "token_exception.h"
+#include "exception.h"
 #include "tb_symbols.h"
 #include "functions.h"
 
@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 			if (last_func == TK_FN_PUTS)
 			{
 				if (last_tk->type == TK_FN_PUTS)
-					throw_exception(1011, source->line_cur, source);
+					throw_exception(1011, source);
 				while (1)
 				{
 					if (last_tk->type == TK_ID)
@@ -114,7 +114,7 @@ int main(int argc, char** argv) {
 							count_id--;
 
 							if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
-								throw_exception(1015, source->line_cur, source);
+								throw_exception(1015, source);
 						}
 						break;
 					}
@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
 					last_tk = (token_t*)stack_pop(&stack_token);
 					length_stack--;
 					if (last_tk && last_tk->type != TK_ID)
-						throw_exception(1002, source->line_cur, source);
+						throw_exception(1002, source);
 
 					stack_push(&ids, last_tk);
 					count_id++;
@@ -141,7 +141,7 @@ int main(int argc, char** argv) {
 					length_stack--;
 				}
 				else
-					throw_exception(1002, source->line_cur, source);
+					throw_exception(1002, source);
 			}
 
 			while (last_tk && last_tk->type == TK_ID)
@@ -175,14 +175,14 @@ int main(int argc, char** argv) {
 							last_tk = (token_t*)stack_pop(&stack_token);
 							length_stack--;
 							if (last_tk && last_tk->type != TK_ID)
-								throw_exception(1002, source->line_cur, source);
+								throw_exception(1002, source);
 							stack_push(&ids, last_tk);
 							count_id++;
 							last_tk = (token_t*)stack_pop(&stack_token);
 							length_stack--;
 						}
 						else
-							throw_exception(1002, source->line_cur, source);
+							throw_exception(1002, source);
 					}
 				}
 			}
@@ -212,7 +212,7 @@ int main(int argc, char** argv) {
 
 					/* Verificar se item existe na tabela de símbolos */
 					if (table_symbols.size == 0)
-						throw_exception(1011, source->line_cur, source);
+						throw_exception(1011, source);
 					else
 					{
 						int j = 1;
@@ -229,7 +229,7 @@ int main(int argc, char** argv) {
 									strncat(buffer, scopy, 1);
 
 								if (!list_any_tbl_symb(&table_symbols, list_position, buffer, NULL))
-									throw_exception(1011, source->line_cur, source);
+									throw_exception(1011, source);
 
 								FillMemory(&buffer, 255, 0);
 							}
@@ -240,7 +240,7 @@ int main(int argc, char** argv) {
 						if (!any_comma)
 						{
 							if (!list_any_tbl_symb(&table_symbols, list_position, tbs->value, NULL))
-								throw_exception(1011, source->line_cur, source);
+								throw_exception(1011, source);
 						}
 						list_insert_next(&table_symbols, NULL, tbs);
 						list_position = list_head(&table_symbols);
@@ -264,33 +264,35 @@ int main(int argc, char** argv) {
 					char* _int = "int";
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 
-
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _int))
 					{
-						if (!is_numeric(valor))
-							throw_exception(1007, source->line_cur, source);
+						if (valor != NULL) 
+						{
+							if (!(is_numeric_int(valor->id)))
+								throw_exception(1007, source);
+						}
 					}
 
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char))
 					{
 						length = any_definition_length(id->id, source, 0);
 						if (!length)
-							throw_exception(1009, source->line_cur, source);
+							throw_exception(1009, source);
 						vartemp = content_variable_id(id->id);
 
-						if (valor->id != NULL)
+						if (valor != NULL && valor->id != NULL)
 						{
 							int tam = length_content_token_char(valor->id);
 							int toint = atoi(length);
 							if (tam > toint)
-								throw_exception(1009, source->line_cur, source);
+								throw_exception(1009, source);
 						}
 					}
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
 					{
 						length = any_definition_length(id->id, source, 1);
 						if (!length)
-							throw_exception(1010, source->line_cur, source);
+							throw_exception(1010, source);
 
 						vartemp = content_variable_id(id->id);
 					}
@@ -318,7 +320,7 @@ int main(int argc, char** argv) {
 					if (table_symbols.size == 0)
 					{
 						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-							throw_exception(1004, source->line_cur, source);
+							throw_exception(1004, source);
 						else
 						{
 							list_insert_next(&table_symbols, NULL, tbs);
@@ -328,7 +330,7 @@ int main(int argc, char** argv) {
 					else
 					{
 						if (list_any_tbl_symb(&table_symbols, list_position, tbs->variable, tbs->type))
-							throw_exception(1004, source->line_cur, source);
+							throw_exception(1004, source);
 						else
 						{
 							list_insert_next(&table_symbols, list_position, tbs);
@@ -349,12 +351,34 @@ int main(int argc, char** argv) {
 					count_const--;
 					count_functions--;
 
-					int i = 0;
+					table_symbols_t* obj =  list_get_tbl_symb(&table_symbols, list_position, id->id, NULL);
+					if (obj != NULL)
+					{
+						char* _dec = "dec";
+						char* _char = "char";
+						char* _int = "int";
+
+						char* variable = (char*)obj->variable;
+						char* tipo = (char*)obj->type;
+
+						// Tipo int
+						if (ts_are_equal(tipo, _int))
+						{
+							if (valor != NULL)
+							{
+								if (!(is_numeric(*valor->id)))
+									throw_exception(1007, source);
+							}
+						}
+					}
+					else 
+						throw_exception(1003, source);
+
 
 					if (table_symbols.size == 0)
-						throw_exception(1003, source->line_cur, source);
+						throw_exception(1003, source);
 					if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
-						throw_exception(1003, source->line_cur, source);
+						throw_exception(1003, source);
 					else
 						list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
 				}

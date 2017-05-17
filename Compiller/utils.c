@@ -1,6 +1,6 @@
 #include "token_stream.h"
 #include <Windows.h>
-#include "token_exception.h"
+#include "exception.h"
 #include <ctype.h>
 
 /* Verifica se é caracter A...Z ou a...z */
@@ -25,6 +25,24 @@ int is_alphanumeric_toupper(char value)
 int is_numeric(char value)
 {
 	return (value >= 48 && value <= 57);
+}
+
+/* Verifica se é um número inteiro*/
+int is_numeric_int(char* value)
+{
+	int tam = length_content_token(value);
+	for (int i = 0; i < tam; i++)
+	{
+		if (!(is_numeric(value[i])))
+			return 0;
+	}
+	return 1;
+}
+
+/* Verifica se é um número decimal */
+int is_numeric_decimal(char* value)
+{
+	return 0;
 }
 
 /* Verifica se é caracter e-comercial '&' */
@@ -350,7 +368,6 @@ char* content_variable_id(char* value)
 
 	for (int i = 0; i < tam; i++)
 	{
-
 		char caracter = value[i];
 		if (is_caracter_open_parathesi(caracter))
 			break;

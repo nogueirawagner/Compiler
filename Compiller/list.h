@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include <stdlib.h>
+#include "token_stream.h"
 
 typedef struct list_element_t
 {
@@ -44,4 +45,6 @@ list_element_t* list_next(list_element_t* element);
 void list_update_tbl_symb(linked_list_t* list, list_element_t* position, char* id, char* value);
 
 int list_any_tbl_symb(linked_list_t* list, list_element_t* position, char* id, char* type);
+
+table_symbols_t* list_get_tbl_symb(linked_list_t* list, list_element_t* position, char* id, char* type);
 #endif
