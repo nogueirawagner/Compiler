@@ -469,7 +469,7 @@ int main(int argc, char** argv) {
 
 		// Descomentar linha para aparecer tabela de simbolo
 		if (source->last_read == -1)
-			printf("\n\n ========== Build: 1 succeeded, 0 failed, 0 up-to-date, %i alerts ==========", source->count_alerts);
+			printf("\n\n ========== Build: 1 succeeded, 0 failed, %i alerts ==========", source->count_alerts);
 			//show_table_symbols(table_symbols, list_position);
 	}
 }

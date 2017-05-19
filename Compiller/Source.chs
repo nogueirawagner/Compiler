@@ -3,6 +3,7 @@ main()
 	int &cab;
 	dec &cob(20.3);
 	&cab = &cob;
+	int &joca = 20.4;
 
 	int &a = 0, &b = 10, &aA = 0, &b1B = 10;
 	dec &raio(2.4) = 2.54;
