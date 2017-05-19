@@ -372,7 +372,6 @@ int main(int argc, char** argv) {
 						if(length_obj != NULL && length != length_obj)
 							throw_alert(1003, source);
 					}
-						
 
 					if (!valor)
 						tbs->value = "NULL";
