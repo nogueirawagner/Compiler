@@ -20,7 +20,7 @@ void throw_exception(int code, source_t * source)
 		case 1005:
 			te_error_var_reserved(source);
 		case 1007:
-			te_error_invalid_value_in_int(source);
+			te_error_int_assign_invalid_value(source);
 		case 1008:
 			te_error_type_undefined(source);
 		case 1009:
@@ -37,6 +37,8 @@ void throw_exception(int code, source_t * source)
 			te_error_expected_keyclosed(source);
 		case 1015:
 			te_error_var_not_declared_global(source);
+		case 1016:
+			te_error_dec_assign_invalid_value(source);
 		default:
 			te_error_unknown(source->line_cur);
 	}
@@ -219,8 +221,8 @@ int te_error_invalid_value_in_char(source_t* source)
 	return 0;
 }
 
-/*Erro ao declarar variavel do tipo char*/
-int te_error_invalid_value_in_int(source_t* source)
+/* Valor inválido para tipo inteiro */
+int te_error_int_assign_invalid_value(source_t* source)
 {
 	fseek(source->source, source->init_pos_line, SEEK_SET);
 	char buffer[255];
@@ -347,5 +349,35 @@ int te_error_var_not_declared_global(source_t* source)
 	printf("%s", linha);
 	getchar();
 	exit(1);
+	return 0;
+}
+
+/* Valor inválido para o tipo dec*/
+int te_error_dec_assign_invalid_value(source_t* source)
+{
+	fseek(source->source, source->init_pos_line, SEEK_SET);
+	char buffer[255];
+	FillMemory(buffer, 255, 0);
+
+	while (1)
+	{
+		char value = ts_get_next_caracter(source);
+		if (is_caracter_ampersand(value))
+		{
+			while (1)
+			{
+				char scopy[1] = { value };
+				strncat(buffer, scopy, 1);
+				value = ts_get_next_caracter(source);
+				if (is_caracter_semicolon(value))
+				{
+					printf("TE-1016 - valor atribuido invalido para tipo dec '%s' | linha: %i \n", buffer, source->line_cur);
+					getchar();
+					exit(1);
+					return 0;
+				}
+			}
+		}
+	}
 	return 0;
 }

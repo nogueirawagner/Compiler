@@ -10,6 +10,7 @@
 /* Define o tipo do token */
 token_type_t ts_get_type(char* value, token_t* last_tk, source_t* source)
 {
+	
 	if (last_tk->type == TK_EQUAL)
 		return TK_CONST;
 	if (is_token_type_data(value, source))
@@ -47,6 +48,7 @@ source_t * ts_open_source(char* source)
 	psource->source = fopen(source, "rb");
 	psource->last_pos = 0;
 	psource->line_cur = 1;
+	psource->count_alerts = 0;
 	return psource;
 }
 

@@ -8,6 +8,7 @@
 #include "exception.h"
 #include "tb_symbols.h"
 #include "functions.h"
+#include "alerts.h"
 
 int main(int argc, char** argv) {
 
@@ -266,10 +267,65 @@ int main(int argc, char** argv) {
 
 					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _int))
 					{
-						if (valor != NULL) 
+						if (valor != NULL)
 						{
-							if (!(is_numeric_int(valor->id, source)))
-								throw_exception(1007, source);
+							table_symbols_t* objint = list_get_tbl_symb(&table_symbols, list_position, valor->id, last_tk->id);
+							table_symbols_t* objdec = list_get_tbl_symb(&table_symbols, list_position, valor->id, _dec);
+							if (objdec != NULL)
+							{
+								if (objdec->value != "NULL")
+								{
+									if (!(is_numeric_int(objdec->value, source)))
+										throw_exception(1007, source);
+								}
+								else
+									throw_alert(1001, source);
+							}
+							else if (objint != NULL)
+							{
+								if (objint->value != "NULL")
+								{
+									if (!(is_numeric_decimal(objint->value, source)))
+										throw_exception(1007, source);
+								}
+							}
+							else if (objdec == NULL && objint == NULL) 
+							{
+								if (!(is_numeric_int(valor->id, source)))
+									throw_exception(1007, source);
+							}
+						}
+					}
+
+					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
+					{
+						if (valor != NULL)
+						{
+							table_symbols_t* objdec = list_get_tbl_symb(&table_symbols, list_position, valor->id, last_tk->id);
+							table_symbols_t* objint = list_get_tbl_symb(&table_symbols, list_position, valor->id, _int);
+							if (objdec != NULL)
+							{
+								if (objdec->value != "NULL")
+								{
+									if (!(is_numeric_decimal(objdec->value, source)))
+										throw_exception(1016, source);
+								}
+							}
+							else if (objint != NULL)
+							{
+								if (objint->value != "NULL")
+								{
+									if (!(is_numeric_decimal(objint->value, source)))
+										throw_exception(1016, source);
+								}
+								else
+									throw_alert(1002, source);
+							}
+							else if (objdec == NULL && objint == NULL)
+							{
+								if (!(is_numeric_decimal(valor->id, source)))
+									throw_exception(1016, source);
+							}
 						}
 					}
 
@@ -314,6 +370,7 @@ int main(int argc, char** argv) {
 						tbs->value = "NULL";
 					else
 						tbs->value = valor->id;
+
 					tbs->enable = 1;
 
 					/* Verificar se item existe na tabela de símbolos */
@@ -351,7 +408,7 @@ int main(int argc, char** argv) {
 					count_const--;
 					count_functions--;
 
-					table_symbols_t* obj =  list_get_tbl_symb(&table_symbols, list_position, id->id, NULL);
+					table_symbols_t* obj = list_get_tbl_symb(&table_symbols, list_position, id->id, NULL);
 					if (obj != NULL)
 					{
 						char* _dec = "dec";
@@ -366,29 +423,53 @@ int main(int argc, char** argv) {
 						{
 							if (valor != NULL)
 							{
-								if (!(is_numeric(*valor->id)))
-									throw_exception(1007, source);
+								table_symbols_t* objint = list_get_tbl_symb(&table_symbols, list_position, valor->id, _int);
+								table_symbols_t* objdec = list_get_tbl_symb(&table_symbols, list_position, valor->id, _dec);
+								if (objdec != NULL)
+								{
+									if (objdec->value != "NULL")
+									{
+										if (!(is_numeric_int(objdec->value, source)))
+											throw_exception(1007, source);
+									}
+									else
+										throw_alert(1001, source);
+								}
+								else if (objint != NULL)
+								{
+									if (objint->value != "NULL")
+									{
+										if (!(is_numeric_decimal(objint->value, source)))
+											throw_exception(1007, source);
+									}
+								}
+								else if (objdec == NULL && objint == NULL)
+								{
+									if (!(is_numeric_int(valor->id, source)))
+										throw_exception(1007, source);
+								}
 							}
 						}
 					}
-					else 
+					else
 						throw_exception(1003, source);
-
 
 					if (table_symbols.size == 0)
 						throw_exception(1003, source);
 					if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
 						throw_exception(1003, source);
-					else
+					else 
 						list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
+						
 				}
 			}
 
 			last_func = TK_TYPE;
 		}
-		
+
 		// Descomentar linha para aparecer tabela de simbolo
-		//if (source->last_read == -1)
-		//	show_table_symbols(table_symbols, list_position);
+		if (source->last_read == -1)
+			printf("\n\n ========== Build: 1 succeeded, 0 failed, 0 up-to-date, %i alerts ==========", source->count_alerts);
+			//show_table_symbols(table_symbols, list_position);
 	}
 }

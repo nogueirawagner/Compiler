@@ -44,9 +44,7 @@ int is_numeric_int(char* value, source_t* source)
 	}
 
 	if (anyPonto == 1) 
-	{
 		throw_alert(1001, source);
-	}
 
 	return 1;
 }
@@ -54,7 +52,23 @@ int is_numeric_int(char* value, source_t* source)
 /* Verifica se é um número decimal */
 int is_numeric_decimal(char* value, source_t* source)
 {
-	return 0;
+	int tam = length_content_token(value);
+	int anyPonto = 0;
+	for (int i = 0; i < tam; i++)
+	{
+		if (is_caracter_point(value[i]))
+			anyPonto++;
+
+		if (anyPonto > 1)
+			return 0;
+		if (!(is_numeric(value[i]) || is_caracter_point(value[i])))
+			return 0;
+	}
+
+	if (anyPonto == 0)
+		throw_alert(1002, source);
+
+	return 1;
 }
 
 /* Verifica se é caracter e-comercial '&' */

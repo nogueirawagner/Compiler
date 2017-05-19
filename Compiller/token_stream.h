@@ -63,6 +63,7 @@ typedef struct {
 	char last_read;			/* último caracter lido */
 	int line_cur;			/* linha atual */
 	int init_pos_line;		/* posição onde começa a linha atual */
+	int count_alerts;		/* contador de alertas */
 } source_t;
 
 /* Função para abrir o arquivo */
