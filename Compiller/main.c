@@ -258,6 +258,7 @@ int main(int argc, char** argv) {
 					count_id--;
 					count_const--;
 					char* length = 0;
+					char* length_obj = 0;
 					char* vartemp = 0;
 
 					char* _dec = "dec";
@@ -289,7 +290,7 @@ int main(int argc, char** argv) {
 										throw_exception(1007, source);
 								}
 							}
-							else if (objdec == NULL && objint == NULL) 
+							else if (objdec == NULL && objint == NULL)
 							{
 								if (!(is_numeric_int(valor->id, source)))
 									throw_exception(1007, source);
@@ -305,6 +306,8 @@ int main(int argc, char** argv) {
 							table_symbols_t* objint = list_get_tbl_symb(&table_symbols, list_position, valor->id, _int);
 							if (objdec != NULL)
 							{
+								length_obj = objdec->length;
+
 								if (objdec->value != "NULL")
 								{
 									if (!(is_numeric_decimal(objdec->value, source)))
@@ -364,7 +367,12 @@ int main(int argc, char** argv) {
 					if (!length)
 						tbs->length = "NULL";
 					else
+					{
 						tbs->length = length;
+						if(length_obj != NULL && length != length_obj)
+							throw_alert(1003, source);
+					}
+						
 
 					if (!valor)
 						tbs->value = "NULL";
@@ -426,27 +434,33 @@ int main(int argc, char** argv) {
 								table_symbols_t* objint = list_get_tbl_symb(&table_symbols, list_position, valor->id, _int);
 								table_symbols_t* objdec = list_get_tbl_symb(&table_symbols, list_position, valor->id, _dec);
 								if (objdec != NULL)
-								{
-									if (objdec->value != "NULL")
-									{
-										if (!(is_numeric_int(objdec->value, source)))
-											throw_exception(1007, source);
-									}
-									else
-										throw_alert(1001, source);
-								}
-								else if (objint != NULL)
-								{
-									if (objint->value != "NULL")
-									{
-										if (!(is_numeric_decimal(objint->value, source)))
-											throw_exception(1007, source);
-									}
-								}
+									throw_alert(1001, source);
 								else if (objdec == NULL && objint == NULL)
 								{
 									if (!(is_numeric_int(valor->id, source)))
-										throw_exception(1007, source);
+										throw_exception(1016, source);
+								}
+							}
+						}
+						// Tipo dec
+						if (ts_are_equal(tipo, _dec))
+						{
+							if (valor != NULL)
+							{
+								table_symbols_t* objdec = list_get_tbl_symb(&table_symbols, list_position, valor->id, _dec);
+								table_symbols_t* objint = list_get_tbl_symb(&table_symbols, list_position, valor->id, _int);
+								if(objdec != NULL)
+								{
+									if (objdec->length != obj->length)
+										throw_alert(1003, source);
+								}
+
+								if (objint != NULL)
+									throw_alert(1002, source);
+								else if (objdec == NULL && objint == NULL)
+								{
+									if (!(is_numeric_decimal(valor->id, source)))
+										throw_exception(1015, source);
 								}
 							}
 						}
@@ -458,9 +472,9 @@ int main(int argc, char** argv) {
 						throw_exception(1003, source);
 					if (!list_any_tbl_symb(&table_symbols, list_position, id->id, NULL))
 						throw_exception(1003, source);
-					else 
+					else
 						list_update_tbl_symb(&table_symbols, list_position, id->id, valor->id);
-						
+
 				}
 			}
 
@@ -470,6 +484,6 @@ int main(int argc, char** argv) {
 		// Descomentar linha para aparecer tabela de simbolo
 		if (source->last_read == -1)
 			printf("\n\n ========== Build: 1 succeeded, 0 failed, %i alerts ==========", source->count_alerts);
-			//show_table_symbols(table_symbols, list_position);
+		//show_table_symbols(table_symbols, list_position);
 	}
 }

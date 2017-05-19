@@ -1,9 +1,20 @@
 main()
-{	
+{
 	int &cab;
 	dec &cob(20.3);
 	&cab = &cob;
 	int &joca = 20.4;
+	int &cc;
+	dec &pp(20.3);
+	&cc = &pp;
+	&pp = &cc;
+
+	dec &leng(2.4);
+	dec &logo(3.4);
+	&leng = &logo;
+
+	dec &deng(2.4);
+	dec &dogo(3.4) = &deng;	
 
 	int &a = 0, &b = 10, &aA = 0, &b1B = 10;
 	dec &raio(2.4) = 2.54;
