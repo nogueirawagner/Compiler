@@ -45,7 +45,7 @@ int fn_main(char value, source_t* source)
 				}
 
 				value = ts_get_next_caracter(source); // Lê próximo caracter
-				if (tam == 7 && ts_are_equal(main, buffer))
+				if (tam == 7 && ts_equals_to(main, buffer))
 					return 1;
 			}
 		}
@@ -553,7 +553,7 @@ token_t* fn_if(source_t* source, token_t* last_token)
 					token->id = buffer;
 					token->line = line;
 					if (is_token_function(buffer, source))
-						token->type = ts_get_type_fn(buffer);
+						throw_exception(1011, source);
 					else
 						token->type = ts_get_type(token->id, last_token, source);
 					return token;
@@ -710,7 +710,7 @@ token_t* fn_if(source_t* source, token_t* last_token)
 						if (!is_caracter_equals(value))
 							throw_exception(1012, source);
 
-					if (is_caracter_equals(*buffer) && !is_caracter_equals(value))
+					if (!is_caracter_equals(*buffer) && is_caracter_equals(value))
 						strncat(buffer, scopy, 1);
 					else
 						throw_exception(1012, source);

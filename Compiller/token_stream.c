@@ -27,19 +27,31 @@ token_type_t ts_get_type_fn(char* value)
 	char* _gets = "gets";
 	char* _if = "if";
 	char* _for = "for";
-	char* _then = "then";
-	char* _else = "else";
 	char* _puts = "puts";
 
-	if (ts_are_equal(_gets, value))
+	if (ts_equals_to(_gets, value))
 		return TK_FN_GETS;
-	if (ts_are_equal(_puts, value))
+	if (ts_equals_to(_puts, value))
 		return TK_FN_PUTS;
-	if (ts_are_equal(_if, value))
+	if (ts_equals_to(_if, value))
 		return TK_FN_IF;
-	if (ts_are_equal(_for, value))
+	if (ts_equals_to(_for, value))
 		return TK_FN_FOR;
+	
 }
+
+/* Verifica se palavra não se trata de um nó interno de função */
+int is_child_function(char* value)
+{
+	char* _else = "else";
+	char* _then = "then";
+	if (ts_equals_to(_else, value))
+		return 1;
+	if (ts_equals_to(_then, value))
+		return 1;
+	return 0;
+}
+
 
 /* Abre o arquivo em binário */
 source_t * ts_open_source(char* source)
@@ -217,10 +229,15 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 				{
 					token->id = buffer;
 					token->line = line;
-					if (is_token_function(buffer, source))
+					if (is_token_function(buffer, source) && !is_child_function(buffer))
 						token->type = ts_get_type_fn(buffer);
-					else
-						token->type = ts_get_type(token->id, last_token, source);
+					else 
+					{
+						if(!is_child_function(buffer))
+							token->type = ts_get_type(token->id, last_token, source);
+						else
+							throw_exception(1002, source);
+					}
 					return token;
 				}
 				if (is_new_line(value))

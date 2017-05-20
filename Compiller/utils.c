@@ -132,7 +132,7 @@ int is_caracter_m(char value)
 }
 
 /* Verificar se ponteiros são iguais */
-int ts_are_equal(char* pointer1, char* pointer2)
+int ts_equals_to(char* pointer1, char* pointer2)
 {
 	return !(strcmp(pointer1, pointer2));
 }

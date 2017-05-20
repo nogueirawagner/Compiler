@@ -266,7 +266,7 @@ int main(int argc, char** argv) {
 					char* _int = "int";
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _int))
+					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _int))
 					{
 						if (valor != NULL)
 						{
@@ -298,7 +298,7 @@ int main(int argc, char** argv) {
 						}
 					}
 
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
+					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _dec))
 					{
 						if (valor != NULL)
 						{
@@ -332,7 +332,7 @@ int main(int argc, char** argv) {
 						}
 					}
 
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _char))
+					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _char))
 					{
 						length = any_definition_length(id->id, source, 0);
 						if (!length)
@@ -347,7 +347,7 @@ int main(int argc, char** argv) {
 								throw_exception(1009, source);
 						}
 					}
-					if (id && id->type == TK_ID && ts_are_equal(last_tk->id, _dec))
+					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _dec))
 					{
 						length = any_definition_length(id->id, source, 1);
 						if (!length)
@@ -426,7 +426,7 @@ int main(int argc, char** argv) {
 						char* tipo = (char*)obj->type;
 
 						// Tipo int
-						if (ts_are_equal(tipo, _int))
+						if (ts_equals_to(tipo, _int))
 						{
 							if (valor != NULL)
 							{
@@ -442,7 +442,7 @@ int main(int argc, char** argv) {
 							}
 						}
 						// Tipo dec
-						if (ts_are_equal(tipo, _dec))
+						if (ts_equals_to(tipo, _dec))
 						{
 							if (valor != NULL)
 							{
@@ -480,9 +480,10 @@ int main(int argc, char** argv) {
 			last_func = TK_TYPE;
 		}
 
-		// Descomentar linha para aparecer tabela de simbolo
 		if (source->last_read == -1)
-			printf("\n\n ========== Build: 1 succeeded, 0 failed, %i alerts ==========", source->count_alerts);
-		//show_table_symbols(table_symbols, list_position);
+		{
+			show_table_symbols(table_symbols, list_position);
+			printf("\n\n\n\n ========== Build: 1 succeeded, 0 failed, %i alerts ==========", source->count_alerts);
+		}
 	}
 }

@@ -68,7 +68,7 @@ int is_caracter_key_closed(char value);
 int is_caracter_m(char value);
 
 /* Verificar se ponteiros são iguais */
-int ts_are_equal(char* pointer1, char* pointer2);
+int ts_equals_to(char* pointer1, char* pointer2);
 
 /* Define se o token é um tipo de dado */
 int is_token_type_data(char* value, source_t* source);
