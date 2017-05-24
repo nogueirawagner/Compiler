@@ -1,8 +1,8 @@
 main()
 {
-	int &a;
-	then
-
-	
-	if(2 == 2)
+	int &i;
+	for(int &i = 0; &i < 10; &i--)
+	{
+		puts("");
+	}
 }

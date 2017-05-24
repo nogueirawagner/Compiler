@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 	while (1)
 	{
 		token_t * token = ts_get_next_token(source, last_tk_temp, last_func);  /* Pega proximo token */
-
+		
 		/* Insere token na pilha */
 		if (token != NULL && is_token_valid(token, source))
 		{
@@ -48,6 +48,7 @@ int main(int argc, char** argv) {
 		if (is_caracter_closed_parathesi(source->last_read) && last_func == TK_FN_FOR)
 		{
 			fn_run_for(source, stack_token, table_symbols, list_position);
+
 			last_func = TK_END_FN;
 		}
 
@@ -369,7 +370,7 @@ int main(int argc, char** argv) {
 					else
 					{
 						tbs->length = length;
-						if(length_obj != NULL && length != length_obj)
+						if (length_obj != NULL && length != length_obj)
 							throw_alert(1003, source);
 					}
 
@@ -448,7 +449,7 @@ int main(int argc, char** argv) {
 							{
 								table_symbols_t* objdec = list_get_tbl_symb(&table_symbols, list_position, valor->id, _dec);
 								table_symbols_t* objint = list_get_tbl_symb(&table_symbols, list_position, valor->id, _int);
-								if(objdec != NULL)
+								if (objdec != NULL)
 								{
 									if (objdec->length != obj->length)
 										throw_alert(1003, source);
