@@ -70,6 +70,9 @@ int is_caracter_m(char value);
 /* Verificar se ponteiros são iguais */
 int ts_equals_to(char* pointer1, char* pointer2);
 
+/* Retorna texto a partir de tamanho especifico de string */
+char* content_substring(char* value, int pos_ini, int pos_end);
+
 /* Define se o token é um tipo de dado */
 int is_token_type_data(char* value, source_t* source);
 

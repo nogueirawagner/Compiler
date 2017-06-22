@@ -213,6 +213,32 @@ int length_content_token(char* value)
 	return length;
 }
 
+/* Retorna texto a partir de tamanho especifico de string */
+char* content_substring(char* value, int pos_ini, int pos_end)
+{
+	int tam = length_content_token(value);
+	char * buffer = (char*)malloc(255);
+	FillMemory(buffer, 255, 0);
+
+	if (pos_ini > tam)
+		return "";
+	if (pos_end > tam)
+		pos_end = tam;
+
+	for (int i = pos_ini; i < pos_end; i++)
+	{
+		char caracter = value[i];
+		if (is_caracter_open_parathesi(caracter))
+			break;
+		else
+		{
+			char scopy[1] = { caracter };
+			strncat(buffer, scopy, 1);
+		}
+	}
+	return buffer;
+}
+
 /* Retorna o tamanho do conteúdo do ponteiro do tipo char */
 int length_content_token_char(char* value)
 {

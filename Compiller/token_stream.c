@@ -216,6 +216,7 @@ token_t* ts_get_next_token(source_t* source, token_t* last_token, token_type_t l
 					count_quotes++;
 				}
 			}
+
 		}
 		if (is_alphanumeric(value))
 		{

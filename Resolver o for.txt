@@ -1,0 +1,4 @@
+ler o for até ) o proximo pode ser {, 
+	se não for esse cara pode ser qualquer coisa exceto declaração de variavel.
+	Se for qualquer coisa exceto declaração de variavel, então lê somente até o final da linha.
+Após encontrar ), quando encontrar } ou \n ai processa o for.

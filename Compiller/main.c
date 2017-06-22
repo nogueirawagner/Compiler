@@ -31,7 +31,7 @@ int main(int argc, char** argv) {
 	while (1)
 	{
 		token_t * token = ts_get_next_token(source, last_tk_temp, last_func);  /* Pega proximo token */
-		
+
 		/* Insere token na pilha */
 		if (token != NULL && is_token_valid(token, source))
 		{
@@ -344,8 +344,27 @@ int main(int argc, char** argv) {
 						{
 							int tam = length_content_token_char(valor->id);
 							int toint = atoi(length);
+							int tosub = atoi(length);
+							int tamPedaco = toint;
+
+							char* pedaco = content_substring(valor->id, 1, ++tosub);
+
+							char* esquerda = (char*)malloc(255);
+							FillMemory(esquerda, 255, 0);
+							char* direita = (char*)malloc(255);
+							FillMemory(direita, 255, 0);
+							char* buffer = (char*)malloc(255);
+							FillMemory(buffer, 255, 0);
+
+							char scopy[1] = { '\"' };
+							strncat(buffer, scopy, 1);
+							strncat(buffer, pedaco, tamPedaco);
+							strncat(buffer, scopy, 1);
+							
+							valor->id = buffer;
+
 							if (tam > toint)
-								throw_exception(1009, source);
+								throw_alert(1004, source);
 						}
 					}
 					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _dec))
