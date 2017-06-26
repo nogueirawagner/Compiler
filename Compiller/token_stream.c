@@ -29,13 +29,13 @@ token_type_t ts_get_type_fn(char* value)
 	char* _for = "for";
 	char* _puts = "puts";
 
-	if (ts_equals_to(_gets, value))
+	if (equals_to(_gets, value))
 		return TK_FN_GETS;
-	if (ts_equals_to(_puts, value))
+	if (equals_to(_puts, value))
 		return TK_FN_PUTS;
-	if (ts_equals_to(_if, value))
+	if (equals_to(_if, value))
 		return TK_FN_IF;
-	if (ts_equals_to(_for, value))
+	if (equals_to(_for, value))
 		return TK_FN_FOR;
 	
 }
@@ -45,9 +45,9 @@ int is_child_function(char* value)
 {
 	char* _else = "else";
 	char* _then = "then";
-	if (ts_equals_to(_else, value))
+	if (equals_to(_else, value))
 		return 1;
-	if (ts_equals_to(_then, value))
+	if (equals_to(_then, value))
 		return 1;
 	return 0;
 }

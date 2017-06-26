@@ -1,5 +1,15 @@
 main()
 {
+	dec &beba(3.4) = 2643.587214;
+	dec &raio(2.2) = 26.587214;
+	dec &pi(2.3) = 2643.587214;
+	dec &beatl(1.4) = 2643.587214;
+	dec &outros(4.4) = 92643.587214;
+	dec &jandaia(5.4) = 92643.587214;
+	dec &oba(5.6) = 92643.587214;
+	dec &oagora(5.9) = 92643.587214;
+	dec &problema(1.1) = 2.0;
+
 	int &cab;
 	dec &cob(20.3);
 	&cab = &cob;
@@ -17,13 +27,13 @@ main()
 	dec &dogo(3.4) = &deng;	
 
 	int &a = 0, &b = 10, &aA = 0, &b1B = 10;
-	dec &raio(2.4) = 2.54;
+	dec &raioImortal(2.4) = 2.54;
 	char &c(2) = "d";
 	int &idade = 20, &idadex14 = 20, &idadexxxx16 = 20, &idadexx141 = -20, &idadexxx113 = 1, &idadexx211 = 20;
 	int &cpf = 150;
 	int &nome, &borracha;
 	&nome = 70;
-	char &pessoa(12) = "Wagner Alves";
+	char &pessoa(12) = "Wagner Alves Goncalves Nogueira";
 	char &professora(5) = "Aline Dayane", &aluno(15) = "Vitor";
 	char &nome(25);
 	dec &real(1.0);

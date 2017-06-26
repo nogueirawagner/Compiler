@@ -45,7 +45,7 @@ int fn_main(char value, source_t* source)
 				}
 
 				value = ts_get_next_caracter(source); // Lê próximo caracter
-				if (tam == 7 && ts_equals_to(main, buffer))
+				if (tam == 7 && equals_to(main, buffer))
 					return 1;
 			}
 		}

@@ -68,7 +68,7 @@ int is_caracter_key_closed(char value);
 int is_caracter_m(char value);
 
 /* Verificar se ponteiros são iguais */
-int ts_equals_to(char* pointer1, char* pointer2);
+int equals_to(char* pointer1, char* pointer2);
 
 /* Retorna texto a partir de tamanho especifico de string */
 char* content_substring(char* value, int pos_ini, int pos_end);
@@ -132,5 +132,8 @@ int is_token_type_function(token_type_t type);
 
 /* Verifica se é caracter inválido para variaveis */
 int is_caracter_invalid_var(char value);
+
+/* Retorna a posicao do elemento passado como parametro em searchValue */
+int content_indexOf(char* value, char* searchValue, int start);
 
 #endif // !__UTILS_H__

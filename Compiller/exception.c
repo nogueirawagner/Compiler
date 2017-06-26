@@ -57,8 +57,10 @@ int te_error_main(source_t * source)
 	char linha[1000];
 	fgets(linha, 1000, source->source);
 
+	system("color C");
 	printf("TE-1001 - Falta do comando main na linha 1 \n");
 	printf("Esperado: main() | Declarado: %s ", linha);
+	printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 	getchar();
 	exit(1);
 	return 0;
@@ -71,8 +73,10 @@ int te_error_declare_var(source_t* source)
 	char linha[1000];
 	fgets(linha, 1000, source->source);
 
+	system("color C");
 	printf("TE-1002 - Erro na declaracao de variavel | linha: %i \n", source->line_cur);
 	printf("%s", linha);
+	printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 	getchar();
 	exit(1);
 	return 0;
@@ -97,7 +101,9 @@ int te_error_var_not_declared(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_equals(value))
 				{
+					system("color C");
 					printf("TE-1003 - Variavel %s nao definido | linha: %i \n", buffer, source->line_cur);
+					printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 					getchar();
 					exit(1);
 					return 0;
@@ -126,7 +132,9 @@ int te_error_var_already_declared(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_semicolon(value))
 				{
+					system("color C");
 					printf("TE-1004 - Variavel %s ja foi declarado | linha: %i \n", buffer, source->line_cur);
+					printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 					getchar();
 					exit(1);
 					return 0;
@@ -151,7 +159,9 @@ int te_error_var_reserved(source_t* source)
 		
 		if (is_caracter_ampersand(value))
 		{
+			system("color C");
 			printf("TE-1005 - Erro ao declarar palavra reservada %s | linha: %i \n", buffer, source->line_cur);
+			printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 			getchar();
 			exit(1);
 			return 0;
@@ -180,7 +190,9 @@ int te_error_type_undefined(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_equals(value))
 				{
+					system("color C");
 					printf("TE-1008 - Tipo de dado nao definido | linha: %i \n", source->line_cur);
+					printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 					getchar();
 					exit(1);
 					return 0;
@@ -210,7 +222,9 @@ int te_error_invalid_value_in_char(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_semicolon(value))
 				{
+					system("color C");
 					printf("TE-1009 - Erro ao declarar variavel do tipo char em '%s'.| linha: %i \n", buffer, source->line_cur);
+					printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 					getchar();
 					exit(1);
 					return 0;
@@ -240,7 +254,9 @@ int te_error_int_assign_invalid_value(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_semicolon(value))
 				{
+					system("color C");
 					printf("TE-1007 - valor invalido para tipo int '%s' | linha: %i \n", buffer, source->line_cur);
+					printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 					getchar();
 					exit(1);
 					return 0;
@@ -270,7 +286,9 @@ int te_error_invalid_value_in_dec(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_comma(value) || is_caracter_semicolon(value))
 				{
+					system("color C");
 					printf("TE-1010 - Erro ao declarar variavel do tipo dec em '%s'.| linha: %i \n", buffer, source->line_cur);
+					printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 					getchar();
 					exit(1);
 					return 0;
@@ -288,8 +306,10 @@ int te_error_call_function(source_t* source)
 	char linha[1000];
 	fgets(linha, 1000, source->source);
 
+	system("color C");
 	printf("TE-1011 - Erro ao chamar funcao | linha: %i \n", source->line_cur);
 	printf("%s", linha);
+	printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 	getchar();
 	exit(1);
 	return 0;
@@ -302,8 +322,10 @@ int te_error_expected_semicolon(source_t* source)
 	char linha[1000];
 	fgets(linha, 1000, source->source);
 
+	system("color C");
 	printf("TE-1012 - Esperado ';' no final da linha | linha: %i \n", source->line_cur);
 	printf("%s", linha);
+	printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 	getchar();
 	exit(1);
 	return 0;
@@ -318,6 +340,7 @@ int te_error_double_quotes(source_t* source)
 
 	printf("TE-1013 - Esperado \" na expressao | linha: %i \n", source->line_cur);
 	printf("%s", linha);
+	printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 	getchar();
 	exit(1);
 	return 0;
@@ -331,8 +354,10 @@ int te_error_expected_keyclosed(source_t* source)
 	char linha[1000];
 	fgets(linha, 1000, source->source);
 
+	system("color C");
 	printf("TE-1014 - Esperado } | linha: %i \n", source->line_cur);
 	printf("%s", linha);
+	printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 	getchar();
 	exit(1);
 	return 0;
@@ -345,8 +370,10 @@ int te_error_var_not_declared_global(source_t* source)
 	char linha[1000];
 	fgets(linha, 1000, source->source);
 
+	system("color C");
 	printf("TE-1015 - Variavel nao declarada | linha: %i \n", source->line_cur);
 	printf("%s", linha);
+	printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 	getchar();
 	exit(1);
 	return 0;
@@ -371,7 +398,9 @@ int te_error_dec_assign_invalid_value(source_t* source)
 				value = ts_get_next_caracter(source);
 				if (is_caracter_semicolon(value))
 				{
+					system("color C");
 					printf("TE-1016 - valor atribuido invalido para tipo dec '%s' | linha: %i \n", buffer, source->line_cur);
+					printf("\n\n\n\n ========== Build: 0 succeeded, 1 failed, %i alerts ==========", source->count_alerts);
 					getchar();
 					exit(1);
 					return 0;

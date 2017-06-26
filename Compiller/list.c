@@ -153,7 +153,7 @@ void list_update_tbl_symb(linked_list_t* list, list_element_t* position, char* i
 	{
 		table_symbols_t* object = (table_symbols_t*)position->data;
 		char* variable = (char*)object->variable;
-		if (ts_equals_to(variable, id))
+		if (equals_to(variable, id))
 		{
 			object->value = value;
 		}
@@ -171,10 +171,10 @@ int list_any_tbl_symb(linked_list_t* list, list_element_t* position, char* id, c
 		char* tipo = (char*)object->type;
 		if (!type)
 		{
-			if (ts_equals_to(variable, id))
+			if (equals_to(variable, id))
 				return 1;
 		}
-		else if (ts_equals_to(variable, id) && ts_equals_to(tipo, type))
+		else if (equals_to(variable, id) && equals_to(tipo, type))
 			return 1;
 		position = list_next(position);
 	}
@@ -190,10 +190,10 @@ table_symbols_t* list_get_tbl_symb(linked_list_t* list, list_element_t* position
 		char* tipo = (char*)object->type;
 		if (!type)
 		{
-			if (ts_equals_to(variable, id))
+			if (equals_to(variable, id))
 				return object;
 		}
-		else if (ts_equals_to(variable, id) && ts_equals_to(tipo, type))
+		else if (equals_to(variable, id) && equals_to(tipo, type))
 			return object;
 		position = list_next(position);
 	}

@@ -99,9 +99,9 @@ void insert_table_symbols(stack_t* stack_token, source_t* source, linked_list_t 
 			char* _dec = "dec";
 			char* _char = "char";
 
-			if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _char))
+			if (id && id->type == TK_ID && equals_to(last_tk->id, _char))
 				length = any_definition_length(id->id, source, 0);
-			if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _dec))
+			if (id && id->type == TK_ID && equals_to(last_tk->id, _dec))
 				length = any_definition_length(id->id, source, 1);
 
 

@@ -11,7 +11,6 @@
 #include "alerts.h"
 
 int main(int argc, char** argv) {
-
 	source_t* source = ts_open_source("Source.chs");
 	stack_t* stack_token;
 	int length_stack = 0;
@@ -267,7 +266,7 @@ int main(int argc, char** argv) {
 					char* _int = "int";
 					table_symbols_t* tbs = (table_symbols_t*)malloc(sizeof(table_symbols_t));
 
-					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _int))
+					if (id && id->type == TK_ID && equals_to(last_tk->id, _int))
 					{
 						if (valor != NULL)
 						{
@@ -299,7 +298,7 @@ int main(int argc, char** argv) {
 						}
 					}
 
-					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _dec))
+					if (id && id->type == TK_ID && equals_to(last_tk->id, _dec))
 					{
 						if (valor != NULL)
 						{
@@ -333,7 +332,7 @@ int main(int argc, char** argv) {
 						}
 					}
 
-					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _char))
+					if (id && id->type == TK_ID && equals_to(last_tk->id, _char))
 					{
 						length = any_definition_length(id->id, source, 0);
 						if (!length)
@@ -346,33 +345,37 @@ int main(int argc, char** argv) {
 							int toint = atoi(length);
 							int tosub = atoi(length);
 							int tamPedaco = toint;
+							tosub++;
 
-							char* pedaco = content_substring(valor->id, 1, ++tosub);
+							if (!(length_content_token(valor->id) <= tosub))
+							{
+								char* pedaco = content_substring(valor->id, 1, tosub);
 
-							char* esquerda = (char*)malloc(255);
-							FillMemory(esquerda, 255, 0);
-							char* direita = (char*)malloc(255);
-							FillMemory(direita, 255, 0);
-							char* buffer = (char*)malloc(255);
-							FillMemory(buffer, 255, 0);
+								char* esquerda = (char*)malloc(255);
+								FillMemory(esquerda, 255, 0);
+								char* direita = (char*)malloc(255);
+								FillMemory(direita, 255, 0);
+								char* buffer = (char*)malloc(255);
+								FillMemory(buffer, 255, 0);
 
-							char scopy[1] = { '\"' };
-							strncat(buffer, scopy, 1);
-							strncat(buffer, pedaco, tamPedaco);
-							strncat(buffer, scopy, 1);
-							
-							valor->id = buffer;
+								char scopy[1] = { '\"' };
+								strncat(buffer, scopy, 1);
+								strncat(buffer, pedaco, tamPedaco);
+								strncat(buffer, scopy, 1);
+
+								valor->id = buffer;
+							}
+
 
 							if (tam > toint)
 								throw_alert(1004, source);
 						}
 					}
-					if (id && id->type == TK_ID && ts_equals_to(last_tk->id, _dec))
+					if (id && id->type == TK_ID && equals_to(last_tk->id, _dec))
 					{
 						length = any_definition_length(id->id, source, 1);
 						if (!length)
 							throw_exception(1010, source);
-
 						vartemp = content_variable_id(id->id);
 					}
 
@@ -396,7 +399,37 @@ int main(int argc, char** argv) {
 					if (!valor)
 						tbs->value = "NULL";
 					else
-						tbs->value = valor->id;
+					{
+						char* search = ".";
+						if (equals_to(last_tk->id, _dec) && content_indexOf(valor->id, search, 0) >= 0)
+						{
+							int indexP = content_indexOf(valor->id, search, 0);  //Da posicao zero para o ponto do valor atribuido
+							int indexCasaDec = content_indexOf(length, search, 0);
+							int antesPonto = indexCasaDec - 1;
+							char* direitaCasa = content_substring(length, 0, antesPonto);  //Da posicao zero para o ponto do valor Declarado
+							int direitaInt = atoi(direitaCasa) - 1;
+
+							if (indexP - 1 < direitaInt)
+								direitaInt = indexP - 1;
+
+							char* prefixo = content_substring(valor->id, 0, direitaInt); // Do ponto pra o final do valor atribuido
+							int tamPref = length_content_token(prefixo);
+
+							indexCasaDec++;
+
+							int tam = length_content_token(length);
+							char* esqCasa = content_substring(length, indexCasaDec, ++tam); // Da posicao do ponto até o resto do valor declarado
+							char* sufixo = content_substring(valor->id, indexP, indexP + atoi(esqCasa));
+							strncat(prefixo, sufixo, 255);
+							tbs->value = prefixo;
+
+							if ((atoi(direitaCasa) <  indexP) || (atoi(esqCasa) < tamPref))
+								throw_alert(1003, source);
+						}
+						else
+							tbs->value = valor->id;
+					}
+
 
 					tbs->enable = 1;
 
@@ -446,7 +479,7 @@ int main(int argc, char** argv) {
 						char* tipo = (char*)obj->type;
 
 						// Tipo int
-						if (ts_equals_to(tipo, _int))
+						if (equals_to(tipo, _int))
 						{
 							if (valor != NULL)
 							{
@@ -462,7 +495,7 @@ int main(int argc, char** argv) {
 							}
 						}
 						// Tipo dec
-						if (ts_equals_to(tipo, _dec))
+						if (equals_to(tipo, _dec))
 						{
 							if (valor != NULL)
 							{

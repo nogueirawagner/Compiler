@@ -43,7 +43,7 @@ int is_numeric_int(char* value, source_t* source)
 			return 0;
 	}
 
-	if (anyPonto == 1) 
+	if (anyPonto == 1)
 		throw_alert(1001, source);
 
 	return 1;
@@ -132,7 +132,7 @@ int is_caracter_m(char value)
 }
 
 /* Verificar se ponteiros são iguais */
-int ts_equals_to(char* pointer1, char* pointer2)
+int equals_to(char* pointer1, char* pointer2)
 {
 	return !(strcmp(pointer1, pointer2));
 }
@@ -212,6 +212,28 @@ int length_content_token(char* value)
 	}
 	return length;
 }
+/* Retorna a posicao do elemento passado como parametro em searchValue */
+int content_indexOf(char* value, char* searchValue, int start)
+{
+	int index;
+	int length = length_content_token(value);
+	
+	if (length < start)
+		return -1;
+
+	for (int i = start; i < length; i++) 
+	{
+		char* valor = (char*)malloc(255);
+		FillMemory(valor, 255, 0);
+		char scopy[1] = { value[i] };
+		strncat(valor, scopy, 1);
+
+		if (equals_to(valor, searchValue))
+			return i;
+	}
+		
+	return -1;
+}
 
 /* Retorna texto a partir de tamanho especifico de string */
 char* content_substring(char* value, int pos_ini, int pos_end)
@@ -225,7 +247,7 @@ char* content_substring(char* value, int pos_ini, int pos_end)
 	if (pos_end > tam)
 		pos_end = tam;
 
-	for (int i = pos_ini; i < pos_end; i++)
+	for (int i = pos_ini; i <= pos_end; i++)
 	{
 		char caracter = value[i];
 		if (is_caracter_open_parathesi(caracter))
